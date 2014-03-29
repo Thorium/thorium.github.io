@@ -34,6 +34,50 @@ Nyt aukeaa emulaattorin käyttöliittymä. Avaa vasemman puolen listasta WorkerR
 
 ![](http://thorium.github.io/FSharpAzure/AzureWorkerRole/5-ComputeEmulator.png)
 
-Jos näin on, onnittelut, ympäristösi on kunnossa...
+Jos näin on, onnittelut, ympäristösi on kunnossa... Lisätään vielä vähän työkaluja:
+
+### Nuget-paketit ###
+
+Seuraavaksi asennetaan projektiin neljä komponenttipakettia Nuget-pakettihallinnasta. Helpoimmin se tapahtuu Visual Studion valikosta:
+
+Tools -> Nuget Package Manager -> Manage Nuget Packages for Solution... -> Online
+
+Asennettavat paketit on helpoin hakea Id:n perusteella popup-ikkunan ylälaidan haulla.
+
+- [Microsoft ASP.NET Web API 2.1 OWIN SelfHost](http://www.nuget.org/packages/Microsoft.AspNet.WebApi.OwinSelfHost/)
+	- Nuget-paketti-id:  **Microsoft.AspNet.WebApi.OwinSelfHost**
+	- [OWIN](http://owin.org/) toimii tässä itsenäisenä pienenä kevyenä ja tehokkaana WWW-palvelimena.*
+- [Microsoft ASP.NET SignalR](https://www.nuget.org/packages/Microsoft.AspNet.SignalR/)
+	- Nuget-paketti-id: **Microsoft.AspNet.SignalR**
+	- [SignalR](http://www.asp.net/signalr) on vähän kuin Node.js kopioituna .NET:ille. Se mahdollistaa kaksisuuntaisen liikenteen www-palvelimen ja käyttäjän välillä.* 
+- [FSharp.Web.Http](http://www.nuget.org/packages/FSharp.Web.Http/)
+	- Nuget-paketti-id: **FSharp.Web.Http**
+	- [Frank](http://frank-fs.github.io/frank/)-kirjasto helpottamaan Web-API-rajapinnan-luontia F#-kielellä.
+- [Fog](https://www.nuget.org/packages/Fog)
+	- Nuget-paketti-id: **Fog**
+	- [Fog](http://dmohl.github.io/Fog/) on kirjasto helpottamaan Azuren käyttöä F#:lla, sisältäen mm. välimuistitusta.
+
+Koska paketit ovat päivittyneet, voi vielä Updates-välilehdeltä käydä päivittelemässä ne uusimpiin versioihin. (Ainakin ohjeen kirjoittamishetkellä uudet versiot ovat myös ok.)
+
+### Omien koodiluokkien lisääminen ###
+
+Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valitse Add -> New Item... -> Source File, ja lisää projektille tiedosto: MyLogics.fs
+(Paremman nimen voi kekesiä myöhemmin.)
+
+F#-kielessä voit aina viitata menneeseen koodilohkoon, mutta et tulevaan, eli koodilohkojen järjestyksellä on väliä. Voit lukea koodia kuin kirjaa, ylhäältä alas. Tämä tarkoittaa myös sitä, että projektissa tiedostojen järjestyksellä on väliä. Voit muuttaa tiedostojen järjestystä painamalla tiedoston nimen päällä hiiren oikeaa nappia, ja "Move Up" tai "Move down".
+
+![](http://thorium.github.io/FSharpAzure/AzureWorkerRole/6-SolutionExplorer.png)
+
+C#-ohjelmoijalle tämä rajoite tuntuu aluksi pahalta: Lähtökohtaisesti ei ohjaudutakaan siihen, että koodissa voi poukkoilla miten haluaa. Vastaavasti koodaus ei muodostukaan siitä, että debugataan vähintään 10 tiedostoa auki pomppien villisti paikasta toiseen.
+
+Järjestä nyt fs-tiedostot tähän järjestykseen (muilla ei ole väliä....):
+
+1. System.Net.Http.fs
+2. System.Web.Http.fs
+3. MyLogics.fs
+4. WorkerRole.fs
+
+Koita vielä, että softa kääntyy. Nyt on perus-infra kunnossa ja voidaan aloittaa itse koodaaminen...
+
 
 3/27/2014 11:15:12 PM 
