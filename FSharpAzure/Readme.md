@@ -13,7 +13,7 @@ Näistä on hyvä aloittaa, jos aihe ei ole ennestään tuttu.
 - [**Azure Worker -roolin luonti**](1-AzureWorkerRole/AzureWorkerRoleFin.html)
 	- Tässä harjoituksessa luodaan worker-role, jota käytetään pohjana muissa harjoituksissa.
 - [**F# lyhyt oppimäärä**](1-FSharpBasics/FSharpBasicsFin.html)
-	- Tässä harjoituksessa käydään läpi kielen syntaksia.
+	- Tässä harjoituksessa käydään läpi perusosia kielen syntaksista. 
 
 ### Edistyneemmät harjoitukset ###
 
