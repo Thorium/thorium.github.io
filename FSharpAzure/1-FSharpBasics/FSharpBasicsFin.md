@@ -241,12 +241,18 @@ Olio, jolla on yksi property, email, jossa on getteri ja setteri, ja oletusarvo 
     type UserData1() = 
        member val Email = "" with get, set
 
+	let myInstance1 = UserData1()
+
+Kun luot uuden instanssin oliosta, niin new-sana on vapaaehtoinen.
+
 Olio, jolla on yksi konstruktorissa asetettava readonly-property, email, ja lisäksi tyhjä konstruktori, joka asettaa tyhjän arvon tehtäisiin näin:
 
     [lang=fsharp]
     type UserData2(email) =
        new() = UserData2("")
        member x.Email = email
+
+	
 
 Perintä-syntaksi ei ole yhtä näppärä kuin C#:ssa, koska vahvaan tyyppitarkistukseen rajapinnat pitää aina periyttää eksplisiittisesti:
 
@@ -266,8 +272,6 @@ Perintä-syntaksi ei ole yhtä näppärä kuin C#:ssa, koska vahvaan tyyppitarki
                 //Dispose resources...
                 GC.SuppressFinalize(x)
 
-
-
 ### Discriminated unioin ###
 
 Voit tehdä "joko-tai"-tyyppejä:
@@ -279,7 +283,7 @@ Voit tehdä "joko-tai"-tyyppejä:
 
     type CalendarEvent =
     | ExactTime of DateTime
-    | MonthAndYear of string*int
+    | MonthAndYear of string*int //month*year
 
     type Tree =
     | Leaf of int
@@ -287,6 +291,40 @@ Voit tehdä "joko-tai"-tyyppejä:
 
 Käyttötarkoituksena esimerkiksi ohjelman tilanhallinta, jo kääntäjätasolla, ilman sotkuista ajonaikaista if-logiikkaa. Nämä ovat erittäin käteviä yhdessä pattern matchingin kanssa. 
 
+### Astetta erikoisemmat tyypit ###
+
+Tyyppi voi olla myös vain alias, tai "joko-tai" voi esiintyä myös yksinään:
+
+    type aliasItem<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
+
+    type OrderId = | Id of System.Guid
+
+Tyyppi voi olla tietue, record:
+
+    type Address = { 
+        Street: string; 
+        Zip: int; 
+        City: string; 
+    }
+    let myAddrr = { Street = "Juvank."; Zip = 33710; City = "Tre"; }
+
+...tai sillä voidaan Measure-attribuutin kanssa määritellä vahva vain-käännösaikainen tyypitys. Vähän kuin oma luokka kapseloimaan vain yksi laskennallinen arvo (mutta näyttämään se aina ulos), jotta eri asiat tai mittayksiköt eivät varmasti mene sekaisin:
+ 
+    [<Measure>]
+    type EUR
+
+    [<Measure>]
+    type LTC
+
+    let rate =
+        let ratePlain = 9.45m //fetch from internet...
+        ratePlain * 1m<EUR/LTC>
+
+    let myMoneyInEur (x:decimal<LTC>) = x*rate 
+
+    let converted = myMoneyInEur 7m<LTC>
+
+Helpoin tapa muuttaa perus-.NET-tyyppi mitaksi on kertoa se yhdellä mitalla. Esteettinen haittapuoli on, että tämä tuo "pienempi kuin" ja "suurempi kuin" merkkejä koodiin.
 
 ### Pattern matching ###
 
