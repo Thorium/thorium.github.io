@@ -76,7 +76,7 @@ Järjestä nyt fs-tiedostot tähän järjestykseen (muilla ei ole väliä....):
 3. MyLogics.fs
 4. WorkerRole.fs
 
-Koita vielä, että softa kääntyy. Nyt on perus-infra kunnossa ja voidaan aloittaa itse koodaaminen...
+Koita vielä, että softa kääntyy. Nyt on perus-infra kunnossa ja voidaan aloittaa itse koodaaminen... Vastaavasti kuin C#:ssa, eri (tiedostojen) namespacejen/moduulien välillä pitää joko viitata kokonimellä tai kutsua open-käskyä, joka vastaa C#-usiWng-käskyä.
 
 
 3/27/2014 11:15:12 PM 

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- 
+      The F# lyhyt oppimäärä
+ parameters will be replaced with the 
+      document title extracted from the <h1> element or
+      file name, if there is no <h1> heading
+    -->
+    <title>F# lyhyt oppimäärä
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="content/style.css" />
+    <script src="content/tips.js" type="text/javascript"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" style="margin-top:30px">
+        <div class="span1"></div>
+        <div class="span10" id="main">
+          <h1>F# lyhyt oppimäärä</h1>
+
+<p>F# on selkeä ohjelmointikieli, joka ohjaa lähtökohtaisesti käyttäjäänsä funktionaalisiin ratkaisuihin. Tätä kautta ohjelman tila mallintuu oikein, ja ohjelmat säikeistyvät hyvin ja niillä on totuttua parempi ylläpidettävyys.</p>
+
+<blockquote>
+  <p>"Functional programming combines the flexibility and power of abstract mathematics with the intuitive clarity of abstract mathematics." - XKCD</p>
+</blockquote>
+
+<p>Vaikka lyhyt on kaunista, ja F# on tarvittaessa hyvinkin abstrakti kieli, niin tärkeintä ei ole saada aikaan lyhyin syntaksi, vaan tilanteeseen sopivin/selkein. On kielen voimakkuutta, että asiat voidaan tehdä monella tavalla, mutta hyvyyttä, että kieli ohjaa intuitiivisesti parhaaseen ratkaisuun.</p>
+
+<p>Ehkä pieni harppaus kokeellisesta yritys-erehdys-ohjelmistoylläpidosta vähän matemaattisempaan suuntaan ei olisi pahasta?</p>
+
+<p>Koodia oppii lukemaan nopeasti, mutta kivuton kirjoittaminen vaatii aikansa: uuden opettelu vaatii malttia. F#-kääntäjä on tiukempi kuin C#, sen kanssa saa alussa vähän hakata päätä seinään, mutta kun koodi menee kääntäjästä läpi, niin todennäköisemmin ohjelma ei kaadu ajonaikaisesti. Toisaalta se tuo onnistumisentunteita, ja saa C#-veteraaninkin huomaamaan, että koodaaminen voi olla kivaa.</p>
+
+<h3>F-Sharp-projektin luonti Visual Studiossa</h3>
+
+<p>Voit käyttää Azure-Worker-rolea (josta erilliset ohjeet), tai tehdä kokonaan uuden projektin. Oletuksena projektista kääntyy dll, samoin kuin C#-projektista, ja dll:t ovat yhteensopivia.</p>
+
+<p>Jos haluat tehdä uuden projektin Visual Studiossa, niin se menee näin:
+File -> New -> Project... -> Other Languages -> Visual F# ->F# Library</p>
+
+<h3>C# ja F# yhteispeli (ja miksei myös VB.NET)</h3>
+
+<p>C# on parhaimmillaan kun tarvitaan valmiit wizzardit riittävät, esim. XAML-kehityksessä. F#:sta voi referoida ja käyttää suoraa C#-dll:iä. Samassa Visual Studio "solutionissa" voi olla sekä F# että C# projekteja, mutta muutosten näkyminen toisesta toiseen vaatii referoitavan projektin kääntämistä.</p>
+
+<p>Lisää kokeeksi C#-projekti (kirjasto, console-app, testiprojekti, tms) samaan "solutioniin" F#-projektin rinnalle, ja lisää viittaus:
+Solution Explorerista C#-projektin References-kansion päällä hiiren oikeaa nappia ja:
+Add reference... -> Solution -> rasti F#-projektin ruutuun ja ok.</p>
+
+<p>Tässä malliluokka F#-sisällöksi (näitä käydään tarkemmin läpi alempana):</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">namespace</span> <span class="i">MyLibrary</span>
+
+<span class="k">type</span> <span class="i">MyClass1</span>() <span class="o">=</span> 
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">X</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">F</span><span class="s">#</span><span class="s">&quot;</span>
+
+<span class="k">module</span> <span class="i">MyModule</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="i">StaticItems</span> <span class="o">=</span> <span class="n">42</span>
+
+    <span class="k">let</span> <span class="i">MyList</span> <span class="o">=</span> [<span class="s">&quot;</span><span class="s">a</span><span class="s">&quot;</span>;<span class="s">&quot;</span><span class="s">b</span><span class="s">&quot;</span>;<span class="s">&quot;</span><span class="s">c</span><span class="s">&quot;</span>] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">toSeq</span>
+
+    <span class="k">let</span> <span class="i">MyAddFive</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span><span class="o">+</span><span class="n">5</span>;
+
+    <span class="k">let</span> <span class="i">MyGenericFunction</span> <span class="i">x</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span class="i">x</span><span class="o">.</span><span class="i">ToString</span>();
+
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">UserData1</span>() <span class="o">=</span> 
+        <span class="k">member</span> <span class="k">val</span> <span class="i">Email</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">set</span></pre>
+</td>
+</tr>
+</table>
+
+<p>...ja C#-projektin luokasta niitä voi (projektin käännön jälkeen) käyttää ihan suoraa:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="i">var</span> <span class="i">class1</span> <span class="o">=</span> <span class="k">new</span> <span class="i">MyLibrary</span><span class="o">.</span><span class="i">MyClass1</span>();
+<span class="i">var</span> <span class="i">fromFs</span> <span class="o">=</span> <span class="i">class1</span><span class="o">.</span><span class="i">X</span>;
+
+<span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">int</span> <span class="i">Item</span> <span class="o">=</span> <span class="i">MyLibrary</span><span class="o">.</span><span class="i">MyModule</span><span class="o">.</span><span class="i">StaticItems</span>;
+
+<span class="i">IEnumerable</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">string</span><span class="o">&gt;</span> <span class="i">response</span> <span class="o">=</span> <span class="i">MyLibrary</span><span class="o">.</span><span class="i">MyModule</span><span class="o">.</span><span class="i">MyList</span>;
+
+<span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="i">int</span> <span class="i">seven</span> <span class="o">=</span> <span class="i">MyLibrary</span><span class="o">.</span><span class="i">MyModule</span><span class="o">.</span><span class="i">MyAddFive</span>(<span class="n">2</span>);
+
+<span class="i">var</span> <span class="i">res</span> <span class="o">=</span> <span class="i">MyLibrary</span><span class="o">.</span><span class="i">MyModule</span><span class="o">.</span><span class="i">MyGenericFunction</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="i">int</span><span class="o">&gt;</span>(<span class="n">2</span>);
+
+<span class="i">var</span> <span class="i">class2</span> <span class="o">=</span> <span class="k">new</span> <span class="i">MyLibrary</span><span class="o">.</span><span class="i">MyModule</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 9)" onmouseover="showTip(event, 'fs3', 9)" class="i">UserData1</span>();
+<span class="i">class2</span><span class="o">.</span><span class="i">Email</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">no</span><span class="s">@</span><span class="s">spam</span><span class="s">.</span><span class="s">com</span><span class="s">&quot;</span>;</pre>
+</td>
+</tr>
+</table>
+
+<p>Näin vanhalla C#-koodaajalla on turvaverkko, johon voi luottaa ennenkuin F# on täysin hallinnassa.
+Samaan tapaan toimisi myös referointi VB.NET-komponenttiin.</p>
+
+<p>Huomattavat rajat:</p>
+
+<ul>
+<li>F#:ssa yleensä kirjoitetaan vakioiden/muuttujien/funktioiden nimet pienellä.
+<ul>
+<li>Tosin se on vain käytäntö, jotta erottaa nämä tyypeistä/luokista.</li>
+</ul></li>
+<li>F#-perus-lista on oma linkitetty listansa.
+<ul>
+<li>Seq on tyypitetty IEnumerable.</li>
+</ul></li>
+<li>F#-perus-funktio on myös omansa
+<ul>
+<li>F#:sta voi kutsua C#-metodia joka ottaa C# Func-parametrin, F#-funktio kelpaa tähän suuntaan.</li>
+<li>Mutta jos F#:sta palauttaa oletus-funktion metodista ulos, niin C#-kehittäjä vähän hämmästyy.</li>
+<li>F#:sta voi erikseen luoda ja palauttaa ulos C#:pin Func-tietotyyppin, mutta sen käyttö F#:pin sisällä ei ole luonnollista.
+<ul>
+<li>C#:ssa Func ja Action ovat eri luokat ja void ei ole tietotyyppi.</li>
+<li>F# void on nimeltään unit ja se on tietotyyppi.</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>Näillä rajoilla on merkitystä lähinnä, jos ennalta tiedetään, että kehitetään F#:sta komponenttia C#-kehityksen käyttöön.</p>
+
+<p>Sitten itse kieleen:</p>
+
+<h3>Hello world</h3>
+
+<p>Käyttäen .NET-luokkia, "Hello World"-ohjelman voi tehdä esim. näin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="i">System</span>
+<span class="k">let</span> <span class="i">x</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">World</span><span class="s">&quot;</span>
+<span class="i">Console</span><span class="o">.</span><span class="i">WriteLine</span> <span class="i">x</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Lähtökohtaisesti F# ohjaa siihen, että et voi käyttää "muuttujia" (/vakioita) uudestaan, eli kun x on kerran määritelty, niin käytä mieluummin seuraavalla kerralla muuttujaa x2 kuin x. (Tosin ehkä paremmalla nimeämiskäytännöllä.) Oikeastihan tarvitset muuttujia vain ylläpitämään luuppien tilaa. Lähtökohtaisesti F# ohjaa käyttämään rekursiota luuppien sijaan, mutta tästä lisää myöhemmin.</p>
+
+<p>Vertailuoperaatio on vain yksi yhtäkuinmerkki.
+Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käytettävissä.</p>
+
+<p>Voit myös antaa kohteille vielä selkeämpiä välilyönnillisiä nimiä (tosin huona puolena suomalainen näppäimistö-layout:in hankaluus):</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">``Hello World Container``</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">World</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h3>Interactive</h3>
+
+<p>Olettaen, että Resharper ei ole ihan sotkenut pikanäppäimiäsi:</p>
+
+<p>Painamalla Ctrl+Alt+F saat esille interactive-ikkunan ("REPL-loop"), jossa voit suorittaa koodia lennosta. Voit kirjoittaa koodia ikkunaan suoraa, ja suorittaa sen kirjoittamalla ennen enterin painallusta kaksi puolipistettä, esim:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">z</span> <span class="o">=</span> <span class="n">4</span>;;</pre>
+</td>
+</tr>
+</table>
+
+<p>Tai sitten voit suoraa projektitiedostosta maalata kasan koodia, ja lähettää sen interactive-ikkunaan (joko hiiren oikealla napilla ja "Execute in interactive", tai näppäinyhdistelmällä Alt+Enter.</p>
+
+<p>Yleensä kannattaa ensin antaa haluamansa alkuarvot parametreille ja sitten lähettää haluamansa koodinpala interactiveen.</p>
+
+<p>F#:lle on myös hyvät yksikkötesti- ja BDD-frameworkit, mutta interactiven ansiosta niitä ei tarvita kokeelliseen kehitykseen, vaan lähinnä ylläpidon varmistamiseen.</p>
+
+<h3>Tyypitys</h3>
+
+<p>Tyyppijärjestelmähän on tarkoitettu siihen, että kääntäjä palvelee koodaajaa, eikä toisinpäin. Oletuksena F# löytää tyypit itsekin, mutta joskus käyttäjä haluaa tyypittää käsin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">f1</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span><span class="o">+</span><span class="n">4.5m</span> 
+<span class="k">let</span> <span class="i">f2</span> (<span class="i">x</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="i">decimal</span>) <span class="o">=</span> <span class="i">x</span><span class="o">+</span><span class="n">4.5m</span> <span class="c">//argument type</span>
+<span class="k">let</span> <span class="i">f3</span> <span class="i">x</span> <span class="o">:</span><span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="i">decimal</span> <span class="o">=</span> <span class="i">x</span><span class="o">+</span><span class="n">4.5m</span>  <span class="c">//function type</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Geneeriset tyypit (klassinen T, T1, T2, jne) merkitään tyyppijärjestelmässä heittomerkillä: 'a, 'b, 'c, jne</p>
+
+<h3>Putkitus</h3>
+
+<p>F#:ssa on operaatio "|>", joka siirtää metodin viimeisen parametrin ensimmäiseksi:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="i">System</span>
+<span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">World</span><span class="s">&quot;</span> <span class="o">|&gt;</span> <span class="i">Console</span><span class="o">.</span><span class="i">WriteLine</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Tätä voit ajatella vähän kuin C#-extension-metodina: jos metodit ovat verbejä, on usein luonnollista aloittaa lause substanttiivilla, kielestä tulee luonnollisempaa:</p>
+
+<p>"koira haukkuu ihmiselle" vs. "haukkuu(koira, ihmiselle)"</p>
+
+<h3>Funktiot</h3>
+
+<p>F#:ssa ei tarvita sulkuja funktioparametreissa ja pilkku on varattu Tuple-luokkien käyttöön, joten parametrillisen funktion voit tehdä näin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">f</span> <span class="i">x</span> <span class="i">y</span> <span class="o">=</span> <span class="i">x</span><span class="o">+</span><span class="i">y</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Funktion tyyppisyntaksi on sama kuin C#-kielen Func<...>-luokan parametrit, esim: Func<int, int, string> on funktio joka ottaa kaksi numeroa ja palauttaa merkkijonon. F#:ssa parametrien välissä on nuoli, eli vastaavan funktion tyyppisyntaksi on</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="i">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs5', 15)" onmouseover="showTip(event, 'fs5', 15)" class="i">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="i">string</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Funktion tyyppisyntaksista voi hyvin pitkälle päätellä mitä funktio tekee.</p>
+
+<p>Parametriton funktio määriteltäisiin suluilla, tätä tarvitset, jos et halua suorittaa evaluointia heti. return-komentoa ei yleensä tarvi, koska funktio palauttaa viimeisen käskyn arvon ulos joka tapauksessa. Funktiot voivat olla sisäkkäin.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="i">sayHello</span> () <span class="o">=</span> 
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="i">hello</span> <span class="o">=</span> 
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="i">ello</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">ello</span><span class="s">&quot;</span>
+        <span class="s">&quot;</span><span class="s">h</span><span class="s">&quot;</span><span class="o">+</span><span onmouseout="hideTip(event, 'fs11', 20)" onmouseover="showTip(event, 'fs11', 20)" class="i">ello</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 21)" onmouseover="showTip(event, 'fs12', 21)" class="i">world</span> <span class="o">=</span> 
+        <span class="s">&quot;</span><span class="s">world</span><span class="s">&quot;</span>
+    <span onmouseout="hideTip(event, 'fs10', 22)" onmouseover="showTip(event, 'fs10', 22)" class="i">hello</span> <span class="o">+</span> <span class="s">&quot;</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs12', 23)" onmouseover="showTip(event, 'fs12', 23)" class="i">world</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Lambda-funktion voi tehdään fun-sanalla ja nuolella.</p>
+
+<h3>Listat</h3>
+
+<p>F#:ssa on LINQ:a monipuolisemmat  listojenkäsittelykirjastot, mutta voit halutessasi käyttää myös LINQ-kirjastoa, jos sen jo osaat.</p>
+
+<p>F#:ssa näkyy usein käytettävän kolmea eri tyyppiä listoja, joilla on kaikilla suurinpiirtein samat käsittelykirjastot. Karrikoidusti tyypit menevät näin:</p>
+
+<ul>
+<li>List
+<ul>
+<li>Ylläpidettävin koodi.</li>
+<li>Immutable: alkiot eivät muutu</li>
+<li>Kaksi kaksoispistettä voidaan käyttää tunnistamaan ensimmäinen ja loput alkiot</li>
+<li>At-merkkiä "@" voi käyttää yhdistämään kaksi listaa.</li>
+</ul></li>
+<li>Array
+<ul>
+<li>Tehokkain suoritus. Vastaa C#-arrayta.</li>
+</ul></li>
+<li>Seq
+<ul>
+<li>Yhteensopivin. Tämä vastaa C# IEnumerablea.</li>
+</ul></li>
+</ul>
+
+<p>Listoja voi muuttaa muodosta toiseen: List.toArray, List.toSeq, Seq.toList, Array.toSeq, jne. Pari  koodiesimerkkiä:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="i">emptyList</span> <span class="o">=</span> []
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="i">listOfLists</span> <span class="o">=</span> [[<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>];[<span class="n">4</span>;<span class="n">5</span>;<span class="n">6</span>]]
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 26)" onmouseover="showTip(event, 'fs15', 26)" class="i">myList</span> <span class="o">=</span> 
+    [<span class="n">1..</span><span class="n">10</span>] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 27)" onmouseover="showTip(event, 'fs1', 27)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 28)" onmouseover="showTip(event, 'fs16', 28)" class="i">filter</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs17', 29)" onmouseover="showTip(event, 'fs17', 29)" class="i">i</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs17', 30)" onmouseover="showTip(event, 'fs17', 30)" class="i">i</span><span class="o">%</span><span class="n">2</span><span class="o">=</span><span class="n">0</span>)
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 31)" onmouseover="showTip(event, 'fs18', 31)" class="i">mySeq</span> <span class="o">=</span>
+    [|<span class="n">1..</span><span class="n">10</span>|] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs19', 32)" onmouseover="showTip(event, 'fs19', 32)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs20', 33)" onmouseover="showTip(event, 'fs20', 33)" class="i">filter</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs17', 34)" onmouseover="showTip(event, 'fs17', 34)" class="i">i</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs17', 35)" onmouseover="showTip(event, 'fs17', 35)" class="i">i</span><span class="o">%</span><span class="n">2</span><span class="o">=</span><span class="n">0</span>)
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs21', 36)" onmouseover="showTip(event, 'fs21', 36)" class="i">merged</span> <span class="o">=</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>] <span class="o">@</span> [<span class="n">4</span>;<span class="n">5</span>;<span class="n">6</span>]
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 37)" onmouseover="showTip(event, 'fs22', 37)" class="i">head</span><span class="o">::</span><span onmouseout="hideTip(event, 'fs23', 38)" onmouseover="showTip(event, 'fs23', 38)" class="i">tail</span> <span class="o">=</span> [<span class="s">&quot;</span><span class="s">h</span><span class="s">&quot;</span>;<span class="s">&quot;</span><span class="s">t1</span><span class="s">&quot;</span>;<span class="s">&quot;</span><span class="s">t2</span><span class="s">&quot;</span>;<span class="s">&quot;</span><span class="s">t3</span><span class="s">&quot;</span>]
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 39)" onmouseover="showTip(event, 'fs24', 39)" class="i">``A and H to Z``</span> <span class="o">=</span> <span class="s">&#39;A&#39;</span><span class="o">::</span>[<span class="s">&#39;H&#39;</span><span class="o">..</span><span class="s">&#39;Z&#39;</span>]
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs7', 40)" onmouseover="showTip(event, 'fs7', 40)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 41)" onmouseover="showTip(event, 'fs25', 41)" class="i">Linq</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs26', 42)" onmouseover="showTip(event, 'fs26', 42)" class="i">threeFirst</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">mySeq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs27', 44)" onmouseover="showTip(event, 'fs27', 44)" class="i">Take</span>(<span class="n">3</span>)
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs19', 45)" onmouseover="showTip(event, 'fs19', 45)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 46)" onmouseover="showTip(event, 'fs28', 46)" class="i">toArray</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs29', 47)" onmouseover="showTip(event, 'fs29', 47)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs30', 48)" onmouseover="showTip(event, 'fs30', 48)" class="i">map</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs17', 49)" onmouseover="showTip(event, 'fs17', 49)" class="i">i</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs17', 50)" onmouseover="showTip(event, 'fs17', 50)" class="i">i</span><span class="o">*</span><span class="n">3</span>)</pre>
+</td>
+</tr>
+</table>
+
+<p>Funktioita voi myös yhdistellä (function composition) ">>" -merkillä, tosin tätä näkee harvemmin.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 51)" onmouseover="showTip(event, 'fs31', 51)" class="i">composed</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs1', 52)" onmouseover="showTip(event, 'fs1', 52)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 53)" onmouseover="showTip(event, 'fs16', 53)" class="i">filter</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs17', 54)" onmouseover="showTip(event, 'fs17', 54)" class="i">i</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs17', 55)" onmouseover="showTip(event, 'fs17', 55)" class="i">i</span><span class="o">%</span><span class="n">2</span><span class="o">=</span><span class="n">0</span>) <span class="o">&gt;</span><span class="o">&gt;</span> <span onmouseout="hideTip(event, 'fs1', 56)" onmouseover="showTip(event, 'fs1', 56)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs32', 57)" onmouseover="showTip(event, 'fs32', 57)" class="i">map</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs17', 58)" onmouseover="showTip(event, 'fs17', 58)" class="i">i</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs17', 59)" onmouseover="showTip(event, 'fs17', 59)" class="i">i</span><span class="o">+</span><span class="n">5</span>)
+[<span class="n">6</span>; <span class="n">5</span>; <span class="n">3</span>; <span class="n">2</span>; <span class="n">4</span>] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs31', 60)" onmouseover="showTip(event, 'fs31', 60)" class="i">composed</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Listan tyypin voi halutessaan merkitä joko C#-tyylisesti tai OCaml-tyylisesti:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs33', 61)" onmouseover="showTip(event, 'fs33', 61)" class="i">emptyList2</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs34', 62)" onmouseover="showTip(event, 'fs34', 62)" class="i">list</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs35', 63)" onmouseover="showTip(event, 'fs35', 63)" class="i">bigint</span><span class="o">&gt;</span> <span class="o">=</span> []
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs36', 64)" onmouseover="showTip(event, 'fs36', 64)" class="i">emptyList3</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs35', 65)" onmouseover="showTip(event, 'fs35', 65)" class="i">bigint</span> <span onmouseout="hideTip(event, 'fs34', 66)" onmouseover="showTip(event, 'fs34', 66)" class="i">list</span> <span class="o">=</span> []</pre>
+</td>
+</tr>
+</table>
+
+<h3>Tuple</h3>
+
+<p>Listojen lisäksi toinen yleinen rakenne on Tuple: lista on n-kappaletta yhtä samaa tyyppiä, tuple on yksi kappale n:ää eri tyyppiä. C#:ssa on myös Tuple, ja tämä luokka on sama.</p>
+
+<p>Voit toki tehdä Tuplen C#-tapaan System.Tuple.Create(1, "a", 1.0), mutta tähän on myös helpompi tapa, pelkkä pilkku. Tuplen voi myös takaisin purkaa osiinsa, joko fst- ja snd-käskyillä, tai sitten määrittelemällä "temp-muuttujat" yhtäkuin-merkin vasemmalla puolella:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 67)" onmouseover="showTip(event, 'fs37', 67)" class="i">tuple</span> <span class="o">=</span> <span class="n">1</span>, <span class="s">&quot;</span><span class="s">a</span><span class="s">&quot;</span>, <span class="n">1.0</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs38', 68)" onmouseover="showTip(event, 'fs38', 68)" class="i">a</span>, <span onmouseout="hideTip(event, 'fs39', 69)" onmouseover="showTip(event, 'fs39', 69)" class="i">b</span>, <span onmouseout="hideTip(event, 'fs40', 70)" onmouseover="showTip(event, 'fs40', 70)" class="i">c</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs37', 71)" onmouseover="showTip(event, 'fs37', 71)" class="i">tuple</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Tyyppisyntaksissa tuple merkitään tähdellä, esim: int*string.</p>
+
+<h3>Luokat</h3>
+
+<p>F# on myös erinomainen oliokieli.</p>
+
+<p>Olio, jolla on yksi property, email, jossa on getteri ja setteri, ja oletusarvo sille on tyhjä merkkijono, tehtäisiin näin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs3', 72)" onmouseover="showTip(event, 'fs3', 72)" class="i">UserData1</span>() <span class="o">=</span> 
+   <span class="k">member</span> <span class="k">val</span> <span class="i">Email</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs4', 73)" onmouseover="showTip(event, 'fs4', 73)" class="i">set</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 74)" onmouseover="showTip(event, 'fs41', 74)" class="i">myInstance1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 75)" onmouseover="showTip(event, 'fs3', 75)" class="i">UserData1</span>()</pre>
+</td>
+</tr>
+</table>
+
+<p>Kun luot uuden instanssin oliosta, niin new-sana on vapaaehtoinen.</p>
+
+<p>Olio, jolla on yksi konstruktorissa asetettava readonly-property, email, ja lisäksi tyhjä konstruktori, joka asettaa tyhjän arvon tehtäisiin näin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs42', 76)" onmouseover="showTip(event, 'fs42', 76)" class="i">UserData2</span>(<span onmouseout="hideTip(event, 'fs43', 77)" onmouseover="showTip(event, 'fs43', 77)" class="i">email</span>) <span class="o">=</span>
+   <span class="k">new</span>() <span class="o">=</span> <span onmouseout="hideTip(event, 'fs42', 78)" onmouseover="showTip(event, 'fs42', 78)" class="i">UserData2</span>(<span class="s">&quot;</span><span class="s">&quot;</span>)
+   <span class="k">member</span> <span onmouseout="hideTip(event, 'fs44', 79)" onmouseover="showTip(event, 'fs44', 79)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs45', 80)" onmouseover="showTip(event, 'fs45', 80)" class="i">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs43', 81)" onmouseover="showTip(event, 'fs43', 81)" class="i">email</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Perintä-syntaksi ei ole yhtä näppärä kuin C#:ssa, koska vahvaan tyyppitarkistukseen rajapinnat pitää aina periyttää eksplisiittisesti:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs46', 82)" onmouseover="showTip(event, 'fs46', 82)" class="i">Base</span>() <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs47', 83)" onmouseover="showTip(event, 'fs47', 83)" class="i">DoSomething</span>() <span class="o">=</span> ()
+    <span class="k">abstract</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs48', 84)" onmouseover="showTip(event, 'fs48', 84)" class="i">Method</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs49', 85)" onmouseover="showTip(event, 'fs49', 85)" class="i">unit</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs49', 86)" onmouseover="showTip(event, 'fs49', 86)" class="i">unit</span>
+    <span class="k">default</span> <span onmouseout="hideTip(event, 'fs50', 87)" onmouseover="showTip(event, 'fs50', 87)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs51', 88)" onmouseover="showTip(event, 'fs51', 88)" class="i">Method</span>() <span class="o">=</span> <span onmouseout="hideTip(event, 'fs47', 89)" onmouseover="showTip(event, 'fs47', 89)" class="i">DoSomething</span>()
+
+<span class="k">type</span> <span class="i">``My inherited class with dispose``</span>() <span class="o">=</span>
+    <span class="k">inherit</span> <span onmouseout="hideTip(event, 'fs46', 90)" onmouseover="showTip(event, 'fs46', 90)" class="i">Base</span>()
+    <span class="k">override</span> <span onmouseout="hideTip(event, 'fs52', 91)" onmouseover="showTip(event, 'fs52', 91)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs53', 92)" onmouseover="showTip(event, 'fs53', 92)" class="i">Method</span>() <span class="o">=</span>
+        <span class="k">base</span><span class="o">.</span><span class="i">Method</span>()
+
+    <span class="k">interface</span> <span class="i">IDisposable</span> <span class="k">with</span>
+        <span class="k">override</span> <span onmouseout="hideTip(event, 'fs52', 93)" onmouseover="showTip(event, 'fs52', 93)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs54', 94)" onmouseover="showTip(event, 'fs54', 94)" class="i">Dispose</span>() <span class="o">=</span> 
+            <span class="c">//Dispose resources...</span>
+            <span class="i">GC</span><span class="o">.</span><span class="i">SuppressFinalize</span>(<span onmouseout="hideTip(event, 'fs52', 95)" onmouseover="showTip(event, 'fs52', 95)" class="i">x</span>)</pre>
+</td>
+</tr>
+</table>
+
+<h3>Discriminated unioin</h3>
+
+<p>Voit tehdä "joko-tai"-tyyppejä:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs55', 96)" onmouseover="showTip(event, 'fs55', 96)" class="i">myEnum</span> <span class="o">=</span>
+| <span onmouseout="hideTip(event, 'fs56', 97)" onmouseover="showTip(event, 'fs56', 97)" class="i">A</span>
+| <span onmouseout="hideTip(event, 'fs57', 98)" onmouseover="showTip(event, 'fs57', 98)" class="i">B</span>
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs58', 99)" onmouseover="showTip(event, 'fs58', 99)" class="i">CalendarEvent</span> <span class="o">=</span>
+| <span onmouseout="hideTip(event, 'fs59', 100)" onmouseover="showTip(event, 'fs59', 100)" class="i">ExactTime</span> <span class="k">of</span> <span class="i">DateTime</span>
+| <span onmouseout="hideTip(event, 'fs60', 101)" onmouseover="showTip(event, 'fs60', 101)" class="i">MonthAndYear</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs6', 102)" onmouseover="showTip(event, 'fs6', 102)" class="i">string</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs5', 103)" onmouseover="showTip(event, 'fs5', 103)" class="i">int</span> <span class="c">//month*year</span>
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs61', 104)" onmouseover="showTip(event, 'fs61', 104)" class="i">Tree</span> <span class="o">=</span>
+| <span onmouseout="hideTip(event, 'fs62', 105)" onmouseover="showTip(event, 'fs62', 105)" class="i">Leaf</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs5', 106)" onmouseover="showTip(event, 'fs5', 106)" class="i">int</span>
+| <span onmouseout="hideTip(event, 'fs63', 107)" onmouseover="showTip(event, 'fs63', 107)" class="i">Node</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs61', 108)" onmouseover="showTip(event, 'fs61', 108)" class="i">Tree</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs61', 109)" onmouseover="showTip(event, 'fs61', 109)" class="i">Tree</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Käyttötarkoituksena esimerkiksi ohjelman tilanhallinta, jo kääntäjätasolla, ilman sotkuista ajonaikaista if-logiikkaa. Nämä ovat erittäin käteviä yhdessä pattern matchingin kanssa.</p>
+
+<h3>Astetta erikoisemmat tyypit</h3>
+
+<p>Tyyppi voi olla myös vain alias, tai "joko-tai" voi esiintyä myös yksinään:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs64', 110)" onmouseover="showTip(event, 'fs64', 110)" class="i">aliasItem</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span>,<span class="o">&#39;</span><span class="i">b</span><span class="o">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 111)" onmouseover="showTip(event, 'fs7', 111)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs65', 112)" onmouseover="showTip(event, 'fs65', 112)" class="i">Collections</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs66', 113)" onmouseover="showTip(event, 'fs66', 113)" class="i">Generic</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs67', 114)" onmouseover="showTip(event, 'fs67', 114)" class="i">KeyValuePair</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span>,<span class="o">&#39;</span><span class="i">b</span><span class="o">&gt;</span>
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs68', 115)" onmouseover="showTip(event, 'fs68', 115)" class="i">OrderId</span> <span class="o">=</span> | <span onmouseout="hideTip(event, 'fs69', 116)" onmouseover="showTip(event, 'fs69', 116)" class="i">Id</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs7', 117)" onmouseover="showTip(event, 'fs7', 117)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs70', 118)" onmouseover="showTip(event, 'fs70', 118)" class="i">Guid</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Tyyppi voi olla tietue, record:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs71', 119)" onmouseover="showTip(event, 'fs71', 119)" class="i">Address</span> <span class="o">=</span> { 
+    <span onmouseout="hideTip(event, 'fs72', 120)" onmouseover="showTip(event, 'fs72', 120)" class="i">Street</span><span class="o">:</span> <span onmouseout="hideTip(event, 'fs6', 121)" onmouseover="showTip(event, 'fs6', 121)" class="i">string</span>; 
+    <span onmouseout="hideTip(event, 'fs73', 122)" onmouseover="showTip(event, 'fs73', 122)" class="i">Zip</span><span class="o">:</span> <span onmouseout="hideTip(event, 'fs5', 123)" onmouseover="showTip(event, 'fs5', 123)" class="i">int</span>; 
+    <span onmouseout="hideTip(event, 'fs74', 124)" onmouseover="showTip(event, 'fs74', 124)" class="i">City</span><span class="o">:</span> <span onmouseout="hideTip(event, 'fs6', 125)" onmouseover="showTip(event, 'fs6', 125)" class="i">string</span>; 
+}
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs75', 126)" onmouseover="showTip(event, 'fs75', 126)" class="i">myAddrr</span> <span class="o">=</span> { <span class="i">Street</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Juvank</span><span class="s">.</span><span class="s">&quot;</span>; <span class="i">Zip</span> <span class="o">=</span> <span class="n">33710</span>; <span class="i">City</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Tre</span><span class="s">&quot;</span>; }</pre>
+</td>
+</tr>
+</table>
+
+<p>...tai sillä voidaan Measure-attribuutin kanssa määritellä vahva vain-käännösaikainen tyypitys. Vähän kuin oma luokka kapseloimaan vain yksi laskennallinen arvo (mutta näyttämään se aina ulos), jotta eri asiat tai mittayksiköt eivät varmasti mene sekaisin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs76', 127)" onmouseover="showTip(event, 'fs76', 127)" class="i">EUR</span>
+
+[&lt;<span onmouseout="hideTip(event, 'fs77', 128)" onmouseover="showTip(event, 'fs77', 128)" class="i">Measure</span>&gt;]
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs78', 129)" onmouseover="showTip(event, 'fs78', 129)" class="i">LTC</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs79', 130)" onmouseover="showTip(event, 'fs79', 130)" class="i">rate</span> <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs80', 131)" onmouseover="showTip(event, 'fs80', 131)" class="i">ratePlain</span> <span class="o">=</span> <span class="n">9.45m</span> <span class="c">//fetch from internet...</span>
+    <span onmouseout="hideTip(event, 'fs80', 132)" onmouseover="showTip(event, 'fs80', 132)" class="i">ratePlain</span> <span class="o">*</span> <span class="n">1m</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs76', 133)" onmouseover="showTip(event, 'fs76', 133)" class="i">EUR</span><span class="o">/</span><span onmouseout="hideTip(event, 'fs78', 134)" onmouseover="showTip(event, 'fs78', 134)" class="i">LTC</span><span class="o">&gt;</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs81', 135)" onmouseover="showTip(event, 'fs81', 135)" class="i">myMoneyInEur</span> (<span onmouseout="hideTip(event, 'fs82', 136)" onmouseover="showTip(event, 'fs82', 136)" class="i">x</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs8', 137)" onmouseover="showTip(event, 'fs8', 137)" class="i">decimal</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs78', 138)" onmouseover="showTip(event, 'fs78', 138)" class="i">LTC</span><span class="o">&gt;</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs82', 139)" onmouseover="showTip(event, 'fs82', 139)" class="i">x</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs79', 140)" onmouseover="showTip(event, 'fs79', 140)" class="i">rate</span> 
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs83', 141)" onmouseover="showTip(event, 'fs83', 141)" class="i">converted</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs81', 142)" onmouseover="showTip(event, 'fs81', 142)" class="i">myMoneyInEur</span> <span class="n">7m</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs78', 143)" onmouseover="showTip(event, 'fs78', 143)" class="i">LTC</span><span class="o">&gt;</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Helpoin tapa muuttaa perus-.NET-tyyppi mitaksi on kertoa se yhdellä mitalla. Esteettinen haittapuoli on, että tämä tuo "pienempi kuin" ja "suurempi kuin" merkkejä koodiin.</p>
+
+<h3>Pattern matching</h3>
+
+<p>Pattern-matching on tavallaan selkeä switch/case tai if-elseif-kuvio, jossa ehto ei voi vaihtua kesken kaiken, mutta eri case:illa ei ole constant-vaatimusta. Eri patternteita on useita.</p>
+
+<p>Lisäksi funktio voi suoraa olla pattern-funktio tai voidaan käyttää ns. active-patterneita selkeyttämään koodia. Tässä sama toiminnallisuus usealla eri kooditavalla:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs84', 144)" onmouseover="showTip(event, 'fs84', 144)" class="i">MyFunction1</span> <span onmouseout="hideTip(event, 'fs85', 145)" onmouseover="showTip(event, 'fs85', 145)" class="i">a</span> <span class="o">=</span>
+   <span class="k">if</span> <span onmouseout="hideTip(event, 'fs85', 146)" onmouseover="showTip(event, 'fs85', 146)" class="i">a</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span> <span class="k">then</span> <span class="n">1</span>
+   <span class="k">elif</span> <span onmouseout="hideTip(event, 'fs85', 147)" onmouseover="showTip(event, 'fs85', 147)" class="i">a</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">B</span><span class="s">&quot;</span> <span class="k">then</span> <span class="n">2</span>
+   <span class="k">else</span> <span class="n">3</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs86', 148)" onmouseover="showTip(event, 'fs86', 148)" class="i">MyFunction2</span> <span onmouseout="hideTip(event, 'fs85', 149)" onmouseover="showTip(event, 'fs85', 149)" class="i">a</span> <span class="o">=</span> 
+   <span class="k">match</span> <span onmouseout="hideTip(event, 'fs85', 150)" onmouseover="showTip(event, 'fs85', 150)" class="i">a</span> <span class="k">with</span>
+   | <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">1</span>
+   | <span class="s">&quot;</span><span class="s">B</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">2</span>
+   | _ <span class="k">-&gt;</span> <span class="n">3</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs87', 151)" onmouseover="showTip(event, 'fs87', 151)" class="i">MyFunction3</span> <span class="o">=</span> <span class="k">fun</span> <span onmouseout="hideTip(event, 'fs85', 152)" onmouseover="showTip(event, 'fs85', 152)" class="i">a</span> <span class="k">-&gt;</span> 
+   <span class="k">match</span> <span onmouseout="hideTip(event, 'fs85', 153)" onmouseover="showTip(event, 'fs85', 153)" class="i">a</span> <span class="k">with</span>
+   | <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">1</span>
+   | <span class="s">&quot;</span><span class="s">B</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">2</span>
+   | _ <span class="k">-&gt;</span> <span class="n">3</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs88', 154)" onmouseover="showTip(event, 'fs88', 154)" class="i">MyFunction4</span> <span class="o">=</span> <span class="k">function</span>
+   | <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">1</span>
+   | <span class="s">&quot;</span><span class="s">B</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">2</span>
+   | _ <span class="k">-&gt;</span> <span class="n">3</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs89', 155)" onmouseover="showTip(event, 'fs89', 155)" class="i">MyFunction5</span> <span onmouseout="hideTip(event, 'fs85', 156)" onmouseover="showTip(event, 'fs85', 156)" class="i">a</span> <span class="o">=</span> 
+   <span class="k">match</span> <span onmouseout="hideTip(event, 'fs85', 157)" onmouseover="showTip(event, 'fs85', 157)" class="i">a</span> <span class="k">with</span>
+   | <span onmouseout="hideTip(event, 'fs90', 158)" onmouseover="showTip(event, 'fs90', 158)" class="i">x</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs90', 159)" onmouseover="showTip(event, 'fs90', 159)" class="i">x</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">1</span>
+   | <span onmouseout="hideTip(event, 'fs90', 160)" onmouseover="showTip(event, 'fs90', 160)" class="i">x</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs90', 161)" onmouseover="showTip(event, 'fs90', 161)" class="i">x</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">B</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="n">2</span>
+   | <span onmouseout="hideTip(event, 'fs90', 162)" onmouseover="showTip(event, 'fs90', 162)" class="i">x</span> <span class="k">-&gt;</span> <span class="n">3</span>
+
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs91', 163)" onmouseover="showTip(event, 'fs91', 163)" class="i">MyFunction6</span> <span onmouseout="hideTip(event, 'fs85', 164)" onmouseover="showTip(event, 'fs85', 164)" class="i">a</span> <span class="o">=</span> 
+
+    <span class="k">let</span> (|<span class="i">FirstVowel</span>|<span class="i">FirstConsonant</span>|<span class="i">Other</span>|) <span onmouseout="hideTip(event, 'fs92', 165)" onmouseover="showTip(event, 'fs92', 165)" class="i">p</span> <span class="o">=</span>
+        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs92', 166)" onmouseover="showTip(event, 'fs92', 166)" class="i">p</span> <span class="k">with</span>
+        | <span class="s">&quot;</span><span class="s">A</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="i">FirstVowel</span>
+        | <span class="s">&quot;</span><span class="s">B</span><span class="s">&quot;</span> <span class="k">-&gt;</span> <span class="i">FirstConsonant</span>
+        | _ <span class="k">-&gt;</span> <span class="i">Other</span>
+
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs85', 167)" onmouseover="showTip(event, 'fs85', 167)" class="i">a</span> <span class="k">with</span>
+    | <span onmouseout="hideTip(event, 'fs93', 168)" onmouseover="showTip(event, 'fs93', 168)" class="i">FirstVowel</span> <span class="k">-&gt;</span> <span class="n">1</span>
+    | <span onmouseout="hideTip(event, 'fs94', 169)" onmouseover="showTip(event, 'fs94', 169)" class="i">FirstConsonant</span> <span class="k">-&gt;</span> <span class="n">2</span>
+    | <span onmouseout="hideTip(event, 'fs95', 170)" onmouseover="showTip(event, 'fs95', 170)" class="i">Other</span> <span class="k">-&gt;</span> <span class="n">3</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Usein, jos mahdollista, on parempi jättää oletus-tapaus kokonaan pois, koska silloin kääntäjä saa kiinni virheet, jos tuntemattomia tapauksia luodaan jälkikäteen koodiin  lisää.</p>
+
+<h3>Nullittomuus ja option-type</h3>
+
+<p>C#:ssa NULL on sekä "special case" (Fowler: PoEAA) että un-assigned-muuttuja. Kaksi rooila yhdellä asialla tekee sen käytöstä sotkuista.</p>
+
+<p>Lähtökohtaisesti F#:ssa NULL ei ole käytössä. Sen sijaan on käytössä option-type, asialle jota ei ole tiedossa:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs96', 171)" onmouseover="showTip(event, 'fs96', 171)" class="i">echo</span> <span onmouseout="hideTip(event, 'fs97', 172)" onmouseover="showTip(event, 'fs97', 172)" class="i">x</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">You</span><span class="s"> </span><span class="s">have</span><span class="s"> </span><span class="s">to</span><span class="s"> </span><span class="s">work</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs97', 173)" onmouseover="showTip(event, 'fs97', 173)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs98', 174)" onmouseover="showTip(event, 'fs98', 174)" class="i">ToString</span>() <span class="o">+</span> <span class="s">&quot;</span><span class="s"> </span><span class="s">hours</span><span class="s">.</span><span class="s">&quot;</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs99', 175)" onmouseover="showTip(event, 'fs99', 175)" class="i">``working hours``</span> <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs100', 176)" onmouseover="showTip(event, 'fs100', 176)" class="i">day</span> <span class="o">=</span> (<span onmouseout="hideTip(event, 'fs5', 177)" onmouseover="showTip(event, 'fs5', 177)" class="i">int</span> <span onmouseout="hideTip(event, 'fs7', 178)" onmouseover="showTip(event, 'fs7', 178)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs101', 179)" onmouseover="showTip(event, 'fs101', 179)" class="i">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs102', 180)" onmouseover="showTip(event, 'fs102', 180)" class="i">Now</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs103', 181)" onmouseover="showTip(event, 'fs103', 181)" class="i">DayOfWeek</span>)
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs100', 182)" onmouseover="showTip(event, 'fs100', 182)" class="i">day</span> <span class="k">with</span>
+    | <span class="n">0</span> | <span class="n">6</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs104', 183)" onmouseover="showTip(event, 'fs104', 183)" class="i">None</span>
+    | _ <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs105', 184)" onmouseover="showTip(event, 'fs105', 184)" class="i">Some</span>(<span class="n">7.5</span>)
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs106', 185)" onmouseover="showTip(event, 'fs106', 185)" class="i">echoHours1</span> <span class="o">=</span> 
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs99', 186)" onmouseover="showTip(event, 'fs99', 186)" class="i">``working hours``</span> <span class="k">with</span>
+    | <span onmouseout="hideTip(event, 'fs104', 187)" onmouseover="showTip(event, 'fs104', 187)" class="i">None</span> <span class="k">-&gt;</span> <span class="s">&quot;</span><span class="s">&quot;</span>
+    | <span onmouseout="hideTip(event, 'fs105', 188)" onmouseover="showTip(event, 'fs105', 188)" class="i">Some</span> <span onmouseout="hideTip(event, 'fs107', 189)" onmouseover="showTip(event, 'fs107', 189)" class="i">h</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs96', 190)" onmouseover="showTip(event, 'fs96', 190)" class="i">echo</span> <span onmouseout="hideTip(event, 'fs107', 191)" onmouseover="showTip(event, 'fs107', 191)" class="i">h</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs108', 192)" onmouseover="showTip(event, 'fs108', 192)" class="i">echoHours2</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs99', 193)" onmouseover="showTip(event, 'fs99', 193)" class="i">``working hours``</span> 
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs109', 194)" onmouseover="showTip(event, 'fs109', 194)" class="i">Option</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs110', 195)" onmouseover="showTip(event, 'fs110', 195)" class="i">map</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs107', 196)" onmouseover="showTip(event, 'fs107', 196)" class="i">h</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs96', 197)" onmouseover="showTip(event, 'fs96', 197)" class="i">echo</span> <span onmouseout="hideTip(event, 'fs107', 198)" onmouseover="showTip(event, 'fs107', 198)" class="i">h</span>)
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs111', 199)" onmouseover="showTip(event, 'fs111', 199)" class="i">echoHours3</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs99', 200)" onmouseover="showTip(event, 'fs99', 200)" class="i">``working hours``</span> 
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs109', 201)" onmouseover="showTip(event, 'fs109', 201)" class="i">Option</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs110', 202)" onmouseover="showTip(event, 'fs110', 202)" class="i">map</span>(<span onmouseout="hideTip(event, 'fs96', 203)" onmouseover="showTip(event, 'fs96', 203)" class="i">echo</span>)</pre>
+</td>
+</tr>
+</table>
+
+<h3>Rekursiivisuus</h3>
+
+<p>Rekursiiviseen funktioon kirjoitetaan rec. Usein itse rekursio kapseloidaan toisen funktion sisään, jotta voidaan peittää "turhat" alkuarvot. Usein myös käytetään muotoa, jossa viimeisenä parametrina menee "akkumulaattori", johon kerätään tulos. Tämä siksi, että kääntäjä optimoi häntärekursiolla stäkin pois, ts. ei tule StackOverflowException:ia, vaikka läpikäytävä rekursio olisi iso.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs112', 204)" onmouseover="showTip(event, 'fs112', 204)" class="i">sumItems</span> <span onmouseout="hideTip(event, 'fs113', 205)" onmouseover="showTip(event, 'fs113', 205)" class="i">myList</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs114', 206)" onmouseover="showTip(event, 'fs114', 206)" class="i">calculate</span> <span onmouseout="hideTip(event, 'fs115', 207)" onmouseover="showTip(event, 'fs115', 207)" class="i">li</span> <span onmouseout="hideTip(event, 'fs116', 208)" onmouseover="showTip(event, 'fs116', 208)" class="i">acc</span> <span class="o">=</span>
+        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs115', 209)" onmouseover="showTip(event, 'fs115', 209)" class="i">li</span> <span class="k">with</span>
+        |[] <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs116', 210)" onmouseover="showTip(event, 'fs116', 210)" class="i">acc</span>
+        |<span onmouseout="hideTip(event, 'fs117', 211)" onmouseover="showTip(event, 'fs117', 211)" class="i">h</span><span class="o">::</span><span onmouseout="hideTip(event, 'fs118', 212)" onmouseover="showTip(event, 'fs118', 212)" class="i">t</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs114', 213)" onmouseover="showTip(event, 'fs114', 213)" class="i">calculate</span> <span onmouseout="hideTip(event, 'fs118', 214)" onmouseover="showTip(event, 'fs118', 214)" class="i">t</span> (<span onmouseout="hideTip(event, 'fs117', 215)" onmouseover="showTip(event, 'fs117', 215)" class="i">h</span><span class="o">+</span><span onmouseout="hideTip(event, 'fs116', 216)" onmouseover="showTip(event, 'fs116', 216)" class="i">acc</span>)
+    <span onmouseout="hideTip(event, 'fs114', 217)" onmouseover="showTip(event, 'fs114', 217)" class="i">calculate</span> <span onmouseout="hideTip(event, 'fs113', 218)" onmouseover="showTip(event, 'fs113', 218)" class="i">myList</span> <span class="n">0</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Tämä tyypillinen funktio löytyy tietysti myös suoraa List-kirjastosta, mutta jos tarvitaan enemmän custom-toiminnallisuutta, niin silloin oma rekursio on joskus paikallaan.</p>
+
+<h3>Computation Expressions</h3>
+
+<p>Nämä ovat eräänlaisia kapseleita kapseloimaan toiminnallisuuden sivuvaikutuksia. Valmiita ovat mm. seq (listoille) ja async (asynkroniselle koodille), mutta näitä voi tehdä itse lisää.</p>
+
+<p>Asynkronisuuden sivuvaikutus on odottaminen. Async.RunSynchronously nyt ei itsessään ole kovin hyödyllinen, mutta Async:illa on paljon muitakin vaihtoehtoja.</p>
+
+<p>Asian ydin on se, että kun katsotaan koodia kohdassa sum = x + y, niin se näyttää hyvin samalta kuin perus F#-koodi muutenkin, vaikka ollaan sivuvaikutuksen piirissä. Ja itse sivuvaikutus, async, ilmenee koodista eksplisiittisesti. Huutomerkki-syntaksi tarkoittaa kutsua "computation expression"-rajapintaan.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs119', 219)" onmouseover="showTip(event, 'fs119', 219)" class="i">asyncOperation</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs120', 220)" onmouseover="showTip(event, 'fs120', 220)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs121', 221)" onmouseover="showTip(event, 'fs121', 221)" class="i">Sleep</span> <span class="n">3000</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs122', 222)" onmouseover="showTip(event, 'fs122', 222)" class="i">waitAndReturn</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs123', 223)" onmouseover="showTip(event, 'fs123', 223)" class="i">async</span> {
+        <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs119', 224)" onmouseover="showTip(event, 'fs119', 224)" class="i">asyncOperation</span>
+        <span class="k">return</span> <span class="n">3.0</span>
+    }
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs124', 225)" onmouseover="showTip(event, 'fs124', 225)" class="i">waitAndReturn2</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs123', 226)" onmouseover="showTip(event, 'fs123', 226)" class="i">async</span> {
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs125', 227)" onmouseover="showTip(event, 'fs125', 227)" class="i">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs122', 228)" onmouseover="showTip(event, 'fs122', 228)" class="i">waitAndReturn</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs126', 229)" onmouseover="showTip(event, 'fs126', 229)" class="i">y</span> <span class="o">=</span> <span class="n">7.0</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs127', 230)" onmouseover="showTip(event, 'fs127', 230)" class="i">sum</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs125', 231)" onmouseover="showTip(event, 'fs125', 231)" class="i">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs126', 232)" onmouseover="showTip(event, 'fs126', 232)" class="i">y</span>
+        <span class="k">return</span> <span onmouseout="hideTip(event, 'fs127', 233)" onmouseover="showTip(event, 'fs127', 233)" class="i">sum</span>
+    }
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs128', 234)" onmouseover="showTip(event, 'fs128', 234)" class="i">result</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs120', 235)" onmouseover="showTip(event, 'fs120', 235)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs129', 236)" onmouseover="showTip(event, 'fs129', 236)" class="i">RunSynchronously</span> <span onmouseout="hideTip(event, 'fs124', 237)" onmouseover="showTip(event, 'fs124', 237)" class="i">waitAndReturn2</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Jos verrataan tätä C#:piin, niin seq { ... } vastaava on LINQ. Mutta LINQ on tavallaan oma kielensä, joka koodaajan on opeteltava erikseen. Ja koodaaja ei tiedä tekeekö LINQ:a IEnumerablea, IQueryablea, IObservablea, vai mitä vasten... Vähän naiivi ja C#-henkinen, mutta toimiva esimerkki seq-expressionista:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs7', 238)" onmouseover="showTip(event, 'fs7', 238)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 239)" onmouseover="showTip(event, 'fs25', 239)" class="i">Linq</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs130', 240)" onmouseover="showTip(event, 'fs130', 240)" class="i">slice</span> <span onmouseout="hideTip(event, 'fs131', 241)" onmouseover="showTip(event, 'fs131', 241)" class="i">mySeq</span> <span class="o">=</span> 
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs132', 242)" onmouseover="showTip(event, 'fs132', 242)" class="i">chunkSize</span> <span class="o">=</span> <span class="n">5</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs133', 243)" onmouseover="showTip(event, 'fs133', 243)" class="i">seqSlice</span> (<span onmouseout="hideTip(event, 'fs134', 244)" onmouseover="showTip(event, 'fs134', 244)" class="i">s</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs5', 245)" onmouseover="showTip(event, 'fs5', 245)" class="i">int</span> <span onmouseout="hideTip(event, 'fs135', 246)" onmouseover="showTip(event, 'fs135', 246)" class="i">seq</span>) <span class="o">=</span>
+        <span onmouseout="hideTip(event, 'fs135', 247)" onmouseover="showTip(event, 'fs135', 247)" class="i">seq</span>{
+            <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs134', 248)" onmouseover="showTip(event, 'fs134', 248)" class="i">s</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs27', 249)" onmouseover="showTip(event, 'fs27', 249)" class="i">Take</span> <span onmouseout="hideTip(event, 'fs132', 250)" onmouseover="showTip(event, 'fs132', 250)" class="i">chunkSize</span>
+            <span class="k">yield!</span> <span onmouseout="hideTip(event, 'fs133', 251)" onmouseover="showTip(event, 'fs133', 251)" class="i">seqSlice</span> (<span onmouseout="hideTip(event, 'fs134', 252)" onmouseover="showTip(event, 'fs134', 252)" class="i">s</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs136', 253)" onmouseover="showTip(event, 'fs136', 253)" class="i">Skip</span> <span onmouseout="hideTip(event, 'fs132', 254)" onmouseover="showTip(event, 'fs132', 254)" class="i">chunkSize</span>)
+        }
+    <span onmouseout="hideTip(event, 'fs133', 255)" onmouseover="showTip(event, 'fs133', 255)" class="i">seqSlice</span> <span onmouseout="hideTip(event, 'fs131', 256)" onmouseover="showTip(event, 'fs131', 256)" class="i">mySeq</span></pre>
+</td>
+</tr>
+</table>
+
+<p>"Computation Expressions" on kauniimpi nimi asialle, josta käytetään myös ilmaisua "Monad".</p>
+
+<h3>Harjoitustehtäviä</h3>
+
+<ul>
+<li>Luo rekursiivinen ohjelma joka listaa 1000 ensimmäistä fibonacci-lukua (1, 1, 2, 3, 5, 8, 13, ...).</li>
+<li>Luo C#-yksikkötesti tai konsoliaplikaatio kutsumaan edellistä.</li>
+</ul>
+
+<h3>Linkit</h3>
+
+<p>Jos tämä oli liian hapokasta, niin kannattaa katsoa läpi <a href="https://bitbucket.org/ilmirajat/fsharptraining.fi/src/05a105289a51212202c76794a704721503c55e41/FSharpTraining/">tämä materiaali</a>.
+Jos haluat opetella listakirjastojen toiminnallisuuksia, niin koita tehdä <a href="https://projecteuler.net/problems">Project Euler</a> -tehtäviä. Jos haluat itsenäisen pienen koodiesimerkin jostain aiheesta, niin <a href="http://www.fssnip.net/pages/AllTags">fssnip.net</a> on hyvä saitti lähteä etsimään.</p>
+
+          <div class="tip" id="fs1">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
+<div class="tip" id="fs2">val toSeq : list:&#39;T list -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.List.toSeq</div>
+<div class="tip" id="fs3">Multiple items<br />type UserData1 =<br />&#160;&#160;new : unit -&gt; UserData1<br />&#160;&#160;member Email : string<br />&#160;&#160;member Email : string with set<br /><br />Full name: FSharpBasicsFin.UserData1<br /><br />--------------------<br />new : unit -&gt; UserData1</div>
+<div class="tip" id="fs4">val set : elements:seq&lt;&#39;T&gt; -&gt; Set&lt;&#39;T&gt; (requires comparison)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.set</div>
+<div class="tip" id="fs5">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
+<div class="tip" id="fs6">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs7">namespace System</div>
+<div class="tip" id="fs8">Multiple items<br />val decimal : value:&#39;T -&gt; decimal (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.decimal<br /><br />--------------------<br />type decimal = System.Decimal<br /><br />Full name: Microsoft.FSharp.Core.decimal<br /><br />--------------------<br />type decimal&lt;&#39;Measure&gt; = decimal<br /><br />Full name: Microsoft.FSharp.Core.decimal&lt;_&gt;</div>
+<div class="tip" id="fs9">val sayHello : unit -&gt; string<br /><br />Full name: FSharpBasicsFin.sayHello</div>
+<div class="tip" id="fs10">val hello : string</div>
+<div class="tip" id="fs11">val ello : string</div>
+<div class="tip" id="fs12">val world : string</div>
+<div class="tip" id="fs13">val emptyList : &#39;a list<br /><br />Full name: FSharpBasicsFin.emptyList</div>
+<div class="tip" id="fs14">val listOfLists : int list list<br /><br />Full name: FSharpBasicsFin.listOfLists</div>
+<div class="tip" id="fs15">val myList : int list<br /><br />Full name: FSharpBasicsFin.myList</div>
+<div class="tip" id="fs16">val filter : predicate:(&#39;T -&gt; bool) -&gt; list:&#39;T list -&gt; &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List.filter</div>
+<div class="tip" id="fs17">val i : int</div>
+<div class="tip" id="fs18">val mySeq : seq&lt;int&gt;<br /><br />Full name: FSharpBasicsFin.mySeq</div>
+<div class="tip" id="fs19">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs20">val filter : predicate:(&#39;T -&gt; bool) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.filter</div>
+<div class="tip" id="fs21">val merged : int list<br /><br />Full name: FSharpBasicsFin.merged</div>
+<div class="tip" id="fs22">val head : string<br /><br />Full name: FSharpBasicsFin.head</div>
+<div class="tip" id="fs23">val tail : string list<br /><br />Full name: FSharpBasicsFin.tail</div>
+<div class="tip" id="fs24">val ( A and H to Z ) : char list<br /><br />Full name: FSharpBasicsFin.( A and H to Z )</div>
+<div class="tip" id="fs25">namespace System.Linq</div>
+<div class="tip" id="fs26">val threeFirst : int []<br /><br />Full name: FSharpBasicsFin.threeFirst</div>
+<div class="tip" id="fs27">(extension) System.Collections.Generic.IEnumerable.Take&lt;&#39;TSource&gt;(count: int) : System.Collections.Generic.IEnumerable&lt;&#39;TSource&gt;</div>
+<div class="tip" id="fs28">val toArray : source:seq&lt;&#39;T&gt; -&gt; &#39;T []<br /><br />Full name: Microsoft.FSharp.Collections.Seq.toArray</div>
+<div class="tip" id="fs29">module Array<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs30">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; array:&#39;T [] -&gt; &#39;U []<br /><br />Full name: Microsoft.FSharp.Collections.Array.map</div>
+<div class="tip" id="fs31">val composed : (int list -&gt; int list)<br /><br />Full name: FSharpBasicsFin.composed</div>
+<div class="tip" id="fs32">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; list:&#39;T list -&gt; &#39;U list<br /><br />Full name: Microsoft.FSharp.Collections.List.map</div>
+<div class="tip" id="fs33">val emptyList2 : bigint list<br /><br />Full name: FSharpBasicsFin.emptyList2</div>
+<div class="tip" id="fs34">type &#39;T list = List&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.list&lt;_&gt;</div>
+<div class="tip" id="fs35">type bigint = System.Numerics.BigInteger<br /><br />Full name: Microsoft.FSharp.Core.bigint</div>
+<div class="tip" id="fs36">val emptyList3 : bigint list<br /><br />Full name: FSharpBasicsFin.emptyList3</div>
+<div class="tip" id="fs37">val tuple : int * string * float<br /><br />Full name: FSharpBasicsFin.tuple</div>
+<div class="tip" id="fs38">val a : int<br /><br />Full name: FSharpBasicsFin.a</div>
+<div class="tip" id="fs39">val b : string<br /><br />Full name: FSharpBasicsFin.b</div>
+<div class="tip" id="fs40">val c : float<br /><br />Full name: FSharpBasicsFin.c</div>
+<div class="tip" id="fs41">val myInstance1 : UserData1<br /><br />Full name: FSharpBasicsFin.myInstance1</div>
+<div class="tip" id="fs42">Multiple items<br />type UserData2 =<br />&#160;&#160;new : unit -&gt; UserData2<br />&#160;&#160;new : email:string -&gt; UserData2<br />&#160;&#160;member Email : string<br /><br />Full name: FSharpBasicsFin.UserData2<br /><br />--------------------<br />new : unit -&gt; UserData2<br />new : email:string -&gt; UserData2</div>
+<div class="tip" id="fs43">val email : string</div>
+<div class="tip" id="fs44">val x : UserData2</div>
+<div class="tip" id="fs45">member UserData2.Email : string<br /><br />Full name: FSharpBasicsFin.UserData2.Email</div>
+<div class="tip" id="fs46">Multiple items<br />type Base =<br />&#160;&#160;new : unit -&gt; Base<br />&#160;&#160;abstract member Method : unit -&gt; unit<br />&#160;&#160;override Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.Base<br /><br />--------------------<br />new : unit -&gt; Base</div>
+<div class="tip" id="fs47">val DoSomething : (unit -&gt; unit)</div>
+<div class="tip" id="fs48">abstract member Base.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.Base.Method</div>
+<div class="tip" id="fs49">type unit = Unit<br /><br />Full name: Microsoft.FSharp.Core.unit</div>
+<div class="tip" id="fs50">val x : Base</div>
+<div class="tip" id="fs51">override Base.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.Base.Method</div>
+<div class="tip" id="fs52">val x : My inherited class with dispose</div>
+<div class="tip" id="fs53">override My inherited class with dispose.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.My inherited class with dispose.Method</div>
+<div class="tip" id="fs54">override My inherited class with dispose.Dispose : unit -&gt; &#39;a<br /><br />Full name: FSharpBasicsFin.My inherited class with dispose.Dispose</div>
+<div class="tip" id="fs55">type myEnum =<br />&#160;&#160;| A<br />&#160;&#160;| B<br /><br />Full name: FSharpBasicsFin.myEnum</div>
+<div class="tip" id="fs56">union case myEnum.A: myEnum</div>
+<div class="tip" id="fs57">union case myEnum.B: myEnum</div>
+<div class="tip" id="fs58">type CalendarEvent =<br />&#160;&#160;| ExactTime of obj<br />&#160;&#160;| MonthAndYear of string * int<br /><br />Full name: FSharpBasicsFin.CalendarEvent</div>
+<div class="tip" id="fs59">union case CalendarEvent.ExactTime: obj -&gt; CalendarEvent</div>
+<div class="tip" id="fs60">union case CalendarEvent.MonthAndYear: string * int -&gt; CalendarEvent</div>
+<div class="tip" id="fs61">type Tree =<br />&#160;&#160;| Leaf of int<br />&#160;&#160;| Node of Tree * Tree<br /><br />Full name: FSharpBasicsFin.Tree</div>
+<div class="tip" id="fs62">union case Tree.Leaf: int -&gt; Tree</div>
+<div class="tip" id="fs63">union case Tree.Node: Tree * Tree -&gt; Tree</div>
+<div class="tip" id="fs64">type aliasItem&lt;&#39;a,&#39;b&gt; = System.Collections.Generic.KeyValuePair&lt;&#39;a,&#39;b&gt;<br /><br />Full name: FSharpBasicsFin.aliasItem&lt;_,_&gt;</div>
+<div class="tip" id="fs65">namespace System.Collections</div>
+<div class="tip" id="fs66">namespace System.Collections.Generic</div>
+<div class="tip" id="fs67">Multiple items<br />type KeyValuePair&lt;&#39;TKey,&#39;TValue&gt; =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : key:&#39;TKey * value:&#39;TValue -&gt; KeyValuePair&lt;&#39;TKey, &#39;TValue&gt;<br />&#160;&#160;&#160;&#160;member Key : &#39;TKey<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;&#160;&#160;member Value : &#39;TValue<br />&#160;&#160;end<br /><br />Full name: System.Collections.Generic.KeyValuePair&lt;_,_&gt;<br /><br />--------------------<br />System.Collections.Generic.KeyValuePair()<br />System.Collections.Generic.KeyValuePair(key: &#39;TKey, value: &#39;TValue) : unit</div>
+<div class="tip" id="fs68">type OrderId = | Id of Guid<br /><br />Full name: FSharpBasicsFin.OrderId</div>
+<div class="tip" id="fs69">union case OrderId.Id: System.Guid -&gt; OrderId</div>
+<div class="tip" id="fs70">Multiple items<br />type Guid =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : b:byte[] -&gt; Guid + 4 overloads<br />&#160;&#160;&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;member Equals : o:obj -&gt; bool + 1 overload<br />&#160;&#160;&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;&#160;&#160;member ToByteArray : unit -&gt; byte[]<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string + 2 overloads<br />&#160;&#160;&#160;&#160;static val Empty : Guid<br />&#160;&#160;&#160;&#160;static member NewGuid : unit -&gt; Guid<br />&#160;&#160;&#160;&#160;static member Parse : input:string -&gt; Guid<br />&#160;&#160;&#160;&#160;static member ParseExact : input:string * format:string -&gt; Guid<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.Guid<br /><br />--------------------<br />System.Guid()<br />System.Guid(b: byte []) : unit<br />System.Guid(g: string) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte []) : unit<br />System.Guid(a: uint32, b: uint16, c: uint16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit</div>
+<div class="tip" id="fs71">type Address =<br />&#160;&#160;{Street: string;<br />&#160;&#160;&#160;Zip: int;<br />&#160;&#160;&#160;City: string;}<br /><br />Full name: FSharpBasicsFin.Address</div>
+<div class="tip" id="fs72">Address.Street: string</div>
+<div class="tip" id="fs73">Address.Zip: int</div>
+<div class="tip" id="fs74">Address.City: string</div>
+<div class="tip" id="fs75">val myAddrr : Address<br /><br />Full name: FSharpBasicsFin.myAddrr</div>
+<div class="tip" id="fs76">type EUR<br /><br />Full name: FSharpBasicsFin.EUR</div>
+<div class="tip" id="fs77">Multiple items<br />type MeasureAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; MeasureAttribute<br /><br />Full name: Microsoft.FSharp.Core.MeasureAttribute<br /><br />--------------------<br />new : unit -&gt; MeasureAttribute</div>
+<div class="tip" id="fs78">[&lt;Measure&gt;]<br />type LTC<br /><br />Full name: FSharpBasicsFin.LTC</div>
+<div class="tip" id="fs79">val rate : decimal<br /><br />Full name: FSharpBasicsFin.rate</div>
+<div class="tip" id="fs80">val ratePlain : decimal</div>
+<div class="tip" id="fs81">val myMoneyInEur : x:decimal&lt;LTC&gt; -&gt; decimal&lt;LTC&gt;<br /><br />Full name: FSharpBasicsFin.myMoneyInEur</div>
+<div class="tip" id="fs82">val x : decimal&lt;LTC&gt;</div>
+<div class="tip" id="fs83">val converted : decimal&lt;LTC&gt;<br /><br />Full name: FSharpBasicsFin.converted</div>
+<div class="tip" id="fs84">val MyFunction1 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction1</div>
+<div class="tip" id="fs85">val a : string</div>
+<div class="tip" id="fs86">val MyFunction2 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction2</div>
+<div class="tip" id="fs87">val MyFunction3 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction3</div>
+<div class="tip" id="fs88">val MyFunction4 : _arg1:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction4</div>
+<div class="tip" id="fs89">val MyFunction5 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction5</div>
+<div class="tip" id="fs90">val x : string</div>
+<div class="tip" id="fs91">val MyFunction6 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction6</div>
+<div class="tip" id="fs92">val p : string</div>
+<div class="tip" id="fs93">active recognizer FirstVowel: string -&gt; Choice&lt;unit,unit,unit&gt;</div>
+<div class="tip" id="fs94">active recognizer FirstConsonant: string -&gt; Choice&lt;unit,unit,unit&gt;</div>
+<div class="tip" id="fs95">active recognizer Other: string -&gt; Choice&lt;unit,unit,unit&gt;</div>
+<div class="tip" id="fs96">val echo : x:&#39;a -&gt; string<br /><br />Full name: FSharpBasicsFin.echo</div>
+<div class="tip" id="fs97">val x : &#39;a</div>
+<div class="tip" id="fs98">System.Object.ToString() : string</div>
+<div class="tip" id="fs99">val ( working hours ) : float option<br /><br />Full name: FSharpBasicsFin.( working hours )</div>
+<div class="tip" id="fs100">val day : int</div>
+<div class="tip" id="fs101">Multiple items<br />type DateTime =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : ticks:int64 -&gt; DateTime + 10 overloads<br />&#160;&#160;&#160;&#160;member Add : value:TimeSpan -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddDays : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddHours : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMilliseconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMinutes : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMonths : months:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddSeconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddTicks : value:int64 -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddYears : value:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.DateTime<br /><br />--------------------<br />System.DateTime()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="tip" id="fs102">property System.DateTime.Now: System.DateTime</div>
+<div class="tip" id="fs103">property System.DateTime.DayOfWeek: System.DayOfWeek</div>
+<div class="tip" id="fs104">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs105">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs106">val echoHours1 : string<br /><br />Full name: FSharpBasicsFin.echoHours1</div>
+<div class="tip" id="fs107">val h : float</div>
+<div class="tip" id="fs108">val echoHours2 : string option<br /><br />Full name: FSharpBasicsFin.echoHours2</div>
+<div class="tip" id="fs109">module Option<br /><br />from Microsoft.FSharp.Core</div>
+<div class="tip" id="fs110">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; option:&#39;T option -&gt; &#39;U option<br /><br />Full name: Microsoft.FSharp.Core.Option.map</div>
+<div class="tip" id="fs111">val echoHours3 : string option<br /><br />Full name: FSharpBasicsFin.echoHours3</div>
+<div class="tip" id="fs112">val sumItems : myList:int list -&gt; int<br /><br />Full name: FSharpBasicsFin.sumItems</div>
+<div class="tip" id="fs113">val myList : int list</div>
+<div class="tip" id="fs114">val calculate : (int list -&gt; int -&gt; int)</div>
+<div class="tip" id="fs115">val li : int list</div>
+<div class="tip" id="fs116">val acc : int</div>
+<div class="tip" id="fs117">val h : int</div>
+<div class="tip" id="fs118">val t : int list</div>
+<div class="tip" id="fs119">val asyncOperation : Async&lt;unit&gt;<br /><br />Full name: FSharpBasicsFin.asyncOperation</div>
+<div class="tip" id="fs120">Multiple items<br />type Async<br />static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member CancelDefaultToken : unit -&gt; unit<br />static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * beginAction:(&#39;Arg1 * &#39;Arg2 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * arg3:&#39;Arg3 * beginAction:(&#39;Arg1 * &#39;Arg2 * &#39;Arg3 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromContinuations : callback:((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member Ignore : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;unit&gt;<br />static member OnCancel : interruption:(unit -&gt; unit) -&gt; Async&lt;IDisposable&gt;<br />static member Parallel : computations:seq&lt;Async&lt;&#39;T&gt;&gt; -&gt; Async&lt;&#39;T []&gt;<br />static member RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:CancellationToken -&gt; &#39;T<br />static member Sleep : millisecondsDueTime:int -&gt; Async&lt;unit&gt;<br />static member Start : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions * ?cancellationToken:CancellationToken -&gt; Task&lt;&#39;T&gt;<br />static member StartChild : computation:Async&lt;&#39;T&gt; * ?millisecondsTimeout:int -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />static member StartChildAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions -&gt; Async&lt;Task&lt;&#39;T&gt;&gt;<br />static member StartImmediate : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartWithContinuations : computation:Async&lt;&#39;T&gt; * continuation:(&#39;T -&gt; unit) * exceptionContinuation:(exn -&gt; unit) * cancellationContinuation:(OperationCanceledException -&gt; unit) * ?cancellationToken:CancellationToken -&gt; unit<br />static member SwitchToContext : syncContext:SynchronizationContext -&gt; Async&lt;unit&gt;<br />static member SwitchToNewThread : unit -&gt; Async&lt;unit&gt;<br />static member SwitchToThreadPool : unit -&gt; Async&lt;unit&gt;<br />static member TryCancelled : computation:Async&lt;&#39;T&gt; * compensation:(OperationCanceledException -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member CancellationToken : Async&lt;CancellationToken&gt;<br />static member DefaultCancellationToken : CancellationToken<br /><br />Full name: Microsoft.FSharp.Control.Async<br /><br />--------------------<br />type Async&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Control.Async&lt;_&gt;</div>
+<div class="tip" id="fs121">static member Async.Sleep : millisecondsDueTime:int -&gt; Async&lt;unit&gt;</div>
+<div class="tip" id="fs122">val waitAndReturn : Async&lt;float&gt;<br /><br />Full name: FSharpBasicsFin.waitAndReturn</div>
+<div class="tip" id="fs123">val async : AsyncBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.async</div>
+<div class="tip" id="fs124">val waitAndReturn2 : Async&lt;float&gt;<br /><br />Full name: FSharpBasicsFin.waitAndReturn2</div>
+<div class="tip" id="fs125">val x : float</div>
+<div class="tip" id="fs126">val y : float</div>
+<div class="tip" id="fs127">val sum : float</div>
+<div class="tip" id="fs128">val result : float<br /><br />Full name: FSharpBasicsFin.result</div>
+<div class="tip" id="fs129">static member Async.RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:System.Threading.CancellationToken -&gt; &#39;T</div>
+<div class="tip" id="fs130">val slice : mySeq:seq&lt;int&gt; -&gt; seq&lt;System.Collections.Generic.IEnumerable&lt;int&gt;&gt;<br /><br />Full name: FSharpBasicsFin.slice</div>
+<div class="tip" id="fs131">val mySeq : seq&lt;int&gt;</div>
+<div class="tip" id="fs132">val chunkSize : int</div>
+<div class="tip" id="fs133">val seqSlice : (seq&lt;int&gt; -&gt; seq&lt;System.Collections.Generic.IEnumerable&lt;int&gt;&gt;)</div>
+<div class="tip" id="fs134">val s : seq&lt;int&gt;</div>
+<div class="tip" id="fs135">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Core.Operators.seq<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.seq&lt;_&gt;</div>
+<div class="tip" id="fs136">(extension) System.Collections.Generic.IEnumerable.Skip&lt;&#39;TSource&gt;(count: int) : System.Collections.Generic.IEnumerable&lt;&#39;TSource&gt;</div>
+          
+        </div>
+        <div class="span1"></div>
+      </div>
+    </div>
+  </body>
+</html>

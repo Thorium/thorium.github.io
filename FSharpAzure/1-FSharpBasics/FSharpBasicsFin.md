@@ -6,6 +6,8 @@ F# on selkeä ohjelmointikieli, joka ohjaa lähtökohtaisesti käyttäjäänsä 
 
 Vaikka lyhyt on kaunista, ja F# on tarvittaessa hyvinkin abstrakti kieli, niin tärkeintä ei ole saada aikaan lyhyin syntaksi, vaan tilanteeseen sopivin/selkein. On kielen voimakkuutta, että asiat voidaan tehdä monella tavalla, mutta hyvyyttä, että kieli ohjaa intuitiivisesti parhaaseen ratkaisuun.
 
+Ehkä pieni harppaus kokeellisesta yritys-erehdys-ohjelmistoylläpidosta vähän matemaattisempaan suuntaan ei olisi pahasta?
+
 Koodia oppii lukemaan nopeasti, mutta kivuton kirjoittaminen vaatii aikansa: uuden opettelu vaatii malttia. F#-kääntäjä on tiukempi kuin C#, sen kanssa saa alussa vähän hakata päätä seinään, mutta kun koodi menee kääntäjästä läpi, niin todennäköisemmin ohjelma ei kaadu ajonaikaisesti. Toisaalta se tuo onnistumisentunteita, ja saa C#-veteraaninkin huomaamaan, että koodaaminen voi olla kivaa.
 
 ### F-Sharp-projektin luonti Visual Studiossa ###
@@ -409,14 +411,14 @@ Lähtökohtaisesti F#:ssa NULL ei ole käytössä. Sen sijaan on käytössä opt
 
 ### Rekursiivisuus ###
 
-Rekursiiviseen funktioon kirjoitetaan rec. Usein käytetään muotoa, jossa viimeisenä parametrina menee "akkumulaattori", johon kerätään tulos. Tämä siksi, että kääntäjä optimoi häntärekursiolla stäkin pois, ts. ei tule StackOverflowException:ia, vaikka läpikäytävä rekursio olisi iso.
+Rekursiiviseen funktioon kirjoitetaan rec. Usein itse rekursio kapseloidaan toisen funktion sisään, jotta voidaan peittää "turhat" alkuarvot. Usein myös käytetään muotoa, jossa viimeisenä parametrina menee "akkumulaattori", johon kerätään tulos. Tämä siksi, että kääntäjä optimoi häntärekursiolla stäkin pois, ts. ei tule StackOverflowException:ia, vaikka läpikäytävä rekursio olisi iso.
 
     [lang=fsharp]
     let sumItems myList =
         let rec calculate li acc =
             match li with
             |[] -> acc
-            |[h::t] -> calculate t (h+acc)
+            |h::t -> calculate t (h+acc)
         calculate myList 0
 
 Tämä tyypillinen funktio löytyy tietysti myös suoraa List-kirjastosta, mutta jos tarvitaan enemmän custom-toiminnallisuutta, niin silloin oma rekursio on joskus paikallaan.
@@ -464,9 +466,13 @@ Jos verrataan tätä C#:piin, niin seq { ... } vastaava on LINQ. Mutta LINQ on t
     
 "Computation Expressions" on kauniimpi nimi asialle, josta käytetään myös ilmaisua "Monad".
 
+### Harjoitustehtäviä ###
+
+- Luo rekursiivinen ohjelma joka listaa 1000 ensimmäistä fibonacci-lukua (1, 1, 2, 3, 5, 8, 13, ...).
+- Luo C#-yksikkötesti tai konsoliaplikaatio kutsumaan edellistä.
+
+
 ### Linkit ###
 
 Jos tämä oli liian hapokasta, niin kannattaa katsoa läpi [tämä materiaali](https://bitbucket.org/ilmirajat/fsharptraining.fi/src/05a105289a51212202c76794a704721503c55e41/FSharpTraining/).
 Jos haluat opetella listakirjastojen toiminnallisuuksia, niin koita tehdä [Project Euler](https://projecteuler.net/problems) -tehtäviä. Jos haluat itsenäisen pienen koodiesimerkin jostain aiheesta, niin [fssnip.net](http://www.fssnip.net/pages/AllTags) on hyvä saitti lähteä etsimään.
-
-Ehkä pieni harppaus kokeellisesta yritys-erehdys-ohjelmistokehityksestä vähän matemaattisempaan suuntaan ei olisi pahasta?
