@@ -26,7 +26,7 @@ Nämä ovat kaikki vain hyvin kevyitä alustuksia laajempiin aiheisiin.
 - [**Actor-malli ja Agent-malli**](2-AgentModel/AgentModelFin.html)
 	- Erlang-kielestä tunnettu malli toteuttaa ohjelman tila niin, että se on hajautettu: ei lukkoja, vaan message-passingia. Ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.
 - [**Domain-mallinnus, DSL-kieli**](2-DomainModel/DomainModelFin.html)
-	- Omia custom-”yleiskäyttöinen” workflow/sääntö/prosessi/ -moottori (tai framework) -viritelmiä on maailma täynnä. Silti ne eivät palvele tarkoitustaan. 
+	- DSL-kieli: workflow/prosessi/sääntö -moottorien ja -frameworkien kuningas.
 	- Primitiivien valinta, kompositio, syntaksi
 - [**Kevyt WWW-palvelin käyttäen OWIN-rajapintaa ja SignalR-viestitystä**](2-AzureOwinWww/AzureOwinWwwFin.html)
 
