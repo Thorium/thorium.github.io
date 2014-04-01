@@ -10,9 +10,9 @@ Funktionaalisen kielen hyviä puolia on mm. se, että yksittäisiä funktioita v
 
 ## Random ei riitä? ##
 
-Vähän .NET-oletusta parempi satunnaisgeneraattori löytyy kirjastosta System.Security.Cryptography luokka RNGCryptoServiceProvider.
+Vähän .NET-oletusta parempi satunnaisgeneraattori (lue: hajonnaltaan vähemmän ennustettava) löytyy kirjastosta System.Security.Cryptography luokka RNGCryptoServiceProvider.
 
-Myös enemmän satunnaisia satunnaisuuksia saa esim. Nugetista löytyvästä  kirjastosta "[MathNet.Numerics.FSharp](https://www.nuget.org/packages/MathNet.Numerics.FSharp)".
+Myös enemmän satunnaisia satunnaisuuksia saa esim. Nugetista löytyvästä kirjastosta "[MathNet.Numerics.FSharp](https://www.nuget.org/packages/MathNet.Numerics.FSharp)".
 
     [lang=fsharp]
     #if INTERACTIVE

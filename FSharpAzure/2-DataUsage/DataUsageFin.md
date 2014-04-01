@@ -6,7 +6,7 @@ Nykyään F#-kielessä kääntäjä osaa kääntää eri tietolähteitä osaksi 
 Näitä "TypeProvider" tietolähteitä on olemassa mm. seuraavia:
 
 - **JSON**-datalähteille (ja **XML**-tietolähteille)
-	- Perus-web-serviceiden schemat. Vähän sama kuin, että generoisi Service-refernssejä, mutta kääntäjä tekee sen puolestasi.
+	- Perus-web-serviceiden schemat. Vähän sama kuin, että generoisi Service-referenssejä, mutta kääntäjä tekee sen puolestasi.
 - **CSV**-tiedostoille
 	- On-line-dataa tarjotaan paljon myös CSV-muodossa. 
 - **FreeBase**-nettitietokannalle
@@ -75,7 +75,7 @@ Jatketaan edellisen logiikan perään: nyt voit hakea dataa oheisella koodilla:
     let ``Last day in USD`` =  quotes.Rows |> Seq.head
 
 
-Valitettavasti Yahoon USD-EUR-kurssi ei ollut ajantasalla, joten se on haettava jostain muualta.
+Valitettavasti Yahoon USD-EUR-kurssi ei ollut ajan tasalla, joten se on haettava jostain muualta.
 
 Jos kirjoitit tiedostonimen TextFile1.csv oikein, niin tässäkin intellisense osaa tyypittää sarakkeet oikein ja jopa tietomuodot (System.DateTime, decimal, jne):
 
@@ -92,7 +92,7 @@ Maailma on täynnä avoimia API-rajapintoja:
 	- [Ninchat API](https://github.com/ninchat/ninchat-api/blob/v1/api.md)
 	- Avointen palveluiden [listaus](http://www.suomi.fi/suomifi/tyohuone/yhteiset_palvelut/avoin_data/).
 - Kansainvälisiä:
-	- Luultavasti kaikki isot yritykset kuten Youtube, Amazon, jne.
+	- Luultavasti kaikki isot yritykset kuten YouTube, Amazon, jne.
 	- [Finanssi-feed-lista](http://en.wikipedia.org/wiki/List_of_financial_data_feeds)
 	- BTC: [Quandl](http://www.quandl.com/api/v1/datasets/BITCOIN/MTGOXUSD.csv?&trim_start=2010-07-17&trim_end=2013-07-08&sort_order=desc), [BTC-e](https://btc-e.com/api/2/btc_usd/trades), [LocalBitcoins](https://localbitcoins.com/api-docs/)
 

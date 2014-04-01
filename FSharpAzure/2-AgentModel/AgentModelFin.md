@@ -35,7 +35,7 @@ Testaa oheinen koodi interactiven avulla:
 
 Mitä jos "oliot" tilan kapseloijina korvattaisiin viestipohjaisella ratkaisulla?
 
-Actor-malli on teoria, joka käyttää “Actor”eita rinnakkaislaskennan alkioina. Actor voi prosessoida tietoa, varastoida tietoa tai kommunikoida muiden actoreiden kanssa. Actor voi jopa ottaa vastaan viestissä itselleen uuden toiminnallisuuden.
+Actor-malli on teoria, joka käyttää “Actor”eita rinnakkaislaskennan alkioina. Actor voi prosessoida tietoa, varastoida tietoa tai kommunikoida muiden actoreiden kanssa. Actor voi jopa ottaa vastaan viestissä itsellensä uuden toiminnallisuuden.
 
 Actor-malli on lähtöisin Erlang-kielestä, mutta nykyään vaihtoehtoja alkaa löytyä jo monille eri kielille.
 
@@ -48,7 +48,7 @@ Agent-malli on käytännössä sama asia, ehkä sillä pienellä erolla, että a
 
 Edellinen esimerkki lähetti viestikanavana merkkijonoja. Kätevämpää on kuitenkin lähettää discriminated union komentoja ja niiden parametreja.
 
-Staattinen MailboxProcessor.Start on sama kuin kutsuisi ensin new MailboxProcessor() ja sitten sille .Start(). Agentille on helppo rakentaa myös timeoutit, virheenkäsittely ja peruutus-operaattiot.
+Staattinen MailboxProcessor.Start on sama kuin kutsuisi ensin new MailboxProcessor() ja sitten sille .Start(). Agentille on helppo rakentaa myös timeoutit, virheenkäsittely ja peruutus-operaatiot.
 
 Testaa oheista koodia:
 
@@ -92,6 +92,6 @@ Lisää "Person agent methods"-metodiin uusi metodi, joka palauttaa vain yli 18 
 
 Jos kiinnostus riittää, voit myös:
 - Vaihtaa tämän asynkroniseksi ja rakentaa toisen mailboxin, joka lähettää viestejä tälle.
-- Kapseloida mailboxin oman tyyppin sisälle, jotta sitä voisi käyttää C#-kirjastosta.
+- Kapseloida mailboxin oman tyypin sisälle, jotta sitä voisi käyttää C#-kirjastosta.
 
 [Takaisin valikkoon](../Readme.html)

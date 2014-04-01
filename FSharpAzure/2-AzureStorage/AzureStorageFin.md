@@ -44,7 +44,7 @@ Muokkaa myös tiedostoja **ServiceConfiguration.Cloud.cscfg** ja **ServiceConfig
 	  </Role>
 	</ServiceConfiguration>
 
-Emulaattorille kelpaa arvo  value="UseDevelopmentStorage=true" mutta tuotannossa tämä connection-string on jotain muuta. Ohjeet siihen löytyy [netistä](http://msdn.microsoft.com/library/azure/ee758697.aspx).
+Emulaattorille kelpaa arvo  value="UseDevelopmentStorage=true", mutta tuotannossa tämä connection-string on jotain muuta. Ohjeet siihen löytyy [netistä](http://msdn.microsoft.com/library/azure/ee758697.aspx).
 
 ### F-Sharp skripti-tiedostojen käyttö ###
 

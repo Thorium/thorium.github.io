@@ -98,7 +98,7 @@ Lähtökohtaisesti F# ohjaa siihen, että et voi käyttää "muuttujia" (/vakioi
 Vertailuoperaatio on vain yksi yhtäkuinmerkki.
 Kommentit ovat // tai (* ja *). Private ja public näkyvyydet ovat käytettävissä.
 
-Voit myös antaa kohteille vielä selkeämpiä välilyönnillisiä nimiä (tosin huona puolena suomalainen näppäimistö-layout:in hankaluus):
+Voit myös antaa kohteille vielä selkeämpiä välilyönnillisiä nimiä (tosin huonona puolena suomalaisen näppäimistö-layout:in hankaluus):
 
     [lang=fsharp]
     let ``Hello World Container`` = "Hello World"
@@ -137,7 +137,7 @@ F#:ssa on operaatio "|>", joka siirtää metodin viimeisen parametrin ensimmäis
     open System
     "Hello World" |> Console.WriteLine
 
-Tätä voit ajatella vähän kuin C#-extension-metodina: jos metodit ovat verbejä, on usein luonnollista aloittaa lause substanttiivilla, kielestä tulee luonnollisempaa: 
+Tätä voit ajatella vähän kuin C#-extension-metodina: jos metodit ovat verbejä, on usein luonnollista aloittaa lause substantiivilla, kielestä tulee luonnollisempaa: 
 
 "koira haukkuu ihmiselle" vs. "haukkuu(koira, ihmiselle)"
 
@@ -172,7 +172,7 @@ Lambda-funktion voi tehdään fun-sanalla ja nuolella.
 
 F#:ssa on LINQ:a monipuolisemmat  listojenkäsittelykirjastot, mutta voit halutessasi käyttää myös LINQ-kirjastoa, jos sen jo osaat.
 
-F#:ssa näkyy usein käytettävän kolmea eri tyyppiä listoja, joilla on kaikilla suurinpiirtein samat käsittelykirjastot. Karrikoidusti tyypit menevät näin:
+F#:ssa näkyy usein käytettävän kolmea eri tyyppiä listoja, joilla on kaikilla suurin piirtein samat käsittelykirjastot. Karrikoidusti tyypit menevät näin:
 
 - List
     - Ylläpidettävin koodi.
@@ -184,7 +184,7 @@ F#:ssa näkyy usein käytettävän kolmea eri tyyppiä listoja, joilla on kaikil
 - Seq
     - Yhteensopivin. Tämä vastaa C# IEnumerablea.
 
-Listoja voi muuttaa muodosta toiseen: List.toArray, List.toSeq, Seq.toList, Array.toSeq, jne. Pari  koodiesimerkkiä:
+Listoja voi muuttaa muodosta toiseen: List.toArray, List.toSeq, Seq.toList, Array.toSeq, jne. Pari koodiesimerkkiä:
 
     [lang=fsharp]
     let emptyList = []
@@ -334,7 +334,7 @@ Helpoin tapa muuttaa perus-.NET-tyyppi mitaksi on kertoa se yhdellä mitalla. Es
 
 ## Pattern matching ##
 
-Pattern-matching on tavallaan selkeä switch/case tai if-elseif-kuvio, jossa ehto ei voi vaihtua kesken kaiken, mutta eri case:illa ei ole constant-vaatimusta. Eri patternteita on useita. 
+Pattern-matching on tavallaan selkeä switch/case tai if-elseif-kuvio, jossa ehto ei voi vaihtua kesken kaiken, mutta eri case:illa ei ole constant-vaatimusta. Eri patterneita on useita. 
 
 Lisäksi funktio voi suoraa olla pattern-funktio tai voidaan käyttää ns. active-patterneita selkeyttämään koodia. Tässä sama toiminnallisuus usealla eri kooditavalla:
 
@@ -382,11 +382,11 @@ Lisäksi funktio voi suoraa olla pattern-funktio tai voidaan käyttää ns. acti
         | Other -> 3
  
 
-Usein, jos mahdollista, on parempi jättää oletus-tapaus kokonaan pois, koska silloin kääntäjä saa kiinni virheet, jos tuntemattomia tapauksia luodaan jälkikäteen koodiin  lisää.
+Usein, jos mahdollista, on parempi jättää oletus-tapaus kokonaan pois, koska silloin kääntäjä saa kiinni virheet, jos tuntemattomia tapauksia luodaan jälkikäteen koodiin lisää.
 
 ## Nullittomuus ja option-type ##
 
-C#:ssa NULL on sekä "special case" (Fowler: PoEAA) että un-assigned-muuttuja. Kaksi rooila yhdellä asialla tekee sen käytöstä sotkuista.
+C#:ssa NULL on sekä "special case" (Fowler: PoEAA) että un-assigned-muuttuja. Kaksi roolia yhdellä asialla tekee sen käytöstä sotkuista.
 
 Lähtökohtaisesti F#:ssa NULL ei ole käytössä. Sen sijaan on käytössä option-type, asialle jota ei ole tiedossa:
 

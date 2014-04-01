@@ -61,7 +61,7 @@ Koska paketit ovat päivittyneet, voi vielä Updates-välilehdeltä käydä päi
 ## Omien koodiluokkien lisääminen ##
 
 Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valitse Add -> New Item... -> Source File, ja lisää projektille tiedosto: MyLogics.fs
-(Paremman nimen voi kekesiä myöhemmin.)
+(Paremman nimen voi keksiä myöhemmin.)
 
 F#-kielessä voit aina viitata menneeseen koodilohkoon, mutta et tulevaan, eli koodilohkojen järjestyksellä on väliä. Voit lukea koodia kuin kirjaa, ylhäältä alas. Tämä tarkoittaa myös sitä, että projektissa tiedostojen järjestyksellä on väliä. Voit muuttaa tiedostojen järjestystä painamalla tiedoston nimen päällä hiiren oikeaa nappia, ja "Move Up" tai "Move down".
 
@@ -76,7 +76,7 @@ Järjestä nyt fs-tiedostot tähän järjestykseen (muilla ei ole väliä....):
 3. MyLogics.fs
 4. WorkerRole.fs
 
-Koita vielä, että softa kääntyy. Nyt on perus-infra kunnossa ja voidaan aloittaa itse koodaaminen... Vastaavasti kuin C#:ssa, eri (tiedostojen) namespacejen/moduulien välillä pitää joko viitata kokonimellä tai kutsua open-käskyä, joka vastaa C#-usiWng-käskyä.
+Koita vielä, että softa kääntyy. Nyt on perus-infra kunnossa ja voidaan aloittaa itse koodaaminen... Vastaavasti kuin C#:ssa, eri (tiedostojen) namespacejen/moduulien välillä pitää joko viitata kokonimellä tai kutsua open-käskyä, joka vastaa C#-using-käskyä.
 
 
 [Takaisin valikkoon](../Readme.html)
