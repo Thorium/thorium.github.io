@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- 
+      The Agent-malli ja Actor-malli
+ parameters will be replaced with the 
+      document title extracted from the <h1> element or
+      file name, if there is no <h1> heading
+    -->
+    <title>Agent-malli ja Actor-malli
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="content/style.css" />
+    <script src="content/tips.js" type="text/javascript"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" style="margin-top:30px">
+        <div class="span1"></div>
+        <div class="span10" id="main">
+          <h1>Agent-malli ja Actor-malli</h1>
+
+<p>Puhuttaessa Actor-mallista termi "Actor" viittaa "toimijaan" tai "tekijään", ei "näyttelijään". Puhuttaessa Agent-mallista termi "Agent" viittaa myös "toimijaan" tai "edustajaan", mutta ei "salaiseen agenttiin".</p>
+
+<h2>Viestijonot</h2>
+
+<p>Erilaisia MQ-jono-tuotteita on useita. Mitäpä jos yksinkertainen viestijonotoiminnallisuus olisi integroitu suoraa ohjelmointikieleen?</p>
+
+<p>Testaa oheinen koodi interactiven avulla:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">myQueue</span> <span class="o">=</span> 
+    <span class="k">new</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">MailboxProcessor</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">string</span><span class="o">&gt;</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">myHandler</span> <span class="k">-&gt;</span> 
+        <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">readNextMessage</span>() <span class="o">=</span>
+            <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">async</span> {
+                <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="i">result</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="i">myHandler</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">Receive</span>()
+                <span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">Console</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="i">WriteLine</span>(<span class="s">&quot;</span><span class="s">Handled</span><span class="s">:</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="i">result</span>)
+                <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="i">readNextMessage</span>()
+            }
+        <span onmouseout="hideTip(event, 'fs5', 15)" onmouseover="showTip(event, 'fs5', 15)" class="i">readNextMessage</span>())
+
+<span onmouseout="hideTip(event, 'fs1', 16)" onmouseover="showTip(event, 'fs1', 16)" class="i">myQueue</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="i">Post</span>(<span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">1</span><span class="s"> </span><span class="s">!</span><span class="s">&quot;</span>)
+<span onmouseout="hideTip(event, 'fs1', 18)" onmouseover="showTip(event, 'fs1', 18)" class="i">myQueue</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 19)" onmouseover="showTip(event, 'fs12', 19)" class="i">Post</span>(<span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">2</span><span class="s"> </span><span class="s">!</span><span class="s">&quot;</span>)
+
+<span onmouseout="hideTip(event, 'fs1', 20)" onmouseover="showTip(event, 'fs1', 20)" class="i">myQueue</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 21)" onmouseover="showTip(event, 'fs13', 21)" class="i">CurrentQueueLength</span> <span class="c">// 2</span>
+
+<span onmouseout="hideTip(event, 'fs1', 22)" onmouseover="showTip(event, 'fs1', 22)" class="i">myQueue</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="i">Start</span>()
+
+<span onmouseout="hideTip(event, 'fs1', 24)" onmouseover="showTip(event, 'fs1', 24)" class="i">myQueue</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 25)" onmouseover="showTip(event, 'fs13', 25)" class="i">CurrentQueueLength</span> <span class="c">// 0</span>
+
+<span onmouseout="hideTip(event, 'fs1', 26)" onmouseover="showTip(event, 'fs1', 26)" class="i">myQueue</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 27)" onmouseover="showTip(event, 'fs12', 27)" class="i">Post</span>(<span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">3</span><span class="s"> </span><span class="s">!</span><span class="s">&quot;</span>)</pre>
+</td>
+</tr>
+</table>
+
+<h2>Actor-malli</h2>
+
+<p>Mitä jos "oliot" tilan kapseloijina korvattaisiin viestipohjaisella ratkaisulla?</p>
+
+<p>Actor-malli on teoria, joka käyttää “Actor”eita rinnakkaislaskennan alkioina. Actor voi prosessoida tietoa, varastoida tietoa tai kommunikoida muiden actoreiden kanssa. Actor voi jopa ottaa vastaan viestissä itselleen uuden toiminnallisuuden.</p>
+
+<p>Actor-malli on lähtöisin Erlang-kielestä, mutta nykyään vaihtoehtoja alkaa löytyä jo monille eri kielille.</p>
+
+<p>Tausta-ajatusta voisi verrata versiohallintaan: ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.</p>
+
+<h2>Agent-malli</h2>
+
+<p>Agent-malli on käytännössä sama asia, ehkä sillä pienellä erolla, että agent ottaa vastaan pyyntöjä, joten rajapinta on kiinteämpi. F#:ssa Agent-malli on kielessä suoraa tuettuna ja kapseloituna luokkaan nimeltä MailboxProcessor. Usein käytännössä tämä konkretisoituu siten, että isäntä vaan kyselee asioita, ja taustasäie sykkii parsien tapahtumahistoriaa joukko-operaatioilla.</p>
+
+<p>Edellinen esimerkki lähetti viestikanavana merkkijonoja. Kätevämpää on kuitenkin lähettää discriminated union komentoja ja niiden parametreja.</p>
+
+<p>Staattinen MailboxProcessor.Start on sama kuin kutsuisi ensin new MailboxProcessor() ja sitten sille .Start(). Agentille on helppo rakentaa myös timeoutit, virheenkäsittely ja peruutus-operaattiot.</p>
+
+<p>Testaa oheista koodia:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">``Person agent methods``</span> <span class="o">=</span>
+| <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="i">AddPerson</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs3', 29)" onmouseover="showTip(event, 'fs3', 29)" class="i">string</span> <span class="o">*</span> <span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="i">int</span> <span class="c">//Name*Age</span>
+| <span onmouseout="hideTip(event, 'fs17', 31)" onmouseover="showTip(event, 'fs17', 31)" class="i">GetPeople</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs18', 32)" onmouseover="showTip(event, 'fs18', 32)" class="i">AsyncReplyChannel</span><span class="o">&lt;</span>(<span onmouseout="hideTip(event, 'fs3', 33)" onmouseover="showTip(event, 'fs3', 33)" class="i">string</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs16', 34)" onmouseover="showTip(event, 'fs16', 34)" class="i">int</span>) <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="i">list</span><span class="o">&gt;</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 36)" onmouseover="showTip(event, 'fs20', 36)" class="i">myQueue2</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs2', 37)" onmouseover="showTip(event, 'fs2', 37)" class="i">MailboxProcessor</span><span class="o">&lt;</span><span class="i">``Person agent methods``</span><span class="o">&gt;</span><span class="o">.</span><span class="i">Start</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs21', 38)" onmouseover="showTip(event, 'fs21', 38)" class="i">myHandler</span> <span class="k">-&gt;</span> 
+        <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs22', 39)" onmouseover="showTip(event, 'fs22', 39)" class="i">readNextMessage</span> <span onmouseout="hideTip(event, 'fs23', 40)" onmouseover="showTip(event, 'fs23', 40)" class="i">people</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, 'fs6', 41)" onmouseover="showTip(event, 'fs6', 41)" class="i">async</span> {
+                <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs24', 42)" onmouseover="showTip(event, 'fs24', 42)" class="i">result</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 43)" onmouseover="showTip(event, 'fs21', 43)" class="i">myHandler</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 44)" onmouseover="showTip(event, 'fs8', 44)" class="i">Receive</span>()
+                <span class="k">match</span> <span onmouseout="hideTip(event, 'fs24', 45)" onmouseover="showTip(event, 'fs24', 45)" class="i">result</span> <span class="k">with</span>
+                | <span onmouseout="hideTip(event, 'fs15', 46)" onmouseover="showTip(event, 'fs15', 46)" class="i">AddPerson</span>(<span onmouseout="hideTip(event, 'fs25', 47)" onmouseover="showTip(event, 'fs25', 47)" class="i">n</span>,<span onmouseout="hideTip(event, 'fs26', 48)" onmouseover="showTip(event, 'fs26', 48)" class="i">s</span>) <span class="k">-&gt;</span>
+                    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs22', 49)" onmouseover="showTip(event, 'fs22', 49)" class="i">readNextMessage</span> ((<span onmouseout="hideTip(event, 'fs25', 50)" onmouseover="showTip(event, 'fs25', 50)" class="i">n</span>,<span onmouseout="hideTip(event, 'fs26', 51)" onmouseover="showTip(event, 'fs26', 51)" class="i">s</span>)<span class="o">::</span><span onmouseout="hideTip(event, 'fs23', 52)" onmouseover="showTip(event, 'fs23', 52)" class="i">people</span>)
+                | <span onmouseout="hideTip(event, 'fs17', 53)" onmouseover="showTip(event, 'fs17', 53)" class="i">GetPeople</span>(<span onmouseout="hideTip(event, 'fs27', 54)" onmouseover="showTip(event, 'fs27', 54)" class="i">response</span>) <span class="k">-&gt;</span>
+                    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 55)" onmouseover="showTip(event, 'fs28', 55)" class="i">p</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 56)" onmouseover="showTip(event, 'fs23', 56)" class="i">people</span>
+                    <span onmouseout="hideTip(event, 'fs27', 57)" onmouseover="showTip(event, 'fs27', 57)" class="i">response</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs29', 58)" onmouseover="showTip(event, 'fs29', 58)" class="i">Reply</span>(<span onmouseout="hideTip(event, 'fs28', 59)" onmouseover="showTip(event, 'fs28', 59)" class="i">p</span>)
+                    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs22', 60)" onmouseover="showTip(event, 'fs22', 60)" class="i">readNextMessage</span> <span onmouseout="hideTip(event, 'fs23', 61)" onmouseover="showTip(event, 'fs23', 61)" class="i">people</span>
+            }
+        <span onmouseout="hideTip(event, 'fs22', 62)" onmouseover="showTip(event, 'fs22', 62)" class="i">readNextMessage</span> [])
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 63)" onmouseover="showTip(event, 'fs30', 63)" class="i">addPerson</span> <span class="o">=</span>  <span onmouseout="hideTip(event, 'fs15', 64)" onmouseover="showTip(event, 'fs15', 64)" class="i">AddPerson</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span onmouseout="hideTip(event, 'fs20', 65)" onmouseover="showTip(event, 'fs20', 65)" class="i">myQueue2</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 66)" onmouseover="showTip(event, 'fs12', 66)" class="i">Post</span> 
+(<span class="s">&quot;</span><span class="s">Matti</span><span class="s">&quot;</span>, <span class="n">30</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs30', 67)" onmouseover="showTip(event, 'fs30', 67)" class="i">addPerson</span>
+(<span class="s">&quot;</span><span class="s">Maija</span><span class="s">&quot;</span>, <span class="n">7</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs30', 68)" onmouseover="showTip(event, 'fs30', 68)" class="i">addPerson</span> 
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 69)" onmouseover="showTip(event, 'fs31', 69)" class="i">res</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 70)" onmouseover="showTip(event, 'fs20', 70)" class="i">myQueue2</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs32', 71)" onmouseover="showTip(event, 'fs32', 71)" class="i">PostAndReply</span>(<span onmouseout="hideTip(event, 'fs17', 72)" onmouseover="showTip(event, 'fs17', 72)" class="i">GetPeople</span>)</pre>
+</td>
+</tr>
+</table>
+
+<p>PostAndReply ohella on myös AsyncPostAndReply</p>
+
+<p>Jos haluat testailla nopeuksia ja asynkronisuutta, saat päälle ajanoton interactiveen kirjoittamalla:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="prep">#time</span> <span class="s">&quot;</span><span class="s">on</span><span class="s">&quot;</span>;;</pre>
+</td>
+</tr>
+</table>
+
+<h2>Harjoitustehtävä</h2>
+
+<p>Lisää "Person agent methods"-metodiin uusi metodi, joka palauttaa vain yli 18 vuotiaat ihmiset.</p>
+
+<p>Jos kiinnostus riittää, voit myös:
+- Vaihtaa tämän asynkroniseksi ja rakentaa toisen mailboxin, joka lähettää viestejä tälle.
+- Kapseloida mailboxin oman tyyppin sisälle, jotta sitä voisi käyttää C#-kirjastosta.</p>
+
+<p><a href="../Readme.html">Takaisin valikkoon</a></p>
+
+          <div class="tip" id="fs1">val myQueue : MailboxProcessor&lt;string&gt;<br /><br />Full name: AgentModelFin.myQueue</div>
+<div class="tip" id="fs2">Multiple items<br />type MailboxProcessor&lt;&#39;Msg&gt; =<br />&#160;&#160;interface IDisposable<br />&#160;&#160;new : body:(MailboxProcessor&lt;&#39;Msg&gt; -&gt; Async&lt;unit&gt;) * ?cancellationToken:CancellationToken -&gt; MailboxProcessor&lt;&#39;Msg&gt;<br />&#160;&#160;member Post : message:&#39;Msg -&gt; unit<br />&#160;&#160;member PostAndAsyncReply : buildMessage:(AsyncReplyChannel&lt;&#39;Reply&gt; -&gt; &#39;Msg) * ?timeout:int -&gt; Async&lt;&#39;Reply&gt;<br />&#160;&#160;member PostAndReply : buildMessage:(AsyncReplyChannel&lt;&#39;Reply&gt; -&gt; &#39;Msg) * ?timeout:int -&gt; &#39;Reply<br />&#160;&#160;member PostAndTryAsyncReply : buildMessage:(AsyncReplyChannel&lt;&#39;Reply&gt; -&gt; &#39;Msg) * ?timeout:int -&gt; Async&lt;&#39;Reply option&gt;<br />&#160;&#160;member Receive : ?timeout:int -&gt; Async&lt;&#39;Msg&gt;<br />&#160;&#160;member Scan : scanner:(&#39;Msg -&gt; Async&lt;&#39;T&gt; option) * ?timeout:int -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;member Start : unit -&gt; unit<br />&#160;&#160;member TryPostAndReply : buildMessage:(AsyncReplyChannel&lt;&#39;Reply&gt; -&gt; &#39;Msg) * ?timeout:int -&gt; &#39;Reply option<br />&#160;&#160;...<br /><br />Full name: Microsoft.FSharp.Control.MailboxProcessor&lt;_&gt;<br /><br />--------------------<br />new : body:(MailboxProcessor&lt;&#39;Msg&gt; -&gt; Async&lt;unit&gt;) * ?cancellationToken:System.Threading.CancellationToken -&gt; MailboxProcessor&lt;&#39;Msg&gt;</div>
+<div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs4">val myHandler : MailboxProcessor&lt;string&gt;</div>
+<div class="tip" id="fs5">val readNextMessage : (unit -&gt; Async&lt;unit&gt;)</div>
+<div class="tip" id="fs6">val async : AsyncBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.async</div>
+<div class="tip" id="fs7">val result : string</div>
+<div class="tip" id="fs8">member MailboxProcessor.Receive : ?timeout:int -&gt; Async&lt;&#39;Msg&gt;</div>
+<div class="tip" id="fs9">namespace System</div>
+<div class="tip" id="fs10">type Console =<br />&#160;&#160;static member BackgroundColor : ConsoleColor with get, set<br />&#160;&#160;static member Beep : unit -&gt; unit + 1 overload<br />&#160;&#160;static member BufferHeight : int with get, set<br />&#160;&#160;static member BufferWidth : int with get, set<br />&#160;&#160;static member CapsLock : bool<br />&#160;&#160;static member Clear : unit -&gt; unit<br />&#160;&#160;static member CursorLeft : int with get, set<br />&#160;&#160;static member CursorSize : int with get, set<br />&#160;&#160;static member CursorTop : int with get, set<br />&#160;&#160;static member CursorVisible : bool with get, set<br />&#160;&#160;...<br /><br />Full name: System.Console</div>
+<div class="tip" id="fs11">System.Console.WriteLine() : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: string) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: obj) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: uint64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: uint32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: float32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: float) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.Console.WriteLine(value: decimal) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="tip" id="fs12">member MailboxProcessor.Post : message:&#39;Msg -&gt; unit</div>
+<div class="tip" id="fs13">property MailboxProcessor.CurrentQueueLength: int</div>
+<div class="tip" id="fs14">member MailboxProcessor.Start : unit -&gt; unit</div>
+<div class="tip" id="fs15">union case Person agent methods.AddPerson: string * int -&gt; Person agent methods</div>
+<div class="tip" id="fs16">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
+<div class="tip" id="fs17">union case Person agent methods.GetPeople: AsyncReplyChannel&lt;(string * int) list&gt; -&gt; Person agent methods</div>
+<div class="tip" id="fs18">type AsyncReplyChannel&lt;&#39;Reply&gt;<br />member Reply : value:&#39;Reply -&gt; unit<br /><br />Full name: Microsoft.FSharp.Control.AsyncReplyChannel&lt;_&gt;</div>
+<div class="tip" id="fs19">type &#39;T list = List&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.list&lt;_&gt;</div>
+<div class="tip" id="fs20">val myQueue2 : MailboxProcessor&lt;Person agent methods&gt;<br /><br />Full name: AgentModelFin.myQueue2</div>
+<div class="tip" id="fs21">val myHandler : MailboxProcessor&lt;Person agent methods&gt;</div>
+<div class="tip" id="fs22">val readNextMessage : ((string * int) list -&gt; Async&lt;&#39;a&gt;)</div>
+<div class="tip" id="fs23">val people : (string * int) list</div>
+<div class="tip" id="fs24">val result : Person agent methods</div>
+<div class="tip" id="fs25">val n : string</div>
+<div class="tip" id="fs26">val s : int</div>
+<div class="tip" id="fs27">val response : AsyncReplyChannel&lt;(string * int) list&gt;</div>
+<div class="tip" id="fs28">val p : (string * int) list</div>
+<div class="tip" id="fs29">member AsyncReplyChannel.Reply : value:&#39;Reply -&gt; unit</div>
+<div class="tip" id="fs30">val addPerson : (string * int -&gt; unit)<br /><br />Full name: AgentModelFin.addPerson</div>
+<div class="tip" id="fs31">val res : (string * int) list<br /><br />Full name: AgentModelFin.res</div>
+<div class="tip" id="fs32">member MailboxProcessor.PostAndReply : buildMessage:(AsyncReplyChannel&lt;&#39;Reply&gt; -&gt; &#39;Msg) * ?timeout:int -&gt; &#39;Reply</div>
+          
+        </div>
+        <div class="span1"></div>
+      </div>
+    </div>
+  </body>
+</html>

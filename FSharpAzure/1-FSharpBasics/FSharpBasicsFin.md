@@ -10,14 +10,14 @@ Ehkä pieni harppaus kokeellisesta yritys-erehdys-ohjelmistoylläpidosta vähän
 
 Koodia oppii lukemaan nopeasti, mutta kivuton kirjoittaminen vaatii aikansa: uuden opettelu vaatii malttia. F#-kääntäjä on tiukempi kuin C#, sen kanssa saa alussa vähän hakata päätä seinään, mutta kun koodi menee kääntäjästä läpi, niin todennäköisemmin ohjelma ei kaadu ajonaikaisesti. Toisaalta se tuo onnistumisentunteita, ja saa C#-veteraaninkin huomaamaan, että koodaaminen voi olla kivaa.
 
-### F-Sharp-projektin luonti Visual Studiossa ###
+## F-Sharp-projektin luonti Visual Studiossa ##
 
 Voit käyttää Azure-Worker-rolea (josta erilliset ohjeet), tai tehdä kokonaan uuden projektin. Oletuksena projektista kääntyy dll, samoin kuin C#-projektista, ja dll:t ovat yhteensopivia.
 
 Jos haluat tehdä uuden projektin Visual Studiossa, niin se menee näin:
 File -> New -> Project... -> Other Languages -> Visual F# ->F# Library
 
-### C# ja F# yhteispeli (ja miksei myös VB.NET) ###
+## C# ja F# yhteispeli (ja miksei myös VB.NET) ##
 
 C# on parhaimmillaan kun tarvitaan valmiit wizzardit riittävät, esim. XAML-kehityksessä. F#:sta voi referoida ja käyttää suoraa C#-dll:iä. Samassa Visual Studio "solutionissa" voi olla sekä F# että C# projekteja, mutta muutosten näkyminen toisesta toiseen vaatii referoitavan projektin kääntämistä.
 
@@ -49,19 +49,20 @@ Tässä malliluokka F#-sisällöksi (näitä käydään tarkemmin läpi alempana
 ...ja C#-projektin luokasta niitä voi (projektin käännön jälkeen) käyttää ihan suoraa:
 
 
-        var class1 = new MyLibrary.MyClass1();
-        var fromFs = class1.X;
-        
-        int Item = MyLibrary.MyModule.StaticItems;
-
-        IEnumerable<string> response = MyLibrary.MyModule.MyList;
-        
-        int seven = MyLibrary.MyModule.MyAddFive(2);
-
-        var res = MyLibrary.MyModule.MyGenericFunction<int>(2);
-    
-        var class2 = new MyLibrary.MyModule.UserData1();
-        class2.Email = "no@spam.com";
+    [lang=csharp]
+	var class1 = new MyLibrary.MyClass1();
+	var fromFs = class1.X;
+	
+	int Item = MyLibrary.MyModule.StaticItems;
+	
+	IEnumerable<string> response = MyLibrary.MyModule.MyList;
+	
+	int seven = MyLibrary.MyModule.MyAddFive(2);
+	
+	var res = MyLibrary.MyModule.MyGenericFunction<int>(2);
+	
+	var class2 = new MyLibrary.MyModule.UserData1();
+	class2.Email = "no@spam.com";
         
 Näin vanhalla C#-koodaajalla on turvaverkko, johon voi luottaa ennenkuin F# on täysin hallinnassa.
 Samaan tapaan toimisi myös referointi VB.NET-komponenttiin.
@@ -83,7 +84,7 @@ Näillä rajoilla on merkitystä lähinnä, jos ennalta tiedetään, että kehit
 
 Sitten itse kieleen:
 
-### Hello world ###
+## Hello world ##
 
 Käyttäen .NET-luokkia, "Hello World"-ohjelman voi tehdä esim. näin:
 
@@ -102,7 +103,7 @@ Voit myös antaa kohteille vielä selkeämpiä välilyönnillisiä nimiä (tosin
     [lang=fsharp]
     let ``Hello World Container`` = "Hello World"
 
-### Interactive ###
+## Interactive ##
 
 Olettaen, että Resharper ei ole ihan sotkenut pikanäppäimiäsi:
 
@@ -117,7 +118,7 @@ Yleensä kannattaa ensin antaa haluamansa alkuarvot parametreille ja sitten läh
 
 F#:lle on myös hyvät yksikkötesti- ja BDD-frameworkit, mutta interactiven ansiosta niitä ei tarvita kokeelliseen kehitykseen, vaan lähinnä ylläpidon varmistamiseen.
 
-### Tyypitys ###
+## Tyypitys ##
 
 Tyyppijärjestelmähän on tarkoitettu siihen, että kääntäjä palvelee koodaajaa, eikä toisinpäin. Oletuksena F# löytää tyypit itsekin, mutta joskus käyttäjä haluaa tyypittää käsin:
 
@@ -128,7 +129,7 @@ Tyyppijärjestelmähän on tarkoitettu siihen, että kääntäjä palvelee kooda
 
 Geneeriset tyypit (klassinen T, T1, T2, jne) merkitään tyyppijärjestelmässä heittomerkillä: 'a, 'b, 'c, jne
 
-### Putkitus ###
+## Putkitus ##
 
 F#:ssa on operaatio "|>", joka siirtää metodin viimeisen parametrin ensimmäiseksi:
 
@@ -140,7 +141,7 @@ Tätä voit ajatella vähän kuin C#-extension-metodina: jos metodit ovat verbej
 
 "koira haukkuu ihmiselle" vs. "haukkuu(koira, ihmiselle)"
 
-### Funktiot ###
+## Funktiot ##
 
 F#:ssa ei tarvita sulkuja funktioparametreissa ja pilkku on varattu Tuple-luokkien käyttöön, joten parametrillisen funktion voit tehdä näin:
 
@@ -167,7 +168,7 @@ Parametriton funktio määriteltäisiin suluilla, tätä tarvitset, jos et halua
 Lambda-funktion voi tehdään fun-sanalla ja nuolella.
 
 
-### Listat ###
+## Listat ##
 
 F#:ssa on LINQ:a monipuolisemmat  listojenkäsittelykirjastot, mutta voit halutessasi käyttää myös LINQ-kirjastoa, jos sen jo osaat.
 
@@ -221,7 +222,7 @@ Listan tyypin voi halutessaan merkitä joko C#-tyylisesti tai OCaml-tyylisesti:
     let emptyList2:list<bigint> = []
     let emptyList3:bigint list = []
 
-### Tuple ###
+## Tuple ##
 
 Listojen lisäksi toinen yleinen rakenne on Tuple: lista on n-kappaletta yhtä samaa tyyppiä, tuple on yksi kappale n:ää eri tyyppiä. C#:ssa on myös Tuple, ja tämä luokka on sama.
 
@@ -233,7 +234,7 @@ Voit toki tehdä Tuplen C#-tapaan System.Tuple.Create(1, "a", 1.0), mutta tähä
 
 Tyyppisyntaksissa tuple merkitään tähdellä, esim: int*string.
 
-### Luokat ###
+## Luokat ##
 
 F# on myös erinomainen oliokieli.
 
@@ -274,7 +275,7 @@ Perintä-syntaksi ei ole yhtä näppärä kuin C#:ssa, koska vahvaan tyyppitarki
                 //Dispose resources...
                 GC.SuppressFinalize(x)
 
-### Discriminated unioin ###
+## Discriminated unioin ##
 
 Voit tehdä "joko-tai"-tyyppejä:
 
@@ -293,16 +294,18 @@ Voit tehdä "joko-tai"-tyyppejä:
 
 Käyttötarkoituksena esimerkiksi ohjelman tilanhallinta, jo kääntäjätasolla, ilman sotkuista ajonaikaista if-logiikkaa. Nämä ovat erittäin käteviä yhdessä pattern matchingin kanssa. 
 
-### Astetta erikoisemmat tyypit ###
+## Astetta erikoisemmat tyypit ##
 
 Tyyppi voi olla myös vain alias, tai "joko-tai" voi esiintyä myös yksinään:
 
+    [lang=fsharp]
     type aliasItem<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 
     type OrderId = | Id of System.Guid
 
 Tyyppi voi olla tietue, record:
 
+    [lang=fsharp]
     type Address = { 
         Street: string; 
         Zip: int; 
@@ -312,6 +315,7 @@ Tyyppi voi olla tietue, record:
 
 ...tai sillä voidaan Measure-attribuutin kanssa määritellä vahva vain-käännösaikainen tyypitys. Vähän kuin oma luokka kapseloimaan vain yksi laskennallinen arvo (mutta näyttämään se aina ulos), jotta eri asiat tai mittayksiköt eivät varmasti mene sekaisin:
  
+    [lang=fsharp]
     [<Measure>]
     type EUR
 
@@ -328,7 +332,7 @@ Tyyppi voi olla tietue, record:
 
 Helpoin tapa muuttaa perus-.NET-tyyppi mitaksi on kertoa se yhdellä mitalla. Esteettinen haittapuoli on, että tämä tuo "pienempi kuin" ja "suurempi kuin" merkkejä koodiin.
 
-### Pattern matching ###
+## Pattern matching ##
 
 Pattern-matching on tavallaan selkeä switch/case tai if-elseif-kuvio, jossa ehto ei voi vaihtua kesken kaiken, mutta eri case:illa ei ole constant-vaatimusta. Eri patternteita on useita. 
 
@@ -380,7 +384,7 @@ Lisäksi funktio voi suoraa olla pattern-funktio tai voidaan käyttää ns. acti
 
 Usein, jos mahdollista, on parempi jättää oletus-tapaus kokonaan pois, koska silloin kääntäjä saa kiinni virheet, jos tuntemattomia tapauksia luodaan jälkikäteen koodiin  lisää.
 
-### Nullittomuus ja option-type ###
+## Nullittomuus ja option-type ##
 
 C#:ssa NULL on sekä "special case" (Fowler: PoEAA) että un-assigned-muuttuja. Kaksi rooila yhdellä asialla tekee sen käytöstä sotkuista.
 
@@ -409,7 +413,7 @@ Lähtökohtaisesti F#:ssa NULL ei ole käytössä. Sen sijaan on käytössä opt
         |> Option.map(echo)
 
 
-### Rekursiivisuus ###
+## Rekursiivisuus ##
 
 Rekursiiviseen funktioon kirjoitetaan rec. Usein itse rekursio kapseloidaan toisen funktion sisään, jotta voidaan peittää "turhat" alkuarvot. Usein myös käytetään muotoa, jossa viimeisenä parametrina menee "akkumulaattori", johon kerätään tulos. Tämä siksi, että kääntäjä optimoi häntärekursiolla stäkin pois, ts. ei tule StackOverflowException:ia, vaikka läpikäytävä rekursio olisi iso.
 
@@ -424,7 +428,7 @@ Rekursiiviseen funktioon kirjoitetaan rec. Usein itse rekursio kapseloidaan tois
 Tämä tyypillinen funktio löytyy tietysti myös suoraa List-kirjastosta, mutta jos tarvitaan enemmän custom-toiminnallisuutta, niin silloin oma rekursio on joskus paikallaan.
 
 
-### Computation Expressions ###
+## Computation Expressions ##
 
 Nämä ovat eräänlaisia kapseleita kapseloimaan toiminnallisuuden sivuvaikutuksia. Valmiita ovat mm. seq (listoille) ja async (asynkroniselle koodille), mutta näitä voi tehdä itse lisää.
 
@@ -466,13 +470,16 @@ Jos verrataan tätä C#:piin, niin seq { ... } vastaava on LINQ. Mutta LINQ on t
     
 "Computation Expressions" on kauniimpi nimi asialle, josta käytetään myös ilmaisua "Monad".
 
-### Harjoitustehtäviä ###
+## Harjoitustehtäviä ##
 
 - Luo rekursiivinen ohjelma joka listaa 1000 ensimmäistä fibonacci-lukua (1, 1, 2, 3, 5, 8, 13, ...).
 - Luo C#-yksikkötesti tai konsoliaplikaatio kutsumaan edellistä.
 
 
-### Linkit ###
+## Linkit ##
 
 Jos tämä oli liian hapokasta, niin kannattaa katsoa läpi [tämä materiaali](https://bitbucket.org/ilmirajat/fsharptraining.fi/src/05a105289a51212202c76794a704721503c55e41/FSharpTraining/).
 Jos haluat opetella listakirjastojen toiminnallisuuksia, niin koita tehdä [Project Euler](https://projecteuler.net/problems) -tehtäviä. Jos haluat itsenäisen pienen koodiesimerkin jostain aiheesta, niin [fssnip.net](http://www.fssnip.net/pages/AllTags) on hyvä saitti lähteä etsimään.
+
+
+[Takaisin valikkoon](../Readme.html)

@@ -38,13 +38,13 @@
 
 <p>Voit valita "Windows Azure Cloud Service". Älä hämäänny kielivalinnasta, voit valita kumman tahansa. Keksi projektillesi nimi ja paina ok.</p>
 
-<p><img src="http://thorium.github.io/FSharpAzure/1-AzureWorkerRole/1-NewProject.png" alt="" /></p>
+<p><img src="1-NewProject.png" alt="" /></p>
 
 <p>Aukeaa uusi dialogi, valitse siitä <strong>Visual F#</strong></p>
 
 <p>Valitse Worker Role ja <strong>lisää se nuolesta listaan</strong>, vasta tämän jälkeen paina ok. (Jos vain suoraa ok, tulee tyhjä "solution".)</p>
 
-<p><img src="http://thorium.github.io/FSharpAzure/1-AzureWorkerRole/2-WorkerRole.png" alt="" /></p>
+<p><img src="2-WorkerRole.png" alt="" /></p>
 
 <p>Nyt sinulla pitäisi olla luotu uusi "solution" ja siinä kaksi projektia:</p>
 
@@ -53,21 +53,21 @@
 <li>WorkerRole-projekti (F#-kuvakkeella), joka on itse lähdekoodiprojekti. Tänne on oletuksena tehty WorkerRole.fs-niminen koodiluokka. Kyseinen luokka ei tee muuta, kuin käynnistyessään kirjoittaa konsolille 10 sekunnin välein tekstin "Working".</li>
 </ol>
 
-<p><img src="http://thorium.github.io/FSharpAzure/1-AzureWorkerRole/3-SolutionExplorer.png" alt="" /></p>
+<p><img src="3-SolutionExplorer.png" alt="" /></p>
 
 <p>Hyvä, sitten vain ohjelma käyntiin. Mutta tässä vaiheessa on vielä turha lähettää ohjelmaa nettiin: sen voi ensiksi ajaa emulaattorilla. (Emulaattori toimii "aika realistisesti", eli kannattaa kuitenkin aika-ajoin joskus julkaista myös Azureen, eikä sokeasti luottaa emulaattoriin.)</p>
 
 <p>Emulaattorin saa käyntiin, kun joko valitsee valikosta Debug -> Start debugging, tai painaa <strong>F5</strong>. Ohjelma lataa hetken ja emulaattorin kuvake ilmestyy Windowsin oikean alakulman SysTray-palkkiin. Paina emulaattorin <strong>kuvakkeen päällä hiiren oikeaa nappia</strong>, ja valitse "Show Compute emulator UI".</p>
 
-<p><img src="http://thorium.github.io/FSharpAzure/1-AzureWorkerRole/4-Systray.png" alt="" /></p>
+<p><img src="4-Systray.png" alt="" /></p>
 
 <p>Nyt aukeaa emulaattorin käyttöliittymä. Avaa vasemman puolen listasta WorkerRole ja valitse se, jolloin saat konsolin näkyville ruudulle. Konsolin yläpalkkia painaessa pomppaa konsoli isoksi näytölle. Konsolissa pitäisi näkyä aluksi sekalaista tekstiä, mutta hetken päästä siihen pitäisi alkaa tulostua säännönmukaisesti teksti "Working".</p>
 
-<p><img src="http://thorium.github.io/FSharpAzure/1-AzureWorkerRole/5-ComputeEmulator.png" alt="" /></p>
+<p><img src="5-ComputeEmulator.png" alt="" /></p>
 
 <p>Jos näin on, onnittelut, ympäristösi on kunnossa... Lisätään vielä vähän työkaluja:</p>
 
-<h3>Nuget-paketit</h3>
+<h2>Nuget-paketit</h2>
 
 <p>Seuraavaksi asennetaan projektiin neljä komponenttipakettia Nuget-pakettihallinnasta. Helpoimmin se tapahtuu Visual Studion valikosta:</p>
 
@@ -100,14 +100,14 @@
 
 <p>Koska paketit ovat päivittyneet, voi vielä Updates-välilehdeltä käydä päivittelemässä ne uusimpiin versioihin. (Ainakin ohjeen kirjoittamishetkellä uudet versiot ovat myös ok.)</p>
 
-<h3>Omien koodiluokkien lisääminen</h3>
+<h2>Omien koodiluokkien lisääminen</h2>
 
 <p>Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valitse Add -> New Item... -> Source File, ja lisää projektille tiedosto: MyLogics.fs
 (Paremman nimen voi kekesiä myöhemmin.)</p>
 
 <p>F#-kielessä voit aina viitata menneeseen koodilohkoon, mutta et tulevaan, eli koodilohkojen järjestyksellä on väliä. Voit lukea koodia kuin kirjaa, ylhäältä alas. Tämä tarkoittaa myös sitä, että projektissa tiedostojen järjestyksellä on väliä. Voit muuttaa tiedostojen järjestystä painamalla tiedoston nimen päällä hiiren oikeaa nappia, ja "Move Up" tai "Move down".</p>
 
-<p><img src="http://thorium.github.io/FSharpAzure/1-AzureWorkerRole/6-SolutionExplorer.png" alt="" /></p>
+<p><img src="6-SolutionExplorer.png" alt="" /></p>
 
 <p>C#-ohjelmoijalle tämä rajoite tuntuu aluksi pahalta: Lähtökohtaisesti ei ohjaudutakaan siihen, että koodissa voi poukkoilla miten haluaa. Vastaavasti koodaus ei muodostukaan siitä, että debugataan vähintään 10 tiedostoa auki pomppien villisti paikasta toiseen.</p>
 
@@ -122,7 +122,7 @@
 
 <p>Koita vielä, että softa kääntyy. Nyt on perus-infra kunnossa ja voidaan aloittaa itse koodaaminen... Vastaavasti kuin C#:ssa, eri (tiedostojen) namespacejen/moduulien välillä pitää joko viitata kokonimellä tai kutsua open-käskyä, joka vastaa C#-usiWng-käskyä.</p>
 
-<p>3/27/2014 11:15:12 PM</p>
+<p><a href="../Readme.html">Takaisin valikkoon</a></p>
 
                     
         </div>
