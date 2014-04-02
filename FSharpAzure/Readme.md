@@ -24,11 +24,13 @@ Nämä ovat kaikki vain hyvin kevyitä alustuksia laajempiin aiheisiin.
 - [**Azure Blob- ja Table Storage**](2-AzureStorage/AzureStorageFin.html)
 	- Azuren tietovarastojen käyttö F#-kielestä.
 - [**Actor-malli ja Agent-malli**](2-AgentModel/AgentModelFin.html)
-	- Erlang-kielestä tunnettu malli toteuttaa ohjelman tila niin, että se on hajautettu: ei lukkoja, vaan message-passingia. Ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.
+	- Malli toteuttaa ohjelman tila niin, että se on hajautettu: ei omia lukkoja, vaan message-passingia. Ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.
 - [**Domain-mallinnus, DSL-kieli**](2-DomainModel/DomainModelFin.html)
 	- DSL-kieli: workflow/prosessi/sääntö -moottorien ja -frameworkien kuningas.
 	- Primitiivien valinta, kompositio, syntaksi
-- [**Kevyt WWW-palvelin käyttäen OWIN-rajapintaa ja SignalR-viestitystä**](2-AzureOwinWww/AzureOwinWwwFin.html)
+- [**OWIN-rajapinta ja SignalR-viestitys**](2-AzureOwinWww/AzureOwinWwwFin.html)
+	- OWIN on middleware-rajapinta palvelimelle, johon voi rekisteröidä komponentteja, esim. www-palvelimen.
+	- SignalR hoitaa kaksisuuntaisen kommunikaatiokanavan palvelimen ja asiakkaan välille.
 
 ## Itsenäistä koodausta ##
 

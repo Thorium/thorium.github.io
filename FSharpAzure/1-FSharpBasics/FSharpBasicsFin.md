@@ -181,6 +181,7 @@ F#:ssa näkyy usein käytettävän kolmea eri tyyppiä listoja, joilla on kaikil
     - At-merkkiä "@" voi käyttää yhdistämään kaksi listaa.
 - Array
     - Tehokkain suoritus. Vastaa C#-arrayta.
+    - Lähtökohtaisesti ei ole hyvä tapa viitata suoraa indeksiin. Se tapahtuu laittamalla piste ennen hakasulkuja.
 - Seq
     - Yhteensopivin. Tämä vastaa C# IEnumerablea.
 
