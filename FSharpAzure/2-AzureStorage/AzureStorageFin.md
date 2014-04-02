@@ -77,13 +77,23 @@ Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikkaluok
     let blobFileName = "testBlob"
     let blob = GetBlobReference containerName blobFileName
     
-    let AddToBlob text = 
+    let addToBlob text = 
         text |> blob.UploadText
+
+    open System
+    open FSharp.Data
+    let demoData =
+        let ``scientist of the day `` = 
+            FreebaseData.GetDataContext().Commons.Computers.``Computer Scientists``
+            |> Seq.skip DateTime.Now.DayOfYear //
+            |> Seq.head
+        "Scientist of the day: " + ``scientist of the day ``.Name
+
     
 Nyt voit lisätä kutsun tähän WorkerRole.fs:n wr.OnStart() -metodissa:
 
     [lang=fsharp]
-    MyLogics.AddToBlob "Blob storage testing"
+    MyLogics.demoData |> MyLogics.addToBlob
 
 Kun ajat softan (F5), niin **Server** Explorer:iin (ei Solution Explorer) on (refresh:in jälkeen) ilmestynyt seuraava blobi, jonka voit tupla-klikata auki, jonka blob-listasta voit taas tupla-klikata itse tiedot auki:
 

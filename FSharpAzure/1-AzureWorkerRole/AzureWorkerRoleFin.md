@@ -49,6 +49,9 @@ Asennettavat paketit on helpoin hakea Id:n perusteella popup-ikkunan ylälaidan 
 - [Microsoft ASP.NET SignalR](https://www.nuget.org/packages/Microsoft.AspNet.SignalR/)
 	- Nuget-paketti-id: **Microsoft.AspNet.SignalR**
 	- [SignalR](http://www.asp.net/signalr) on vähän kuin Node.js kopioituna .NET:ille. Se mahdollistaa kaksisuuntaisen liikenteen www-palvelimen ja käyttäjän välillä.* 
+- [Microsoft Owin StaticFiles](http://www.nuget.org/packages/Microsoft.Owin.StaticFiles/)
+	- Kevyt WWW-palvelin-komponentti hostaamaan staattisia tiedostoja. 
+	- Toimii, mutta tuotantokäytössä sisällön jakelu Azure Blob:ista voisi olla parempi ratkaisu.
 - [FSharp.Web.Http](http://www.nuget.org/packages/FSharp.Web.Http/)
 	- Nuget-paketti-id: **FSharp.Web.Http**
 	- [Frank](http://frank-fs.github.io/frank/)-kirjasto helpottamaan Web-API-rajapinnan-luontia F#-kielellä.
