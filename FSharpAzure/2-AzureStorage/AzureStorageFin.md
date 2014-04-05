@@ -57,6 +57,7 @@ Näiden koodien ajaminen toimii interactive-ympäristöstä tiettyyn pisteeseen 
     #r "Microsoft.WindowsAzure.StorageClient.dll"
     #endif
 
+Näissä on huomattava se, että NuGet on voinut hakea sinulle eri version komponentista kuin mitä tässä esimerkissä. Joten jos Visual Studio alleviivaa rivin punaisella ja valittaa, että tiedostoa ei löydy, niin tämä voi johtua siitä, että sinulla on eri polussa uudempi versio siitä.
 Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Script File (*.fsx), joka suoritetaan vain interactive-tyylisessä scriptaus-ajoissa, mutta jää itsestään käännöksen ulkopuolelle. Nämä #r:t toimivat myös siellä, ja projektin .fs-tiedoston voi ladata käskyillä: 
 
     [lang=fsharp]
