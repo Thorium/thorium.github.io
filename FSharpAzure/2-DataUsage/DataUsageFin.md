@@ -81,8 +81,26 @@ Jos kirjoitit tiedostonimen TextFile1.csv oikein, niin tässäkin intellisense o
 
 ![](2-Csv.png)
 
-## Harjoitustehtävä ##
+## Harjoitustehtävät ##
 
+#### Harjoitustehtävä 1 ####
+
+Tee ohjelma, joka kyselee "kumpi oli presidentti":
+> Kumpi oli presidentti, Richard Burton vai Gerald Ford?
+
+Ohjelman toimintaperiaate:
+
+1. Hae Freebase:sta (Commons.Government alta) lista USA:n presidenteistä. Vain nimet.
+	- Sijoita tilapäismuuttujaan niin, ettei kyselyitä tule liian usein.
+2. Hae Freebase:sta (Commons.Film alta) lista näyttelijöistä. Vain nimet. Ota vain 50 ensimmäistä.
+	- Sijoita tilapäismuuttujaan niin, ettei kyselyitä tule liian usein.
+3. Kysely-toiminto:
+	- Arvo kummastakin listasta yksi nimi ja esitä ne satunnaisjärjestyksessä kumpi-kysymyksen muodossa.
+4. Tarkistus-toiminto:
+	- Ota parametrina nimi ja tarkista löytyykö annettu nimi presidentti-listalta.
+
+
+#### Harjoitustehtävä 2 ####
 Maailma on täynnä avoimia API-rajapintoja:
  
 - Suomalaisia:
