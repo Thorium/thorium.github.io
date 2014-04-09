@@ -30,11 +30,588 @@
         <div class="span10" id="main">
           <h1>Domain-mallinnus, DSL-kieli</h1>
 
-<p>Tämän osion materiaali ei ole vielä valmis...</p>
+<p>Domain-mallilla tarkoitetaan (kehittäjille suunnattua) tietomallia (=rakennetta), ohjaamaan ongelmanratkaisua tietyille raiteille.</p>
+
+<p>Domain Specific Language (DSL) viittaa tässä vain Embedded / Internal tyyliseen kieleen, jossa itsenäinen funktionaalinen (kombinaattori-)kirjasto upotetaan osaksi F#-kieltä. Emme käy läpi Fowler:in OO-pohjaista DSL-kirjaa.</p>
+
+<h2>Mallinnuksen vaiheet</h2>
+
+<p>Mallinnus koostuu kolmesta vaiheesta</p>
+
+<ol>
+<li><strong>Valitaan/mallinnetaan alkiot (primitives)</strong>
+<ul>
+<li>Järjestelmän perus-yksiköiden tilat.</li>
+<li>Vain keskeisin/oleellisin tieto</li>
+</ul></li>
+<li><strong>Mallinnetaan kompositio (yhdistäminen)</strong>
+<ul>
+<li>Miten primitiivejä yhdistellään niin, että ne sopivat saumattomasti yhteen</li>
+<li>Kombinaattorit</li>
+</ul></li>
+<li><strong>Syntaksi</strong>
+<ul>
+<li>Lisäkoristelut, jotta palikoita on kiva käyttää.</li>
+</ul></li>
+</ol>
+
+<h2>1. &amp; 2. Mallinnetaan alkiot ja niiden kompositio</h2>
+
+<p>Toiminnallisuudet voidaan lähteä mallintamaan joko tietona (contract as data) tai laskentaoperaatioina (contract as computation). Riippumatta tästä, käytössä on samat työkalut.</p>
+
+<h3>Mallinnuksen työkalut</h3>
+
+<p>Mallinnus kannattaa tehdä käyttäen kolmea työkalua:</p>
+
+<ul>
+<li><strong>Tuplet</strong>
+<ul>
+<li>"Product type", voidaan ajatella AND-operaationa</li>
+</ul></li>
+<li><strong>Discriminated union</strong>
+<ul>
+<li>"Sum type", voidaan ajatella OR-operaationa</li>
+</ul></li>
+<li><strong>Funktiot</strong>
+<ul>
+<li>Siirtymä tilojen välillä</li>
+<li>Toiminnon mallinnus</li>
+</ul></li>
+</ul>
+
+<p>Teoriassa boolean-operaatiot riittävät tietotekniikassa mallintamaan kaiken. Selkein domain tuleekin käyttäen näitä (ts. vältä oliorakenteita), mutta käytännössä halutaan ehkä käyttää apuna vielä seuraavia:</p>
+
+<ul>
+<li><strong>Record</strong>, jos yhteen-niputettavaa tietoa on paljon (esim. "ERP-olio")</li>
+<li><strong>Lista</strong>, jos yksittäisiä kohteita ei haluta listata</li>
+<li>Discriminated union voidaan <em>jälkikäteen</em> vaihtaa rajapinnaksi, jos kaikki sen jäsenet eivät ole tiedossa, ts. halutaan plugin-arkkitehtuuri.</li>
+</ul>
+
+<h3>Domain-mallin mallintaminen (contract as data)</h3>
+
+<p>Otetaan esimerkkinä yksinkertainen osake/pörssikauppa.</p>
+
+<p>Kuinka mallinnetaan:</p>
+
+<ul>
+<li>Haluan ostaa Microsoftin osakkeita 100kpl</li>
+<li>Haluan ostaa Nokian osakkeita 500kpl</li>
+<li>Haluan myydä Googlen osakkeita 300kpl</li>
+</ul>
+
+<p>Alkiot (primitiivit) olisivat yksittäisiä kauppoja, ja kompositio on sitä, että primitiiveistä yhdistellään eräänlainen abstrakti syntaksipuu.</p>
+
+<p>Usein kannattaa lähteä mallintamaan järjestelmän toimintoja (commandeja, verbejä), eikä niinkään "perus-olioita" (substantiiveja). Malli voisi näyttää esimerkiksi tältä:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">module</span> <span class="i">``Option case 1``</span> <span class="o">=</span>
+
+    <span class="c">//Primitives:</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Option</span> <span class="o">=</span> 
+    | <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">Buy</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">string</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">decimal</span> <span class="c">// Buy &quot;MSFT&quot; 100 (amount)</span>
+    | <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">Sell</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs3', 6)" onmouseover="showTip(event, 'fs3', 6)" class="i">string</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="i">decimal</span>
+    <span class="c">//Composition combinators:</span>
+    | <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="i">ContractUntil</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="i">DateTime</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs1', 11)" onmouseover="showTip(event, 'fs1', 11)" class="i">Option</span>
+    | <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="i">ContractAfter</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="i">DateTime</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs1', 15)" onmouseover="showTip(event, 'fs1', 15)" class="i">Option</span>
+    | <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="i">Combine</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs1', 17)" onmouseover="showTip(event, 'fs1', 17)" class="i">Option</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs1', 18)" onmouseover="showTip(event, 'fs1', 18)" class="i">Option</span> <span class="c">//or Option list</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Tai tältä:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">module</span> <span class="i">``Option case 2``</span> <span class="o">=</span>
+
+    <span class="c">//Primitives:</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="i">OperationKind</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="i">Buy</span> | <span onmouseout="hideTip(event, 'fs13', 21)" onmouseover="showTip(event, 'fs13', 21)" class="i">Sell</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="i">DateTimeKind</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 23)" onmouseover="showTip(event, 'fs15', 23)" class="i">Until</span> | <span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="i">After</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="i">Option</span> <span class="o">=</span> 
+    | <span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="i">Operation</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs11', 27)" onmouseover="showTip(event, 'fs11', 27)" class="i">OperationKind</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs3', 28)" onmouseover="showTip(event, 'fs3', 28)" class="i">string</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="i">decimal</span>
+    <span class="c">//Composition combinators:</span>
+    | <span onmouseout="hideTip(event, 'fs19', 30)" onmouseover="showTip(event, 'fs19', 30)" class="i">Contract</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs14', 31)" onmouseover="showTip(event, 'fs14', 31)" class="i">DateTimeKind</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs7', 32)" onmouseover="showTip(event, 'fs7', 32)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 33)" onmouseover="showTip(event, 'fs8', 33)" class="i">DateTime</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs17', 34)" onmouseover="showTip(event, 'fs17', 34)" class="i">Option</span>
+    | <span onmouseout="hideTip(event, 'fs10', 35)" onmouseover="showTip(event, 'fs10', 35)" class="i">Combine</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs17', 36)" onmouseover="showTip(event, 'fs17', 36)" class="i">Option</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs17', 37)" onmouseover="showTip(event, 'fs17', 37)" class="i">Option</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Näiden kahden merkittävin ero on siinä, että sitten kun näitä käytetään, niin kuinka helposti päästään käsiksi parametritietoihin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">module</span> <span class="i">``Option case 1 usage``</span> <span class="o">=</span>
+    <span class="k">open</span> <span class="i">``Option case 1``</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="i">create</span> <span class="o">=</span> 
+        <span onmouseout="hideTip(event, 'fs10', 39)" onmouseover="showTip(event, 'fs10', 39)" class="i">Combine</span>(
+            <span onmouseout="hideTip(event, 'fs10', 40)" onmouseover="showTip(event, 'fs10', 40)" class="i">Combine</span>(
+                <span onmouseout="hideTip(event, 'fs2', 41)" onmouseover="showTip(event, 'fs2', 41)" class="i">Buy</span>(<span class="s">&quot;</span><span class="s">MSFT</span><span class="s">&quot;</span>,<span class="n">100m</span>),
+                <span onmouseout="hideTip(event, 'fs2', 42)" onmouseover="showTip(event, 'fs2', 42)" class="i">Buy</span>(<span class="s">&quot;</span><span class="s">NOK</span><span class="s">&quot;</span>,<span class="n">500m</span>)),
+            <span onmouseout="hideTip(event, 'fs5', 43)" onmouseover="showTip(event, 'fs5', 43)" class="i">Sell</span>(<span class="s">&quot;</span><span class="s">GOOG</span><span class="s">&quot;</span>,<span class="n">300m</span>))
+
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs21', 44)" onmouseover="showTip(event, 'fs21', 44)" class="i">purge</span> <span class="o">=</span> 
+        <span class="k">function</span>
+            | <span onmouseout="hideTip(event, 'fs2', 45)" onmouseover="showTip(event, 'fs2', 45)" class="i">Buy</span> (<span onmouseout="hideTip(event, 'fs22', 46)" onmouseover="showTip(event, 'fs22', 46)" class="i">name</span>,<span onmouseout="hideTip(event, 'fs23', 47)" onmouseover="showTip(event, 'fs23', 47)" class="i">amount</span>) <span class="k">-&gt;</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="c">//...</span>
+            | <span onmouseout="hideTip(event, 'fs5', 48)" onmouseover="showTip(event, 'fs5', 48)" class="i">Sell</span> (<span onmouseout="hideTip(event, 'fs22', 49)" onmouseover="showTip(event, 'fs22', 49)" class="i">name</span>,<span onmouseout="hideTip(event, 'fs23', 50)" onmouseover="showTip(event, 'fs23', 50)" class="i">amount</span>) <span class="k">-&gt;</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="c">//...</span>
+            | <span onmouseout="hideTip(event, 'fs6', 51)" onmouseover="showTip(event, 'fs6', 51)" class="i">ContractUntil</span> (<span onmouseout="hideTip(event, 'fs24', 52)" onmouseover="showTip(event, 'fs24', 52)" class="i">dt</span>,<span onmouseout="hideTip(event, 'fs25', 53)" onmouseover="showTip(event, 'fs25', 53)" class="i">opt</span>) <span class="k">-&gt;</span> 
+                 <span class="k">if</span> <span onmouseout="hideTip(event, 'fs24', 54)" onmouseover="showTip(event, 'fs24', 54)" class="i">dt</span><span class="o">&lt;=</span><span onmouseout="hideTip(event, 'fs7', 55)" onmouseover="showTip(event, 'fs7', 55)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 56)" onmouseover="showTip(event, 'fs8', 56)" class="i">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 57)" onmouseover="showTip(event, 'fs26', 57)" class="i">Now</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs21', 58)" onmouseover="showTip(event, 'fs21', 58)" class="i">purge</span> <span onmouseout="hideTip(event, 'fs25', 59)" onmouseover="showTip(event, 'fs25', 59)" class="i">opt</span> <span class="k">else</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="c">//...</span>
+            | <span onmouseout="hideTip(event, 'fs9', 60)" onmouseover="showTip(event, 'fs9', 60)" class="i">ContractAfter</span> (<span onmouseout="hideTip(event, 'fs24', 61)" onmouseover="showTip(event, 'fs24', 61)" class="i">dt</span>,<span onmouseout="hideTip(event, 'fs25', 62)" onmouseover="showTip(event, 'fs25', 62)" class="i">opt</span>) <span class="k">-&gt;</span>
+                 <span class="k">if</span> <span onmouseout="hideTip(event, 'fs24', 63)" onmouseover="showTip(event, 'fs24', 63)" class="i">dt</span><span class="o">&gt;</span><span class="o">=</span><span onmouseout="hideTip(event, 'fs7', 64)" onmouseover="showTip(event, 'fs7', 64)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 65)" onmouseover="showTip(event, 'fs8', 65)" class="i">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 66)" onmouseover="showTip(event, 'fs26', 66)" class="i">Now</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs21', 67)" onmouseover="showTip(event, 'fs21', 67)" class="i">purge</span> <span onmouseout="hideTip(event, 'fs25', 68)" onmouseover="showTip(event, 'fs25', 68)" class="i">opt</span> <span class="k">else</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="c">//...</span>
+            | <span onmouseout="hideTip(event, 'fs10', 69)" onmouseover="showTip(event, 'fs10', 69)" class="i">Combine</span> (<span onmouseout="hideTip(event, 'fs27', 70)" onmouseover="showTip(event, 'fs27', 70)" class="i">a</span>,<span onmouseout="hideTip(event, 'fs28', 71)" onmouseover="showTip(event, 'fs28', 71)" class="i">b</span>) <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs21', 72)" onmouseover="showTip(event, 'fs21', 72)" class="i">purge</span> <span onmouseout="hideTip(event, 'fs27', 73)" onmouseover="showTip(event, 'fs27', 73)" class="i">a</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs21', 74)" onmouseover="showTip(event, 'fs21', 74)" class="i">purge</span> <span onmouseout="hideTip(event, 'fs28', 75)" onmouseover="showTip(event, 'fs28', 75)" class="i">b</span>
+
+<span class="k">module</span> <span class="i">``Option case 2 usage``</span> <span class="o">=</span>
+    <span class="k">open</span> <span class="i">``Option case 2``</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 76)" onmouseover="showTip(event, 'fs29', 76)" class="i">create</span> <span class="o">=</span> 
+        <span onmouseout="hideTip(event, 'fs10', 77)" onmouseover="showTip(event, 'fs10', 77)" class="i">Combine</span>(
+            <span onmouseout="hideTip(event, 'fs10', 78)" onmouseover="showTip(event, 'fs10', 78)" class="i">Combine</span>(
+                <span onmouseout="hideTip(event, 'fs18', 79)" onmouseover="showTip(event, 'fs18', 79)" class="i">Operation</span>(<span onmouseout="hideTip(event, 'fs12', 80)" onmouseover="showTip(event, 'fs12', 80)" class="i">Buy</span>,<span class="s">&quot;</span><span class="s">MSFT</span><span class="s">&quot;</span>,<span class="n">100m</span>),
+                <span onmouseout="hideTip(event, 'fs18', 81)" onmouseover="showTip(event, 'fs18', 81)" class="i">Operation</span>(<span onmouseout="hideTip(event, 'fs12', 82)" onmouseover="showTip(event, 'fs12', 82)" class="i">Buy</span>,<span class="s">&quot;</span><span class="s">NOK</span><span class="s">&quot;</span>,<span class="n">500m</span>)),
+            <span onmouseout="hideTip(event, 'fs18', 83)" onmouseover="showTip(event, 'fs18', 83)" class="i">Operation</span>(<span onmouseout="hideTip(event, 'fs13', 84)" onmouseover="showTip(event, 'fs13', 84)" class="i">Sell</span>,<span class="s">&quot;</span><span class="s">GOOG</span><span class="s">&quot;</span>,<span class="n">300m</span>))
+
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs30', 85)" onmouseover="showTip(event, 'fs30', 85)" class="i">purge</span> <span class="o">=</span> 
+        <span class="k">function</span>
+            | <span onmouseout="hideTip(event, 'fs18', 86)" onmouseover="showTip(event, 'fs18', 86)" class="i">Operation</span> (<span onmouseout="hideTip(event, 'fs31', 87)" onmouseover="showTip(event, 'fs31', 87)" class="i">kind</span>,<span onmouseout="hideTip(event, 'fs22', 88)" onmouseover="showTip(event, 'fs22', 88)" class="i">name</span>,<span onmouseout="hideTip(event, 'fs23', 89)" onmouseover="showTip(event, 'fs23', 89)" class="i">amount</span>) <span class="k">-&gt;</span> <span class="c">// you could use when or...</span>
+                <span class="s">&quot;</span><span class="s">&quot;</span> <span class="c">// use common name and amount functionality and then </span>
+                   <span class="c">// match kind with buy/sell when needed</span>
+            | <span onmouseout="hideTip(event, 'fs19', 90)" onmouseover="showTip(event, 'fs19', 90)" class="i">Contract</span> (<span onmouseout="hideTip(event, 'fs32', 91)" onmouseover="showTip(event, 'fs32', 91)" class="i">dtk</span>, <span onmouseout="hideTip(event, 'fs24', 92)" onmouseover="showTip(event, 'fs24', 92)" class="i">dt</span>,<span onmouseout="hideTip(event, 'fs25', 93)" onmouseover="showTip(event, 'fs25', 93)" class="i">opt</span>) <span class="k">-&gt;</span> <span class="s">&quot;</span><span class="s">&quot;</span> <span class="c">// match dt with...purge(opt)</span>
+            | <span onmouseout="hideTip(event, 'fs10', 94)" onmouseover="showTip(event, 'fs10', 94)" class="i">Combine</span> (<span onmouseout="hideTip(event, 'fs27', 95)" onmouseover="showTip(event, 'fs27', 95)" class="i">a</span>,<span onmouseout="hideTip(event, 'fs28', 96)" onmouseover="showTip(event, 'fs28', 96)" class="i">b</span>) <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs30', 97)" onmouseover="showTip(event, 'fs30', 97)" class="i">purge</span> <span onmouseout="hideTip(event, 'fs27', 98)" onmouseover="showTip(event, 'fs27', 98)" class="i">a</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs30', 99)" onmouseover="showTip(event, 'fs30', 99)" class="i">purge</span> <span onmouseout="hideTip(event, 'fs28', 100)" onmouseover="showTip(event, 'fs28', 100)" class="i">b</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Kannattaa valita vaihtoehto 2, jos käytettävät parametrit kuvaavat samaa tietosisältöä, kuten tässä. Silloin operaatio on helpompi muokata muodosta toiseen, esim. vaihtaa Buy -> Sell. Tee mieluummin useita tyyppejä kuin mega-tyyppejä.</p>
+
+<p>Tämä on helpoin ja selkein tapa mallintaa, näin saat selkeän tietomallin. Haittapuolena on, että operaatiot ovat kiinteitä, eli et voi kirjastomaisesti yhdistää omia rakenteita tekemään mitä tahansa, vaan toiminnallisuuden on kunnioitettava tietomallin toiminnallisuuksia. Usein tämä riittää, kun tavoitteena on rakentaa yksittäinen järjestelmää, jolla on selkeät rajat.</p>
+
+<p>Siinä missä C# usein johtaa olio-mappaus-koodiin tyypistä toiseen, auttavat <a href="http://msdn.microsoft.com/en-us/library/dd233237.aspx">F# Object Expressionit</a>, joilla voi luoda instansseja ilman boilerplate-koodia.</p>
+
+<h3>Tietomallin mallintaminen laskentaoperaatioina (contract as computation)</h3>
+
+<p>Tämä on perus-ohjelmaan usein turhan monimutkainen konsepti (ellei call-cc ja Haskell-kirjastot ole entuudestaan tuttuja), mutta hyvä vaihtoehto, jos on pakko yrittää rakentaa jonkinlainen oma workflow/prosessi/sääntö -moottori tai framework. Erona edelliseen on se, että käyttäjä voi referoida tämän kirjastona ja itse tehdä komposito-operaatioita lisää. Tällöin kyseessä alkaa olla jo kombinaattorikirjasto tai DSL-kieli.</p>
+
+<p>Tietomallia voidaan mallintaa toimintona/funktiona <code>('a -&gt; M&lt;'b&gt;)</code>, jossa a on "ohjelman tila", ts. mitä vastaan kombinaatiosääntöjä tehdään, ja M kuvaa jonkinlaista kapselia/monadia (vaikkapa lista), ja b taas on tuloksen tyyppi. Kapseli on vapaaehtoinen ja myöskään a ja b ei tarvitse olla geneerisiä, jos tarkemmat tyypit on business-mielessä mahdollista määrittää. Aluksi annetaan funktiolle nimi, jotta ei hukuta nuoliin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs33', 101)" onmouseover="showTip(event, 'fs33', 101)" class="i">Option</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span>,<span class="o">&#39;</span><span class="i">b</span><span class="o">&gt;</span> <span class="o">=</span>
+| <span onmouseout="hideTip(event, 'fs34', 102)" onmouseover="showTip(event, 'fs34', 102)" class="i">Operation</span> <span class="k">of</span> (<span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs35', 103)" onmouseover="showTip(event, 'fs35', 103)" class="i">List</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">b</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+<p>Nyt voidaan luoda funktio, joka yhdistää kaksi toiminnallisuutta, esim. listalla:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs36', 104)" onmouseover="showTip(event, 'fs36', 104)" class="i">combine</span> (<span onmouseout="hideTip(event, 'fs34', 105)" onmouseover="showTip(event, 'fs34', 105)" class="i">Operation</span> <span onmouseout="hideTip(event, 'fs37', 106)" onmouseover="showTip(event, 'fs37', 106)" class="i">f1</span>) (<span onmouseout="hideTip(event, 'fs34', 107)" onmouseover="showTip(event, 'fs34', 107)" class="i">Operation</span> <span onmouseout="hideTip(event, 'fs38', 108)" onmouseover="showTip(event, 'fs38', 108)" class="i">f2</span>) <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs34', 109)" onmouseover="showTip(event, 'fs34', 109)" class="i">Operation</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs39', 110)" onmouseover="showTip(event, 'fs39', 110)" class="i">a</span> <span class="k">-&gt;</span> [<span onmouseout="hideTip(event, 'fs37', 111)" onmouseover="showTip(event, 'fs37', 111)" class="i">f1</span>(<span onmouseout="hideTip(event, 'fs39', 112)" onmouseover="showTip(event, 'fs39', 112)" class="i">a</span>); <span onmouseout="hideTip(event, 'fs38', 113)" onmouseover="showTip(event, 'fs38', 113)" class="i">f2</span>(<span onmouseout="hideTip(event, 'fs39', 114)" onmouseover="showTip(event, 'fs39', 114)" class="i">a</span>)])
+
+<span class="c">// Option -&gt; Option -&gt; Option</span></pre>
+</td>
+</tr>
+</table>
+
+<p>ja määritellään vielä toinen funktio, itse suoritus:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs40', 115)" onmouseover="showTip(event, 'fs40', 115)" class="i">eval</span> (<span onmouseout="hideTip(event, 'fs34', 116)" onmouseover="showTip(event, 'fs34', 116)" class="i">Operation</span> <span onmouseout="hideTip(event, 'fs41', 117)" onmouseover="showTip(event, 'fs41', 117)" class="i">f</span>) <span onmouseout="hideTip(event, 'fs39', 118)" onmouseover="showTip(event, 'fs39', 118)" class="i">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 119)" onmouseover="showTip(event, 'fs41', 119)" class="i">f</span>(<span onmouseout="hideTip(event, 'fs39', 120)" onmouseover="showTip(event, 'fs39', 120)" class="i">a</span>)</pre>
+</td>
+</tr>
+</table>
+
+<p>Nyt käyttäjä voi tehdä mitä tahansa Operation-tyylisiä funktioita, jotka toteuttavat syntaksin <code>(a -&gt; List&lt;b&gt;)</code> ja näitä voidaan yhdistellä käyttäjän mielen mukaan. 
+Esim:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs42', 121)" onmouseover="showTip(event, 'fs42', 121)" class="i">buy</span> <span onmouseout="hideTip(event, 'fs43', 122)" onmouseover="showTip(event, 'fs43', 122)" class="i">name</span> <span onmouseout="hideTip(event, 'fs44', 123)" onmouseover="showTip(event, 'fs44', 123)" class="i">amount</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs34', 124)" onmouseover="showTip(event, 'fs34', 124)" class="i">Operation</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs45', 125)" onmouseover="showTip(event, 'fs45', 125)" class="i">a</span> <span class="k">-&gt;</span> [(<span onmouseout="hideTip(event, 'fs43', 126)" onmouseover="showTip(event, 'fs43', 126)" class="i">name</span>, <span onmouseout="hideTip(event, 'fs44', 127)" onmouseover="showTip(event, 'fs44', 127)" class="i">amount</span>)])</pre>
+</td>
+</tr>
+</table>
+
+<p>Lopuksi käyttäjä pyytää suorittamaan ajon.</p>
+
+<p>Eli abstrakti-syntaksi-puu muodostuukin funktioista lähdekoodissa, esim. näin (pseudoa):</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs46', 128)" onmouseover="showTip(event, 'fs46', 128)" class="i">myCombination</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs36', 129)" onmouseover="showTip(event, 'fs36', 129)" class="i">combine</span>
+        (<span onmouseout="hideTip(event, 'fs42', 130)" onmouseover="showTip(event, 'fs42', 130)" class="i">buy</span> <span class="s">&quot;</span><span class="s">MSFT</span><span class="s">&quot;</span> <span class="n">100m</span>)
+        (<span onmouseout="hideTip(event, 'fs42', 131)" onmouseover="showTip(event, 'fs42', 131)" class="i">buy</span> <span class="s">&quot;</span><span class="s">NOK</span><span class="s">&quot;</span> <span class="n">500m</span>)
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs47', 132)" onmouseover="showTip(event, 'fs47', 132)" class="i">myDone</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs40', 133)" onmouseover="showTip(event, 'fs40', 133)" class="i">eval</span> <span onmouseout="hideTip(event, 'fs46', 134)" onmouseover="showTip(event, 'fs46', 134)" class="i">myCombination</span> <span class="s">&quot;</span><span class="s">now</span><span class="s">!</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<p>Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätettiin pois, mutta tarkoitus oli antaa yleiskäsitys asiasta. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla <a href="http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674">netistä</a>, kirjan <a href="http://www.manning.com/petricek/">"Real-World Functional Programming"</a> koodiesimerkeistä, kappale 15.</p>
+
+<h4>Standardi-operaatiot</h4>
+
+<p>Yhdisteltäessä eri toiminnallisuuksia (jopa eri kirjastojen välillä), on usein kätevää käyttää tuttuja standardi-operaatiota kuten esim:</p>
+
+<ul>
+<li>map <code>('T -&gt; 'R) -&gt; M&lt;'T&gt; -&gt; M&lt;'R&gt;</code></li>
+<li>bind <code>('T -&gt; M&lt;'R&gt;) -&gt; M&lt;'T&gt; -&gt; M&lt;'R&gt;</code></li>
+</ul>
+
+<p>Operaation tietotyypistä voi jo päätellä mitä itse operaatio tekee.</p>
+
+<h2>3. Syntaksi</h2>
+
+<p>Jotta toiminnallisuuksiasi olisi parempi käyttää, niin F#:ssa on lukuisia hienouksia: omat custom-operaattorit, Builder-syntaksi, Quotations (kuin C# -expression-puu), Query-syntaksi, ...
+Tässä esiteltynä tarkemmin kaksi:</p>
+
+<h3>Custom-operaattorit</h3>
+
+<p>F#:ssa voit tehdä omat <a href="http://msdn.microsoft.com/en-us/library/dd233204.aspx">operaattorisi</a>, kuten normaali funktio, mutta kirjoittamalla operaattorin sulkuihin. Käytettäessä operaattorin ensimmäinen parametri tulee ennen operaattoria. Esimerkkinä seuraava "hauska jekku":</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> (<span class="o">+</span>) <span onmouseout="hideTip(event, 'fs48', 135)" onmouseover="showTip(event, 'fs48', 135)" class="i">x</span> <span onmouseout="hideTip(event, 'fs49', 136)" onmouseover="showTip(event, 'fs49', 136)" class="i">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs48', 137)" onmouseover="showTip(event, 'fs48', 137)" class="i">x</span><span class="o">-</span><span onmouseout="hideTip(event, 'fs49', 138)" onmouseover="showTip(event, 'fs49', 138)" class="i">y</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs50', 139)" onmouseover="showTip(event, 'fs50', 139)" class="i">minusOne</span> <span class="o">=</span> <span class="n">5</span><span class="o">+</span><span class="n">6</span></pre>
+</td>
+</tr>
+</table>
+
+<p>mutta tälle on myös erittäin mukavia käyttötarkoituksia omissa DSL-kielissä, tästä esimerkkinä edellisen kohda combine-funktio (partial application:in takia ei tarvitse listata parametreja):</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> (<span class="o">&amp;</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs36', 140)" onmouseover="showTip(event, 'fs36', 140)" class="i">combine</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs51', 141)" onmouseover="showTip(event, 'fs51', 141)" class="i">myCombination2</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs42', 142)" onmouseover="showTip(event, 'fs42', 142)" class="i">buy</span> <span class="s">&quot;</span><span class="s">MSFT</span><span class="s">&quot;</span> <span class="n">100m</span> <span class="o">&amp;</span>
+    <span onmouseout="hideTip(event, 'fs42', 143)" onmouseover="showTip(event, 'fs42', 143)" class="i">buy</span> <span class="s">&quot;</span><span class="s">NOK</span><span class="s">&quot;</span> <span class="n">500m</span> <span class="o">&amp;</span>
+    <span class="i">sell</span> <span class="s">&quot;</span><span class="s">GOOG</span><span class="s">&quot;</span> <span class="n">300m</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs52', 144)" onmouseover="showTip(event, 'fs52', 144)" class="i">myDone2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs40', 145)" onmouseover="showTip(event, 'fs40', 145)" class="i">eval</span> <span onmouseout="hideTip(event, 'fs51', 146)" onmouseover="showTip(event, 'fs51', 146)" class="i">myCombination2</span> <span class="s">&quot;</span><span class="s">now</span><span class="s">!</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h3>Builder-syntaksi</h3>
+
+<p>Omia computational expressioneita (/monadeita) voi rakentaa lennosta: Keksit vain tilan/sivuvaikutuksen, jonka kapseloit. Tämän sisällä ohjelmoidaan <code>konteksti{ ... }</code> -syntaksilla (jossa "konteksti" voi olla melkein mikä tahansa valitsemasi sana).</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="c">// Return class like Async&lt;T&gt; or IEnumerable&lt;T&gt;:</span>
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs53', 147)" onmouseover="showTip(event, 'fs53', 147)" class="i">MyReturnClass</span>(<span onmouseout="hideTip(event, 'fs54', 148)" onmouseover="showTip(event, 'fs54', 148)" class="i">n</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs55', 149)" onmouseover="showTip(event, 'fs55', 149)" class="i">int</span>) <span class="o">=</span>
+    <span class="k">member</span> <span onmouseout="hideTip(event, 'fs56', 150)" onmouseover="showTip(event, 'fs56', 150)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs57', 151)" onmouseover="showTip(event, 'fs57', 151)" class="i">Value</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs54', 152)" onmouseover="showTip(event, 'fs54', 152)" class="i">n</span>
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs58', 153)" onmouseover="showTip(event, 'fs58', 153)" class="i">MyContextBuilder</span>() <span class="o">=</span>        
+    <span class="k">member</span> <span onmouseout="hideTip(event, 'fs59', 154)" onmouseover="showTip(event, 'fs59', 154)" class="i">t</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs60', 155)" onmouseover="showTip(event, 'fs60', 155)" class="i">Return</span>(<span onmouseout="hideTip(event, 'fs48', 156)" onmouseover="showTip(event, 'fs48', 156)" class="i">x</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs53', 157)" onmouseover="showTip(event, 'fs53', 157)" class="i">MyReturnClass</span>(<span onmouseout="hideTip(event, 'fs48', 158)" onmouseover="showTip(event, 'fs48', 158)" class="i">x</span>)
+    <span class="k">member</span> <span onmouseout="hideTip(event, 'fs59', 159)" onmouseover="showTip(event, 'fs59', 159)" class="i">t</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs61', 160)" onmouseover="showTip(event, 'fs61', 160)" class="i">Bind</span>(<span onmouseout="hideTip(event, 'fs56', 161)" onmouseover="showTip(event, 'fs56', 161)" class="i">x</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs53', 162)" onmouseover="showTip(event, 'fs53', 162)" class="i">MyReturnClass</span>, <span onmouseout="hideTip(event, 'fs62', 163)" onmouseover="showTip(event, 'fs62', 163)" class="i">rest</span>) <span class="o">=</span> 
+        <span onmouseout="hideTip(event, 'fs63', 164)" onmouseover="showTip(event, 'fs63', 164)" class="i">printfn</span> <span class="s">&quot;</span><span class="s">Binded</span><span class="s"> </span><span class="s">%</span><span class="s">d</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs56', 165)" onmouseover="showTip(event, 'fs56', 165)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs64', 166)" onmouseover="showTip(event, 'fs64', 166)" class="i">Value</span> 
+        <span onmouseout="hideTip(event, 'fs62', 167)" onmouseover="showTip(event, 'fs62', 167)" class="i">rest</span>(<span onmouseout="hideTip(event, 'fs56', 168)" onmouseover="showTip(event, 'fs56', 168)" class="i">x</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs64', 169)" onmouseover="showTip(event, 'fs64', 169)" class="i">Value</span>)
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs65', 170)" onmouseover="showTip(event, 'fs65', 170)" class="i">context</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs58', 171)" onmouseover="showTip(event, 'fs58', 171)" class="i">MyContextBuilder</span>()
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs66', 172)" onmouseover="showTip(event, 'fs66', 172)" class="i">test</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs65', 173)" onmouseover="showTip(event, 'fs65', 173)" class="i">context</span>{
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs67', 174)" onmouseover="showTip(event, 'fs67', 174)" class="i">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs53', 175)" onmouseover="showTip(event, 'fs53', 175)" class="i">MyReturnClass</span>(<span class="n">3</span>) <span class="c">//&quot;let!&quot; calls builder&#39;s Bind</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs68', 176)" onmouseover="showTip(event, 'fs68', 176)" class="i">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs53', 177)" onmouseover="showTip(event, 'fs53', 177)" class="i">MyReturnClass</span>(<span class="n">5</span>) <span class="c">//&quot;let!&quot; calls builder&#39;s Bind</span>
+
+        <span class="c">//Inside the monad you program like usual F#:</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs69', 178)" onmouseover="showTip(event, 'fs69', 178)" class="i">mult</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs67', 179)" onmouseover="showTip(event, 'fs67', 179)" class="i">a</span> <span class="o">*</span> <span onmouseout="hideTip(event, 'fs68', 180)" onmouseover="showTip(event, 'fs68', 180)" class="i">b</span>   
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs70', 181)" onmouseover="showTip(event, 'fs70', 181)" class="i">sum</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs69', 182)" onmouseover="showTip(event, 'fs69', 182)" class="i">mult</span> <span class="o">+</span> <span class="n">1</span> 
+
+        <span class="k">return</span> <span onmouseout="hideTip(event, 'fs70', 183)" onmouseover="showTip(event, 'fs70', 183)" class="i">sum</span> <span class="c">//&quot;return&quot; calls builder&#39;s Return(x)</span>
+    }</pre>
+</td>
+</tr>
+</table>
+
+<ul>
+<li>Kontekstin sisällä huutomerkki-käskyt ("syntaktisokeria") ohjaavat builder-"rajapinnan" vastaaviin metodeihin.</li>
+<li>"Rajapinnasta" ei tarvitse täyttää kuin oleelliset metodit. Homma perustuu continuationiin (tarkemmin: call-cc) ja reify:yn.</li>
+<li>Tarkempi kuvaus rajapinnan metodeista ja sisäisestä toiminnasta löytyy netistä.
+<ul>
+<li><a href="http://msdn.microsoft.com/en-us/library/dd233182.aspx">Rajapinta</a></li>
+<li><a href="http://blogs.msdn.com/b/dsyme/archive/2007/09/22/some-details-on-f-computation-expressions-aka-monadic-or-workflow-syntax.aspx">Lisäinfoa</a></li>
+</ul></li>
+</ul>
+
+<h2>Harjoitustehtävät</h2>
+
+<h3>Harjoitus 1</h3>
+
+<p>Ohessa on piirretty kuvitteellinen lainanhakuprosessi: <a href="loanappprocess.pdf">pdf</a>.</p>
+
+<p>Siitä copy &amp; pastella on hutaistu tekstit oheisiin tietotyyppeihin:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs71', 184)" onmouseover="showTip(event, 'fs71', 184)" class="i">Terms</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 185)" onmouseover="showTip(event, 'fs3', 185)" class="i">string</span>
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs72', 186)" onmouseover="showTip(event, 'fs72', 186)" class="i">Loan</span> <span class="o">=</span> 
+| <span onmouseout="hideTip(event, 'fs73', 187)" onmouseover="showTip(event, 'fs73', 187)" class="i">Offer</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs4', 188)" onmouseover="showTip(event, 'fs4', 188)" class="i">decimal</span><span class="o">*</span><span class="i">DateTime</span>
+| <span onmouseout="hideTip(event, 'fs74', 189)" onmouseover="showTip(event, 'fs74', 189)" class="i">Approved</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs4', 190)" onmouseover="showTip(event, 'fs4', 190)" class="i">decimal</span><span class="o">*</span><span class="i">DateTime</span>
+
+<span class="k">type</span> <span class="i">``Loan application state``</span> <span class="o">=</span>
+| <span class="i">``Status Received``</span>
+| <span class="i">``Has Client``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs75', 191)" onmouseover="showTip(event, 'fs75', 191)" class="i">bool</span>
+| <span class="i">``Has Credit``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs75', 192)" onmouseover="showTip(event, 'fs75', 192)" class="i">bool</span>
+| <span class="i">``Offer terms are ok``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs71', 193)" onmouseover="showTip(event, 'fs71', 193)" class="i">Terms</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs75', 194)" onmouseover="showTip(event, 'fs75', 194)" class="i">bool</span>
+| <span class="i">``Loan rejected``</span>
+| <span class="i">``Manual offer terms``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs71', 195)" onmouseover="showTip(event, 'fs71', 195)" class="i">Terms</span>
+| <span class="i">``Offer created``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs71', 196)" onmouseover="showTip(event, 'fs71', 196)" class="i">Terms</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs72', 197)" onmouseover="showTip(event, 'fs72', 197)" class="i">Loan</span>
+| <span class="i">``Offer approved``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs71', 198)" onmouseover="showTip(event, 'fs71', 198)" class="i">Terms</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs72', 199)" onmouseover="showTip(event, 'fs72', 199)" class="i">Loan</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs75', 200)" onmouseover="showTip(event, 'fs75', 200)" class="i">bool</span>
+| <span class="i">``Offer closed``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs71', 201)" onmouseover="showTip(event, 'fs71', 201)" class="i">Terms</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs72', 202)" onmouseover="showTip(event, 'fs72', 202)" class="i">Loan</span>
+| <span class="i">``Money transfered``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs72', 203)" onmouseover="showTip(event, 'fs72', 203)" class="i">Loan</span>
+| <span class="i">``Loan fully paid``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs75', 204)" onmouseover="showTip(event, 'fs75', 204)" class="i">bool</span><span class="o">*</span><span onmouseout="hideTip(event, 'fs72', 205)" onmouseover="showTip(event, 'fs72', 205)" class="i">Loan</span>
+| <span class="i">``Report created``</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs72', 206)" onmouseover="showTip(event, 'fs72', 206)" class="i">Loan</span></pre>
+</td>
+</tr>
+</table>
+
+<ul>
+<li>Miten optimoisit näitä tietotyyppejä?</li>
+<li>Kirjoita myös muutama kuvitteellinen metodi käyttämään tätä kuvattua prosessia ja kuljettamaan lainahakemusta prosessin vaiheesta toiseen.</li>
+<li>Prosessiin kuulumaton data kannattaa kapseloida mieluummin uutena tuplena myöhemmin rinnalle, kuin prosessin sisään.</li>
+</ul>
+
+<h3>Harjoitus 2</h3>
+
+<p>Mieti mikä olisi huono domain-malli?</p>
+
+<h2>Linkit / Lähteet</h2>
+
+<p>Tomas Petricek - Domain Specific Languages in F# - <a href="http://vimeo.com/60546839">Video</a>, <a href="http://www.slideshare.net/tomaspfb/dsls">Slides</a></p>
+
+<p>Simon Peyton-Jones - <a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/financial-contracts/contracts-icfp.htm">Composing contracts: an adventure in financial engineering</a></p>
+
+<p>Lab49 - <a href="http://blog.lab49.com/archives/3011">The Algebra of Data, and the Calculus of Mutation</a></p>
+
+<p>Philip Wadler - <a href="http://ttic.uchicago.edu/~dreyer/course/papers/wadler.pdf">Theorems for free!</a></p>
 
 <p><a href="../Readme.html">Takaisin valikkoon</a></p>
 
-                    
+          <div class="tip" id="fs1">Multiple items<br />module Option<br /><br />from Microsoft.FSharp.Core<br /><br />--------------------<br />type Option =<br />&#160;&#160;| Buy of string * decimal<br />&#160;&#160;| Sell of string * decimal<br />&#160;&#160;| ContractUntil of DateTime * Option<br />&#160;&#160;| ContractAfter of DateTime * Option<br />&#160;&#160;| Combine of Option * Option<br /><br />Full name: DomainModelFin.Option case 1.Option</div>
+<div class="tip" id="fs2">union case Option.Buy: string * decimal -&gt; Option</div>
+<div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs4">Multiple items<br />val decimal : value:&#39;T -&gt; decimal (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.decimal<br /><br />--------------------<br />type decimal = System.Decimal<br /><br />Full name: Microsoft.FSharp.Core.decimal<br /><br />--------------------<br />type decimal&lt;&#39;Measure&gt; = decimal<br /><br />Full name: Microsoft.FSharp.Core.decimal&lt;_&gt;</div>
+<div class="tip" id="fs5">union case Option.Sell: string * decimal -&gt; Option</div>
+<div class="tip" id="fs6">union case Option.ContractUntil: System.DateTime * Option -&gt; Option</div>
+<div class="tip" id="fs7">namespace System</div>
+<div class="tip" id="fs8">Multiple items<br />type DateTime =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : ticks:int64 -&gt; DateTime + 10 overloads<br />&#160;&#160;&#160;&#160;member Add : value:TimeSpan -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddDays : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddHours : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMilliseconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMinutes : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMonths : months:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddSeconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddTicks : value:int64 -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddYears : value:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.DateTime<br /><br />--------------------<br />System.DateTime()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="tip" id="fs9">union case Option.ContractAfter: System.DateTime * Option -&gt; Option</div>
+<div class="tip" id="fs10">union case Option.Combine: Option * Option -&gt; Option</div>
+<div class="tip" id="fs11">type OperationKind =<br />&#160;&#160;| Buy<br />&#160;&#160;| Sell<br /><br />Full name: DomainModelFin.Option case 2.OperationKind</div>
+<div class="tip" id="fs12">union case OperationKind.Buy: OperationKind</div>
+<div class="tip" id="fs13">union case OperationKind.Sell: OperationKind</div>
+<div class="tip" id="fs14">type DateTimeKind =<br />&#160;&#160;| Until<br />&#160;&#160;| After<br /><br />Full name: DomainModelFin.Option case 2.DateTimeKind</div>
+<div class="tip" id="fs15">union case DateTimeKind.Until: DateTimeKind</div>
+<div class="tip" id="fs16">union case DateTimeKind.After: DateTimeKind</div>
+<div class="tip" id="fs17">Multiple items<br />module Option<br /><br />from Microsoft.FSharp.Core<br /><br />--------------------<br />type Option =<br />&#160;&#160;| Operation of OperationKind * string * decimal<br />&#160;&#160;| Contract of DateTimeKind * DateTime * Option<br />&#160;&#160;| Combine of Option * Option<br /><br />Full name: DomainModelFin.Option case 2.Option</div>
+<div class="tip" id="fs18">union case Option.Operation: OperationKind * string * decimal -&gt; Option</div>
+<div class="tip" id="fs19">union case Option.Contract: DateTimeKind * System.DateTime * Option -&gt; Option</div>
+<div class="tip" id="fs20">val create : Option<br /><br />Full name: DomainModelFin.Option case 1 usage.create</div>
+<div class="tip" id="fs21">val purge : _arg1:Option -&gt; string<br /><br />Full name: DomainModelFin.Option case 1 usage.purge</div>
+<div class="tip" id="fs22">val name : string</div>
+<div class="tip" id="fs23">val amount : decimal</div>
+<div class="tip" id="fs24">val dt : System.DateTime</div>
+<div class="tip" id="fs25">val opt : Option</div>
+<div class="tip" id="fs26">property System.DateTime.Now: System.DateTime</div>
+<div class="tip" id="fs27">val a : Option</div>
+<div class="tip" id="fs28">val b : Option</div>
+<div class="tip" id="fs29">val create : Option<br /><br />Full name: DomainModelFin.Option case 2 usage.create</div>
+<div class="tip" id="fs30">val purge : _arg1:Option -&gt; string<br /><br />Full name: DomainModelFin.Option case 2 usage.purge</div>
+<div class="tip" id="fs31">val kind : OperationKind</div>
+<div class="tip" id="fs32">val dtk : DateTimeKind</div>
+<div class="tip" id="fs33">Multiple items<br />module Option<br /><br />from Microsoft.FSharp.Core<br /><br />--------------------<br />type Option&lt;&#39;a,&#39;b&gt; = | Operation of (&#39;a -&gt; List&lt;&#39;b&gt;)<br /><br />Full name: DomainModelFin.Option&lt;_,_&gt;</div>
+<div class="tip" id="fs34">union case Option.Operation: (&#39;a -&gt; List&lt;&#39;b&gt;) -&gt; Option&lt;&#39;a,&#39;b&gt;</div>
+<div class="tip" id="fs35">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
+<div class="tip" id="fs36">val combine : Option&lt;&#39;a,&#39;b&gt; -&gt; Option&lt;&#39;a,&#39;b&gt; -&gt; Option&lt;&#39;a,List&lt;&#39;b&gt;&gt;<br /><br />Full name: DomainModelFin.combine</div>
+<div class="tip" id="fs37">val f1 : (&#39;a -&gt; List&lt;&#39;b&gt;)</div>
+<div class="tip" id="fs38">val f2 : (&#39;a -&gt; List&lt;&#39;b&gt;)</div>
+<div class="tip" id="fs39">val a : &#39;a</div>
+<div class="tip" id="fs40">val eval : Option&lt;&#39;a,&#39;b&gt; -&gt; a:&#39;a -&gt; List&lt;&#39;b&gt;<br /><br />Full name: DomainModelFin.eval</div>
+<div class="tip" id="fs41">val f : (&#39;a -&gt; List&lt;&#39;b&gt;)</div>
+<div class="tip" id="fs42">val buy : name:&#39;a -&gt; amount:&#39;b -&gt; Option&lt;&#39;c,(&#39;a * &#39;b)&gt;<br /><br />Full name: DomainModelFin.buy</div>
+<div class="tip" id="fs43">val name : &#39;a</div>
+<div class="tip" id="fs44">val amount : &#39;b</div>
+<div class="tip" id="fs45">val a : &#39;c</div>
+<div class="tip" id="fs46">val myCombination : Option&lt;string,List&lt;string * decimal&gt;&gt;<br /><br />Full name: DomainModelFin.myCombination</div>
+<div class="tip" id="fs47">val myDone : List&lt;List&lt;string * decimal&gt;&gt;<br /><br />Full name: DomainModelFin.myDone</div>
+<div class="tip" id="fs48">val x : int</div>
+<div class="tip" id="fs49">val y : int</div>
+<div class="tip" id="fs50">val minusOne : int<br /><br />Full name: DomainModelFin.minusOne</div>
+<div class="tip" id="fs51">val myCombination2 : Option&lt;string,List&lt;List&lt;string * decimal&gt;&gt;&gt;<br /><br />Full name: DomainModelFin.myCombination2</div>
+<div class="tip" id="fs52">val myDone2 : List&lt;List&lt;List&lt;string * decimal&gt;&gt;&gt;<br /><br />Full name: DomainModelFin.myDone2</div>
+<div class="tip" id="fs53">Multiple items<br />type MyReturnClass =<br />&#160;&#160;new : n:int -&gt; MyReturnClass<br />&#160;&#160;member Value : int<br /><br />Full name: DomainModelFin.MyReturnClass<br /><br />--------------------<br />new : n:int -&gt; MyReturnClass</div>
+<div class="tip" id="fs54">val n : int</div>
+<div class="tip" id="fs55">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
+<div class="tip" id="fs56">val x : MyReturnClass</div>
+<div class="tip" id="fs57">member MyReturnClass.Value : int<br /><br />Full name: DomainModelFin.MyReturnClass.Value</div>
+<div class="tip" id="fs58">Multiple items<br />type MyContextBuilder =<br />&#160;&#160;new : unit -&gt; MyContextBuilder<br />&#160;&#160;member Bind : x:MyReturnClass * rest:(int -&gt; &#39;a) -&gt; &#39;a<br />&#160;&#160;member Return : x:int -&gt; MyReturnClass<br /><br />Full name: DomainModelFin.MyContextBuilder<br /><br />--------------------<br />new : unit -&gt; MyContextBuilder</div>
+<div class="tip" id="fs59">val t : MyContextBuilder</div>
+<div class="tip" id="fs60">member MyContextBuilder.Return : x:int -&gt; MyReturnClass<br /><br />Full name: DomainModelFin.MyContextBuilder.Return</div>
+<div class="tip" id="fs61">member MyContextBuilder.Bind : x:MyReturnClass * rest:(int -&gt; &#39;a) -&gt; &#39;a<br /><br />Full name: DomainModelFin.MyContextBuilder.Bind</div>
+<div class="tip" id="fs62">val rest : (int -&gt; &#39;a)</div>
+<div class="tip" id="fs63">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
+<div class="tip" id="fs64">property MyReturnClass.Value: int</div>
+<div class="tip" id="fs65">val context : MyContextBuilder<br /><br />Full name: DomainModelFin.context</div>
+<div class="tip" id="fs66">val test : MyReturnClass<br /><br />Full name: DomainModelFin.test</div>
+<div class="tip" id="fs67">val a : int</div>
+<div class="tip" id="fs68">val b : int</div>
+<div class="tip" id="fs69">val mult : int</div>
+<div class="tip" id="fs70">val sum : int</div>
+<div class="tip" id="fs71">type Terms = string<br /><br />Full name: DomainModelFin.Terms</div>
+<div class="tip" id="fs72">type Loan =<br />&#160;&#160;| Offer of decimal * obj<br />&#160;&#160;| Approved of decimal * obj<br /><br />Full name: DomainModelFin.Loan</div>
+<div class="tip" id="fs73">union case Loan.Offer: decimal * obj -&gt; Loan</div>
+<div class="tip" id="fs74">union case Loan.Approved: decimal * obj -&gt; Loan</div>
+<div class="tip" id="fs75">type bool = System.Boolean<br /><br />Full name: Microsoft.FSharp.Core.bool</div>
+          
         </div>
         <div class="span1"></div>
       </div>

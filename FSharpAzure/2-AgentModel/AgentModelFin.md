@@ -1,8 +1,8 @@
 # Agent-malli ja Actor-malli #
 
-Puhuttaessa Actor-mallista termi "Actor" viittaa "toimijaan" tai "tekijään", ei "näyttelijään". Puhuttaessa Agent-mallista termi "Agent" viittaa myös "toimijaan" tai "edustajaan", mutta ei "salaiseen agenttiin".
+Puhuttaessa Actor-mallista termi "Actor" viittaa "toimijaan" tai "tekijään", ei "näyttelijään". Puhuttaessa Agent-mallista termi "Agent" viittaa myös "toimijaan" tai "edustajaan", mutta ei "salaiseen agenttiin". Actor-malli ei ole vaihtoehto domain-mallille: Actor-malli ei ole varsinainen tietomalli, vaan lähinnä ohjelman tilan toteutustekniikka.
 
-Jos haluat testailla nopeuksia, saat päälle ajanoton interactiveen kirjoittamalla:
+Jos haluat testailla nopeuksia, saat päälle ajanoton F#-interactiveen kirjoittamalla:
  
     #time "on";;
 
