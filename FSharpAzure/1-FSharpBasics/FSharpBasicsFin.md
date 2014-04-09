@@ -19,7 +19,7 @@ File -> New -> Project... -> Other Languages -> Visual F# ->F# Library
 
 ## C# ja F# yhteispeli (ja miksei myös VB.NET) ##
 
-C# on parhaimmillaan kun tarvitaan valmiit wizzardit riittävät, esim. XAML-kehityksessä. F#:sta voi referoida ja käyttää suoraa C#-dll:iä. Samassa Visual Studio "solutionissa" voi olla sekä F# että C# projekteja, mutta muutosten näkyminen toisesta toiseen vaatii referoitavan projektin kääntämistä.
+C# on parhaimmillaan kun tarvitaan valmiit wizardit riittävät, esim. XAML-kehityksessä. F#:sta voi referoida ja käyttää suoraa C#-dll:iä. Samassa Visual Studio "solutionissa" voi olla sekä F# että C# projekteja, mutta muutosten näkyminen toisesta toiseen vaatii referoitavan projektin kääntämistä.
 
 Lisää kokeeksi C#-projekti (kirjasto, console-app, testiprojekti, tms) samaan "solutioniin" F#-projektin rinnalle, ja lisää viittaus:
 Solution Explorerista C#-projektin References-kansion päällä hiiren oikeaa nappia ja:
@@ -276,7 +276,7 @@ Perintä-syntaksi ei ole yhtä näppärä kuin C#:ssa, koska vahvaan tyyppitarki
                 //Dispose resources...
                 GC.SuppressFinalize(x)
 
-## Discriminated unioin ##
+## Discriminated union ##
 
 Voit tehdä "joko-tai"-tyyppejä:
 
