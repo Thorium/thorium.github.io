@@ -334,7 +334,9 @@ Esim:</p>
 </tr>
 </table>
 
-<p>Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätettiin pois, mutta tarkoitus oli antaa yleiskäsitys asiasta. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla <a href="http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674">netistä</a>, kirjan <a href="http://www.manning.com/petricek/">"Real-World Functional Programming"</a> koodiesimerkeistä, kappale 15.</p>
+<p>Huomattavaa on, että koodin logiikkaa ei erikseen tehdä domainin rinnalle, vaan kirjasto jo suorittaa koodin logiikan.</p>
+
+<p>Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätetään harjoitustehtäväksi. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla <a href="http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674">netistä</a>, kirjan <a href="http://www.manning.com/petricek/">"Real-World Functional Programming"</a> koodiesimerkeistä, kappale 15.</p>
 
 <h4>Standardi-operaatiot</h4>
 
@@ -343,6 +345,7 @@ Esim:</p>
 <ul>
 <li>map <code>('T -&gt; 'R) -&gt; M&lt;'T&gt; -&gt; M&lt;'R&gt;</code></li>
 <li>bind <code>('T -&gt; M&lt;'R&gt;) -&gt; M&lt;'T&gt; -&gt; M&lt;'R&gt;</code></li>
+<li>return <code>'T -&gt; M&lt;'T&gt;</code></li>
 </ul>
 
 <p>Operaation tietotyypistä voi jo päätellä mitä itse operaatio tekee.</p>
@@ -523,6 +526,24 @@ Tässä esiteltynä tarkemmin kaksi:</p>
 <h3>Harjoitus 2</h3>
 
 <p>Mieti mikä olisi huono domain-malli?</p>
+
+<h3>Harjoitus 3</h3>
+
+<p>Kappaleessa "Tietomallin mallintaminen laskentaoperaatioina" oli jätetty myynti-operaatio pois. Myynti voisi olla joko vain negaatio, tai sitten lisätään taas rinnalle oma <code>type OperationKind = Buy | Sell</code>.</p>
+
+<p>Koska myyntejä on vain yksi, ja combine ottaa kaksi parametria, niin tarvitaan vähän koodimuutoksia, esim. wrapperi käytettyyn listaan, ja ehkä tälle oma custom-operaattori:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">``return``</span> (<span onmouseout="hideTip(event, 'fs34', 207)" onmouseover="showTip(event, 'fs34', 207)" class="i">Operation</span> <span onmouseout="hideTip(event, 'fs37', 208)" onmouseover="showTip(event, 'fs37', 208)" class="i">f1</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs34', 209)" onmouseover="showTip(event, 'fs34', 209)" class="i">Operation</span>(<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs39', 210)" onmouseover="showTip(event, 'fs39', 210)" class="i">a</span> <span class="k">-&gt;</span> [<span onmouseout="hideTip(event, 'fs37', 211)" onmouseover="showTip(event, 'fs37', 211)" class="i">f1</span>(<span onmouseout="hideTip(event, 'fs39', 212)" onmouseover="showTip(event, 'fs39', 212)" class="i">a</span>)])</pre>
+</td>
+</tr>
+</table>
+
+<p>Toteuta myyntioperaatio ja koita saada se toimimaan alkuperäisessä esimerkissä.</p>
 
 <h2>Linkit / Lähteet</h2>
 

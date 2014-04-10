@@ -165,7 +165,9 @@ Eli abstrakti-syntaksi-puu muodostuukin funktioista lähdekoodissa, esim. näin 
             (buy "NOK" 500m)
     let myDone = eval myCombination "now!"
 
-Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätettiin pois, mutta tarkoitus oli antaa yleiskäsitys asiasta. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla [netistä](http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674), kirjan ["Real-World Functional Programming"](http://www.manning.com/petricek/) koodiesimerkeistä, kappale 15.
+Huomattavaa on, että koodin logiikkaa ei erikseen tehdä domainin rinnalle, vaan kirjasto jo suorittaa koodin logiikan.
+
+Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätetään harjoitustehtäväksi. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla [netistä](http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674), kirjan ["Real-World Functional Programming"](http://www.manning.com/petricek/) koodiesimerkeistä, kappale 15.
 
 #### Standardi-operaatiot ####
 
@@ -173,6 +175,7 @@ Yhdisteltäessä eri toiminnallisuuksia (jopa eri kirjastojen välillä), on use
 
 - map `('T -> 'R) -> M<'T> -> M<'R>`
 - bind `('T -> M<'R>) -> M<'T> -> M<'R>`
+- return `'T -> M<'T>`
 
 Operaation tietotyypistä voi jo päätellä mitä itse operaatio tekee.
 
@@ -273,6 +276,17 @@ Siitä copy & pastella on hutaistu tekstit oheisiin tietotyyppeihin:
 
 Mieti mikä olisi huono domain-malli?
 
+### Harjoitus 3 ###
+
+Kappaleessa "Tietomallin mallintaminen laskentaoperaatioina" oli jätetty myynti-operaatio pois. Myynti voisi olla joko vain negaatio, tai sitten lisätään taas rinnalle oma `type OperationKind = Buy | Sell`.
+
+Koska myyntejä on vain yksi, ja combine ottaa kaksi parametria, niin tarvitaan vähän koodimuutoksia, esim. wrapperi käytettyyn listaan, ja ehkä tälle oma custom-operaattori:
+		
+    [lang=fsharp]
+    let ``return`` (Operation f1) = Operation(fun a -> [f1(a)])
+
+Toteuta myyntioperaatio ja koita saada se toimimaan alkuperäisessä esimerkissä.
+
 ## Linkit / Lähteet ##
 
 Tomas Petricek - Domain Specific Languages in F# - [Video](http://vimeo.com/60546839), [Slides](http://www.slideshare.net/tomaspfb/dsls) 
@@ -284,3 +298,4 @@ Lab49 - [The Algebra of Data, and the Calculus of Mutation](http://blog.lab49.co
 Philip Wadler - [Theorems for free!](http://ttic.uchicago.edu/~dreyer/course/papers/wadler.pdf)
 
 [Takaisin valikkoon](../Readme.html)
+
