@@ -30,7 +30,7 @@
         <div class="span10" id="main">
           <h1>Azure Worker -roolin luonti</h1>
 
-<p>Oletetaan, että koneellasi on Visual Studio 2012 tai Visual Studio 2013 ja siihen asennettuna oletuksena mukana tuleva F#-kielen tuki. Lisäksi olet asentanut myös <a href="http://www.windowsazure.com/en-us/downloads/">Windows Azure SDK</a>:n.</p>
+<p>Oletetaan, että koneellasi on Visual Studio 2012 tai Visual Studio 2013 ja siihen asennettuna oletuksena mukana tuleva F#-kielen tuki. Lisäksi olet asentanut myös <a href="http://www.windowsazure.com/en-us/downloads/">Microsoft Azure SDK</a>:n.</p>
 
 <p>Avaa Visual Studio ja valitse valikosta: File -> New -> Project</p>
 
@@ -49,7 +49,7 @@
 <p>Nyt sinulla pitäisi olla luotu uusi "solution" ja siinä kaksi projektia:</p>
 
 <ol>
-<li>Valitsemasi niminen projekti (pilvikuvakkeella), joka on ns. deployment-projekti: Jos valitset tämän ja painaisit hiiren oikeaa nappia, tulee valikko, jossa on mm. "Publish"-nappi, josta projekti julkaistaan Windows Azureen.</li>
+<li>Valitsemasi niminen projekti (pilvikuvakkeella), joka on ns. deployment-projekti: Jos valitset tämän ja painaisit hiiren oikeaa nappia, tulee valikko, jossa on mm. "Publish"-nappi, josta projekti julkaistaan Microsoft Azureen.</li>
 <li>WorkerRole-projekti (F#-kuvakkeella), joka on itse lähdekoodiprojekti. Tänne on oletuksena tehty WorkerRole.fs-niminen koodiluokka. Kyseinen luokka ei tee muuta, kuin käynnistyessään kirjoittaa konsolille 10 sekunnin välein tekstin "Working".</li>
 </ol>
 
@@ -69,7 +69,7 @@
 
 <h2>Nuget-paketit</h2>
 
-<p>Seuraavaksi asennetaan projektiin neljä komponenttipakettia Nuget-pakettihallinnasta. Helpoimmin se tapahtuu Visual Studion valikosta:</p>
+<p>Seuraavaksi asennetaan projektiin viisi komponenttipakettia Nuget-pakettihallinnasta. Helpoimmin se tapahtuu Visual Studion valikosta:</p>
 
 <p>Tools -> Nuget Package Manager -> Manage Nuget Packages for Solution... -> Online</p>
 
@@ -88,13 +88,14 @@
 </ul></li>
 <li><a href="http://www.nuget.org/packages/Microsoft.Owin.StaticFiles/">Microsoft Owin StaticFiles</a>
 <ul>
+<li>Nuget-paketti-id: <strong>Microsoft.Owin.StaticFiles</strong></li>
 <li>Kevyt WWW-palvelin-komponentti hostaamaan staattisia tiedostoja.</li>
 <li>Toimii, mutta tuotantokäytössä sisällön jakelu Azure Blob:ista voisi olla parempi ratkaisu.</li>
 </ul></li>
 <li><a href="http://www.nuget.org/packages/FSharp.Web.Http/">FSharp.Web.Http</a>
 <ul>
 <li>Nuget-paketti-id: <strong>FSharp.Web.Http</strong></li>
-<li><a href="http://frank-fs.github.io/frank/">Frank</a>-kirjasto helpottamaan Web-API-rajapinnan-luontia F#-kielellä.</li>
+<li><a href="http://frank-fs.github.io/frank/">Frank</a>-kirjasto helpottamaan http-kommunikaatiota ja Web-API-rajapinnan-luontia F#-kielellä.</li>
 </ul></li>
 <li><a href="https://www.nuget.org/packages/Fog">Fog</a>
 <ul>

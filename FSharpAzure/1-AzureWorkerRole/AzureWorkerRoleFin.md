@@ -1,6 +1,6 @@
 # Azure Worker -roolin luonti #
 
-Oletetaan, että koneellasi on Visual Studio 2012 tai Visual Studio 2013 ja siihen asennettuna oletuksena mukana tuleva F#-kielen tuki. Lisäksi olet asentanut myös [Windows Azure SDK](http://www.windowsazure.com/en-us/downloads/):n.
+Oletetaan, että koneellasi on Visual Studio 2012 tai Visual Studio 2013 ja siihen asennettuna oletuksena mukana tuleva F#-kielen tuki. Lisäksi olet asentanut myös [Microsoft Azure SDK](http://www.windowsazure.com/en-us/downloads/):n.
 
 Avaa Visual Studio ja valitse valikosta: File -> New -> Project
 
@@ -18,7 +18,7 @@ Valitse Worker Role ja **lisää se nuolesta listaan**, vasta tämän jälkeen p
 
 Nyt sinulla pitäisi olla luotu uusi "solution" ja siinä kaksi projektia:
 
- 1. Valitsemasi niminen projekti (pilvikuvakkeella), joka on ns. deployment-projekti: Jos valitset tämän ja painaisit hiiren oikeaa nappia, tulee valikko, jossa on mm. "Publish"-nappi, josta projekti julkaistaan Windows Azureen.
+ 1. Valitsemasi niminen projekti (pilvikuvakkeella), joka on ns. deployment-projekti: Jos valitset tämän ja painaisit hiiren oikeaa nappia, tulee valikko, jossa on mm. "Publish"-nappi, josta projekti julkaistaan Microsoft Azureen.
  2. WorkerRole-projekti (F#-kuvakkeella), joka on itse lähdekoodiprojekti. Tänne on oletuksena tehty WorkerRole.fs-niminen koodiluokka. Kyseinen luokka ei tee muuta, kuin käynnistyessään kirjoittaa konsolille 10 sekunnin välein tekstin "Working".
 
 ![](3-SolutionExplorer.png)
@@ -37,7 +37,7 @@ Jos näin on, onnittelut, ympäristösi on kunnossa... Lisätään vielä vähä
 
 ## Nuget-paketit ##
 
-Seuraavaksi asennetaan projektiin neljä komponenttipakettia Nuget-pakettihallinnasta. Helpoimmin se tapahtuu Visual Studion valikosta:
+Seuraavaksi asennetaan projektiin viisi komponenttipakettia Nuget-pakettihallinnasta. Helpoimmin se tapahtuu Visual Studion valikosta:
 
 Tools -> Nuget Package Manager -> Manage Nuget Packages for Solution... -> Online
 
@@ -50,11 +50,12 @@ Asennettavat paketit on helpoin hakea Id:n perusteella popup-ikkunan ylälaidan 
 	- Nuget-paketti-id: **Microsoft.AspNet.SignalR**
 	- [SignalR](http://www.asp.net/signalr) on vähän kuin Node.js kopioituna .NET:ille. Se mahdollistaa kaksisuuntaisen liikenteen www-palvelimen ja käyttäjän välillä.* 
 - [Microsoft Owin StaticFiles](http://www.nuget.org/packages/Microsoft.Owin.StaticFiles/)
+	- Nuget-paketti-id: **Microsoft.Owin.StaticFiles**
 	- Kevyt WWW-palvelin-komponentti hostaamaan staattisia tiedostoja. 
 	- Toimii, mutta tuotantokäytössä sisällön jakelu Azure Blob:ista voisi olla parempi ratkaisu.
 - [FSharp.Web.Http](http://www.nuget.org/packages/FSharp.Web.Http/)
 	- Nuget-paketti-id: **FSharp.Web.Http**
-	- [Frank](http://frank-fs.github.io/frank/)-kirjasto helpottamaan Web-API-rajapinnan-luontia F#-kielellä.
+	- [Frank](http://frank-fs.github.io/frank/)-kirjasto helpottamaan http-kommunikaatiota ja Web-API-rajapinnan-luontia F#-kielellä.
 - [Fog](https://www.nuget.org/packages/Fog)
 	- Nuget-paketti-id: **Fog**
 	- [Fog](http://dmohl.github.io/Fog/) on kirjasto helpottamaan Azuren käyttöä F#:lla, sisältäen mm. välimuistitusta.
