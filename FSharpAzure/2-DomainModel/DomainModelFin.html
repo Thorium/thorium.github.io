@@ -314,7 +314,7 @@ Esim:</p>
 
 <p>Lopuksi käyttäjä pyytää suorittamaan ajon.</p>
 
-<p>Eli abstrakti-syntaksi-puu muodostuukin funktioista lähdekoodissa, esim. näin (pseudoa):</p>
+<p>Koodin logiikkaa ei erikseen tehdä domainin rinnalle, vaan kirjasto jo suorittaa koodin logiikan. Eli abstrakti-syntaksi-puu muodostuukin kooste-funktioista lähdekoodissa:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -333,8 +333,6 @@ Esim:</p>
 </td>
 </tr>
 </table>
-
-<p>Huomattavaa on, että koodin logiikkaa ei erikseen tehdä domainin rinnalle, vaan kirjasto jo suorittaa koodin logiikan.</p>
 
 <p>Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätetään harjoitustehtäväksi. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla <a href="http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674">netistä</a>, kirjan <a href="http://www.manning.com/petricek/">"Real-World Functional Programming"</a> koodiesimerkeistä, kappale 15.</p>
 
@@ -467,7 +465,7 @@ Tässä esiteltynä tarkemmin kaksi:</p>
 
 <h2>Harjoitustehtävät</h2>
 
-<h3>Harjoitus 1</h3>
+<h3>Harjoitustehtävä 1</h3>
 
 <p>Ohessa on piirretty kuvitteellinen lainanhakuprosessi: <a href="loanappprocess.pdf">pdf</a>.</p>
 
@@ -523,11 +521,11 @@ Tässä esiteltynä tarkemmin kaksi:</p>
 <li>Prosessiin kuulumaton data kannattaa kapseloida mieluummin uutena tuplena myöhemmin rinnalle, kuin prosessin sisään.</li>
 </ul>
 
-<h3>Harjoitus 2</h3>
+<h3>Harjoitustehtävä 2</h3>
 
 <p>Mieti mikä olisi huono domain-malli?</p>
 
-<h3>Harjoitus 3</h3>
+<h3>Harjoitustehtävä 3</h3>
 
 <p>Kappaleessa "Tietomallin mallintaminen laskentaoperaatioina" oli jätetty myynti-operaatio pois. Myynti voisi olla joko vain negaatio, tai sitten lisätään taas rinnalle oma <code>type OperationKind = Buy | Sell</code>.</p>
 

@@ -156,7 +156,7 @@ Esim:
 
 Lopuksi käyttäjä pyytää suorittamaan ajon.
 
-Eli abstrakti-syntaksi-puu muodostuukin funktioista lähdekoodissa, esim. näin (pseudoa):
+Koodin logiikkaa ei erikseen tehdä domainin rinnalle, vaan kirjasto jo suorittaa koodin logiikan. Eli abstrakti-syntaksi-puu muodostuukin kooste-funktioista lähdekoodissa:
   
     [lang=fsharp]
     let myCombination = 
@@ -165,7 +165,6 @@ Eli abstrakti-syntaksi-puu muodostuukin funktioista lähdekoodissa, esim. näin 
             (buy "NOK" 500m)
     let myDone = eval myCombination "now!"
 
-Huomattavaa on, että koodin logiikkaa ei erikseen tehdä domainin rinnalle, vaan kirjasto jo suorittaa koodin logiikan.
 
 Tässä tehtiin koodista turhan geneeristä ja myynti-(sell)-operaatio jätetään harjoitustehtäväksi. Käytännön tarkempi lähdekoodiesimerkki (jossa myös myynti on toteutettu, ja kasa muita operaatioita) on saatavilla [netistä](http://archive.msdn.microsoft.com/realworldfp/Release/ProjectReleases.aspx?ReleaseId=3674), kirjan ["Real-World Functional Programming"](http://www.manning.com/petricek/) koodiesimerkeistä, kappale 15.
 
@@ -242,7 +241,7 @@ Omia computational expressioneita (/monadeita) voi rakentaa lennosta: Keksit vai
 
 ## Harjoitustehtävät ##
 
-### Harjoitus 1 ###
+### Harjoitustehtävä 1 ###
 
 Ohessa on piirretty kuvitteellinen lainanhakuprosessi: [pdf](loanappprocess.pdf).
 
@@ -272,11 +271,11 @@ Siitä copy & pastella on hutaistu tekstit oheisiin tietotyyppeihin:
 - Kirjoita myös muutama kuvitteellinen metodi käyttämään tätä kuvattua prosessia ja kuljettamaan lainahakemusta prosessin vaiheesta toiseen. 
 - Prosessiin kuulumaton data kannattaa kapseloida mieluummin uutena tuplena myöhemmin rinnalle, kuin prosessin sisään.
 
-### Harjoitus 2 ###
+### Harjoitustehtävä 2 ###
 
 Mieti mikä olisi huono domain-malli?
 
-### Harjoitus 3 ###
+### Harjoitustehtävä 3 ###
 
 Kappaleessa "Tietomallin mallintaminen laskentaoperaatioina" oli jätetty myynti-operaatio pois. Myynti voisi olla joko vain negaatio, tai sitten lisätään taas rinnalle oma `type OperationKind = Buy | Sell`.
 
