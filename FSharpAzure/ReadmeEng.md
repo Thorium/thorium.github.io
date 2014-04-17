@@ -1,7 +1,8 @@
 
 # F# and Azure in Practice #
 
-The event is in Finnish only, but these pages are a translation of the materials used. So this is just a quick translation, not a perfect F#-tutorial. 
+The event is in Finnish only, but these pages are a translation of the materials used. So this is just a quick translation, not a perfect F#-tutorial. Original [Finnish version](Readme.html).
+
 
 There are actually 2 levels of exercises and they are not in any particular order.
 
@@ -43,6 +44,4 @@ But F# is general purpose language, so you can code what you want. :-)
 
 ----------
 
-These exercises start from the scratch. Still, if you have network problems or something, you may download an example-VS2013-solution from [here](FSharpAzure.zip).*
-
-[Finnish version](Readme.html)
+*These exercises start from the scratch. Still, if you have network problems or something, you may download an example-VS2013-solution from [here](FSharpAzure.zip).*

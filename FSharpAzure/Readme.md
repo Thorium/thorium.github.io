@@ -46,4 +46,4 @@ Käyttäen edellisten harjoitusten tuloksia, sinulla on eväät toteuttaa mitä 
 
 ----------
 
-Näissä harjoituksissa lähdetään tyhjältä pöydältä. Jos kuitenkin sinulla on verkko-ongelmia, tms. niin VS2013-malllisolutionin saa ongelmatilanteissa [tästä](FSharpAzure.zip).*
+*Näissä harjoituksissa lähdetään tyhjältä pöydältä. Jos kuitenkin sinulla on verkko-ongelmia, tms. niin VS2013-malllisolutionin saa ongelmatilanteissa [tästä](FSharpAzure.zip).*
