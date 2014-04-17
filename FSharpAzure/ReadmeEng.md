@@ -40,7 +40,7 @@ Some well-known existing references of F# usage areas are:
 - Social Gaming
 - Cloud Computing
 
-But F# is general purpose language, so you can code what you want. :-)
+But F# is a general purpose language, so you can code what you want. :-)
 
 ----------
 
