@@ -32,7 +32,7 @@
 	</style>
   </head>
   <body class="bg">
-	<a href="http://www.meetup.com/FSharpHelsinki/events/173790412/"><div style="margin: 5px; text-align: center; color:gray;">The Greater Helsinki Area F# User Group<br/></div></a>
+	<a href="http://www.meetup.com/FSharpHelsinki/events/173790412/" target="_blank"><div style="margin: 5px; text-align: center; color:gray;">The Greater Helsinki Area F# User Group<br/></div></a>
     <div class="container">
       <div class="row" style="margin-top:30px">
         <div class="span1"></div>
@@ -60,7 +60,7 @@ Käytetään WorkerRole-projektia ja tiedostopalvelimena komponenttia Microsoft.
 
 <h2>Käynnistyskoodilohkon lisääminen</h2>
 
-<p>Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valitse Add -> New Item... -> Source File, ja lisää projektille tiedosto MyStartUp.fs</p>
+<p>Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valitse Add -> New Item... -> Source File, ja lisää projektille tiedosto MyStartUp.fs sisällöltään:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -129,7 +129,7 @@ Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFi
 
 <p><img src="1-SolutionExplorer.png" alt="" /></p>
 
-<p>Index.html tulee sisältämään jonkinlaisen sisällön ja kansan JavaScriptiä: SignalR-javascript-puolen komponentit. Mutta hommaa voi testata, niin voit nyt aluksi vaan kirjottaa sinne jonkinlaisen tervehdyksen.</p>
+<p>Index.html tulee sisältämään jonkinlaisen sisällön ja kansan JavaScriptiä: SignalR-JavaScript-asiakaspuolen komponentit. Mutta hommaa voi testata, niin voit nyt aluksi vaan kirjottaa sinne jonkinlaisen tervehdyksen.</p>
 
 <h2>Konfiguraatio ja käynnistys</h2>
 
@@ -178,9 +178,9 @@ Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFi
 <h2>SignalR</h2>
 
 <p>SignalR on dynaaminen JavaScriptiin perustuva kirjasto, joka käyttää C#-dynamic-operaattoria. Tämän takia WorkerRole-projektiin on <strong>lisättävä referenssi Microsoft.CSharp</strong>.
-(Tuttuun tapaan, Solution Explorerissa References-kansion päällä oikeaa nappia ja: Add Reference -> Assemvlies -> Framework).</p>
+(Tuttuun tapaan, Solution Explorerissa References-kansion päällä oikeaa nappia ja: Add Reference -> Assemblies -> Framework).</p>
 
-<p>Lisäksi dynamic ei toimi ihan sellaisenaan, joten lisää vielä luokka Dynamic.fs ja siirrä se ensimmäiseksi ennen muita fs-tiedostoja, ja kopioi sen sisällöksi <a href="https://raw.githubusercontent.com/Thorium/CatVsDog/master/OwinWorkerRole/Dynamic.fs">tämä</a> sisältö, joka on otettu <a href="http://www.fssnip.net/raw/2U">Fssnip</a>-sitelta.</p>
+<p>Lisäksi dynamic ei toimi ihan sellaisenaan, joten lisää vielä uusi tiedosto Dynamic.fs ja siirrä se ensimmäiseksi ennen muita fs-tiedostoja, ja kopioi sen sisällöksi <a href="https://raw.githubusercontent.com/Thorium/CatVsDog/master/OwinWorkerRole/Dynamic.fs">tämä</a> sisältö, joka on otettu <a href="http://www.fssnip.net/raw/2U">Fssnip</a>-sitelta.</p>
 
 <p>Lisätään ohjelmaksi pieni peli, jota voi testailla interactivessa:</p>
 
@@ -258,7 +258,7 @@ Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFi
 </tr>
 </table>
 
-<p>Sitten tarvitaan luokka, joka periytyy SignalR-kantaluokasta. Se näyttää tältä:</p>
+<p>Sitten tarvitaan luokka, joka periytyy SignalR-kantaluokasta. Se näyttäköön tältä:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -308,13 +308,13 @@ Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFi
 
 <ul>
 <li>GuessCountry-metodia kutsutaan JavaScript-clientista.</li>
-<li>newQuiz ja informResult taas ovat JavaScriptissä määriteltyjä funktioita, joita kutsutaan tästä. Kysymysmerkki on dynaaminen operaattori, joka tulee dynamics.fs-koodista.</li>
+<li>newQuiz ja informResult taas ovat JavaScriptissä määriteltyjä funktioita, joita kutsutaan tästä. Kysymysmerkki on dynaaminen operaattori, joka tulee Dynamics.fs-koodista.</li>
 </ul>
 
-<p>Asennuspaketti on lisännyt WorkerRole-projektiin Scripts-hakemiston. Koska SignalR käyttää jQueryä ja SignalR:n omaa JavaScript-clienttia, niin käy vaihtamassa näille kahdelle tiedostolle Copy to Output Directory arvoon "Copy if newer": jquery-1.6.4.min.js ja jquery.signalR-2.0.3.min.js</p>
+<p>Nuget-asennuspaketti on lisännyt WorkerRole-projektiin Scripts-hakemiston. Koska SignalR käyttää jQueryä ja SignalR:n omaa JavaScript-clienttia, niin käy vaihtamassa näille kahdelle tiedostolle "Copy to Output Directory" arvoon "Copy if newer": jquery-1.6.4.min.js ja jquery.signalR-2.0.3.min.js</p>
 
 <ul>
-<li>Tiedostojen versionumerot voivat vaihdella riippuen siitä, mitkä paketit NuGet hakee. Vastaaviin viitataan Index.html-tiedostossa.</li>
+<li>Tiedostojen versionumerot voivat vaihdella riippuen siitä, mitkä paketit NuGet hakee. Vastaaviin viitataan Index.html-tiedostossa. Viittausten on oltava samat.</li>
 </ul>
 
 <p>Tarvitset vielä sisällön Index.html-tiedostolle:</p>
@@ -408,7 +408,7 @@ Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFi
 <span class="k">&lt;/</span><span class="i">body</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">html</span><span class="k">&gt;</span></pre>
 
-<p>Tämä on siis simppeli HTML/JavaScript-tiedosto.</p>
+<p>Tämä on siis simppeli HTML/JavaScript-tiedosto. Nyt voit käynnistää ohjelman... (F5)</p>
 
 <p><a href="../Readme.html">Takaisin valikkoon</a></p>
 
@@ -440,6 +440,6 @@ Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFi
         <div class="span1"></div>
       </div>
     </div>
-	<br/><div style="color:gray; text-align: center;"><img alt="Creative Commons -k�ytt�lupa" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /> Tuomas Hietanen, 2014</div>
+	<br/><div style="color:gray; text-align: center;"><img alt="Creative Commons -k�ytt�lupa" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /> Tuomas Hietanen, 2014, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:gray;">Creative Commons</a></div>
   </body>
 </html>

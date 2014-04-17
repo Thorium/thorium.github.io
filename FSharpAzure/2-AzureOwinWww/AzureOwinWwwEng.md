@@ -1,26 +1,26 @@
 
-# OWIN-rajapinta ja SignalR-viestitys #
+# OWIN-interface and SignalR-messaging #
 
-[OWIN](http://owin.org/) on rajapinta, johon voi helposti rekisteröidä komponentteja:
+[OWIN](http://owin.org/) is an interface, which allows you easily to register components, like:
 
-- WWW-tiedosto-palvelin
-- REST-Web-rajapintaa 
-- [SignalR](http://signalr.net/)-kommunikaatio
-- Autentikointi
-- Yms. (tulevaisuudessa jopa IIS)
+- WWW-file-server
+- REST-Web-interface 
+- [SignalR](http://signalr.net/)-communication
+- Authentication
+- Etc. (in the future, even IIS)
 
-OWIN ja SignalR vaativat käynnistyäkseen vähän infrastruktuuri-seremoniaa. 
-Käytetään WorkerRole-projektia ja tiedostopalvelimena komponenttia Microsoft.Owin.StaticFiles.
+OWIN and SignalR need some infrastructure ceremony to run... 
+Let's use the WorkerRole-project and file server component Microsoft.Owin.StaticFiles.
 
-### Tekniikkavalinta ###
+### Technology Choice ###
 
-Tässä harjoituksessa on valittu tekniikaksi SignalR, jolla saavutetaan kaksisuuntainen kommunikaatio. Toinen tyypillinen tapa olisi tehdä CRUD-henkinen REST API, josta löytyy OWIN-F#-[koodiesimerkki](https://github.com/dmohl/FsOnTheWeb-Workshop/blob/master/Azure%20Lab/AzureFSharpOwinComplete/WebApiRole/GuitarsApi.fs) netistä.
+This practice uses SignalR, which achieves two-way communication. Another typical way would be CRUD-style REST API, which is demonstrated in an OWIN-F#-[code example](https://github.com/dmohl/FsOnTheWeb-Workshop/blob/master/Azure%20Lab/AzureFSharpOwinComplete/WebApiRole/GuitarsApi.fs).
 
-Tässä harjoituksessa käytetään WorkerRolea ja OWIN:ia. Toinen ihan käyttökelpoinen ratkaisu olisi tehdä (C#/VB.NET) ASPNET Web Role, josta voi referoida F#-kirjasto-projektia. Silloin saisit osan IIS-infrastruktuuria kaupanpäälle, mutta kannattaisi varautua mahdollisiin taustasäieongelmiin.
+This practice uses WorkerRole and OWIN. Another quite applicable solution would be creating an (C#/VB.NET) ASPNET Web Role, where you can reference F#-library-project. Then you would get some of the IIS-infrastructure on top of that, but may run to some possible background-threading-problems.
 
-## Käynnistyskoodilohkon lisääminen ##
+## Adding a Start-up-block ##
 
-Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valitse Add -> New Item... -> Source File, ja lisää projektille tiedosto MyStartUp.fs sisällöltään:
+Select the WorkerRole-project, right mouse click over that, and select Add -> New Item... -> Source File, and add a file MyStartUp.fs to the project, with content:
 
 	[lang=fsharp]
     module MyStartUp
@@ -49,21 +49,21 @@ Valitse WorkerRole-projekti, paina sen päällä hiiren oikeaa nappia, ja valits
     [<assembly: Microsoft.Owin.OwinStartup(typeof<MyWebStartup>)>]
     do()
 
-Siirrä kyseinen tiedosto Solution Explorerissa WorkerRole.fs-tiedoston päälle, jotta sen suoritus tapahtuu ennen WorkerRole-tiedostoa.
+Move this file in Solution Explorer to the top of WorkerRole.fs, so it will be executed before WorkerRole-file.
 
 ### Index.html ###
 
-Koodissa lisätään index.html www-palvelun oletustiedostoksi.
-Oletuspolku palvelulle on projektin output-path. Joten lisää projektiin TextFile nimeltään index.html ja vaihda sen propertiesista "Build Action" arvoon "Content" ja "Copy to Output Folder" arvoon "Copy if newer".
+The code above defines the index.html to be the default start-up-file of the WWW-server.
+The default path is the project output-path. So, add to project a TextFile called index.html. From the properties of the index.html modify the "Build Action" to value "Content" and the "Copy to Output Folder" to value "Copy if newer".
 
 ![](1-SolutionExplorer.png)
 
-Index.html tulee sisältämään jonkinlaisen sisällön ja kansan JavaScriptiä: SignalR-JavaScript-asiakaspuolen komponentit. Mutta hommaa voi testata, niin voit nyt aluksi vaan kirjottaa sinne jonkinlaisen tervehdyksen.
+Index.html will contain some kind of content and a pile of JavaScript: SignalR-JavaSctipt-client-side components. But to start with, just write there some kind of test-greeting.
  
 
-## Konfiguraatio ja käynnistys ##
+## Configuration and the Start-Up ##
 
-Deployment-projektissa on **ServerDefinition.csdef**-tiedosto, jossa on palvelimen asetuksia. Aluksi voit muuttaa WorkerRole-tagin attribuutin vmsize-asetuksen asennosta "Small" asentoon "ExtraSmall". WorkerRole-tagin sisässä on Imports. Kopioi Imports:in rinnalle uusi tagi **Endpoints**. Tiedosto näyttää jokseenkin tältä (riippuen tietysti projektisi nimestä, yms.):
+Deployment-project has **ServerDefinition.csdef**-file, which contains server settings. At first you may change the WorkerRole-tag attribute vmsize-setting from "Small" to "ExtraSmall". Inside WorkerRole-tag is Imports. The side of Imports, copy a new tag called **Endpoints**. The file should look something like this (of course, depending on your project's name, etc.):
 
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -80,7 +80,7 @@ Deployment-projektissa on **ServerDefinition.csdef**-tiedosto, jossa on palvelim
 	  </WorkerRole>
 	</ServiceDefinition>
 
-Seuraavaksi avaa WorkerRole.fs:n tiedosto wr.OnStart() -metodi ja kopioi ennen base.OnStart():ia tapahtumaan seuraava koodinpätkä:
+Next, open WorkerRole.fs file and wr.OnStart() method and copy before the call base.OnStart() this small source code:
 
 	[lang=fsharp]
     let endpoint = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints.["Endpoint1"]
@@ -90,18 +90,17 @@ Seuraavaksi avaa WorkerRole.fs:n tiedosto wr.OnStart() -metodi ja kopioi ennen b
     options.Urls.Add(baseUri)
     webApp <- WebApp.Start<MyStartUp.MyWebStartup>(options)
 
-Tämä hakee konfiguraation ServerDefinition-tiedostosta, tulostaa sen ruudulle, ja käynnistää palvelimen. Nyt kun käynnistät palvelimen, niin voit käydä Azuren Compute Emulator UI:n konsolista katsomassa (tähän oli ohjeet jo WorkerRole-harjoituksessa) mihin osoitteeseen palvelin käynnistyi, ja surffata siihen selaimella.
+This will get the configuration from the ServerDefinition-file, print it to the screen, and start the server. Now when you start the server, you can visit the Azure Compute Emulator UI console (this had separate instructions already in the WorkerRole-practice) to see the address and port where the server did start, and then open that in the web browser.
 
 ![](2-StaticFileServer.png)
 
 ## SignalR ##
 
-SignalR on dynaaminen JavaScriptiin perustuva kirjasto, joka käyttää C#-dynamic-operaattoria. Tämän takia WorkerRole-projektiin on **lisättävä referenssi Microsoft.CSharp**.
-(Tuttuun tapaan, Solution Explorerissa References-kansion päällä oikeaa nappia ja: Add Reference -> Assemblies -> Framework).
+SignalR is dynamic JavaScript based library, which uses C#-dynamic-operator. This is the reason that you have **to add a reference to Microsoft.CSharp** to your WorkerRole-project. (The familiar way, from Solution Explorer over References-folder, right-click and: Add Reference -> Assemblies -> Framework).
 
-Lisäksi dynamic ei toimi ihan sellaisenaan, joten lisää vielä uusi tiedosto Dynamic.fs ja siirrä se ensimmäiseksi ennen muita fs-tiedostoja, ja kopioi sen sisällöksi [tämä](https://raw.githubusercontent.com/Thorium/CatVsDog/master/OwinWorkerRole/Dynamic.fs) sisältö, joka on otettu [Fssnip](http://www.fssnip.net/raw/2U)-sitelta.
+In addition, dynamic won't work as such, so add a new file Dynamic.fs and move it to first one, before other fs-files, and copy  [this](https://raw.githubusercontent.com/Thorium/CatVsDog/master/OwinWorkerRole/Dynamic.fs) to its content, the code has been taken from [Fssnip](http://www.fssnip.net/raw/2U)-site.
 
-Lisätään ohjelmaksi pieni peli, jota voi testailla interactivessa:
+Let's add a small game as a program, you can test this in the interactive-window:
 
 	[lang=fsharp]
     #if INTERACTIVE
@@ -125,7 +124,7 @@ Lisätään ohjelmaksi pieni peli, jota voi testailla interactivessa:
     let checkAnswer country capitalCity =
         corrects |> Array.exists(fun (cou, cap) -> cou = country && cap = capitalCity)
 
-Lisätään vielä pari apumetodia ja yksi apuluokka, joka mallintaa JSON-liikenteen muotoa:
+Let's also add some helper methods, and one class to model the shape of JSON-traffic:
 
 	[lang=fsharp]
     let preGenerated = [0..500] |> List.map(fun _ -> generateQuiz())
@@ -138,7 +137,7 @@ Lisätään vielä pari apumetodia ja yksi apuluokka, joka mallintaa JSON-liiken
         member x.Countries = item |> snd
 
 
-Sitten tarvitaan luokka, joka periytyy SignalR-kantaluokasta. Se näyttäköön tältä:
+Then we need a class that will inherit the SignalR-base-class. Let it look like this:
 
 	[lang=fsharp]
     open Microsoft.AspNet.SignalR
@@ -162,14 +161,14 @@ Sitten tarvitaan luokka, joka periytyy SignalR-kantaluokasta. Se näyttäköön 
                 this.Clients.Caller?informResult("Wrong! Try again!") |> ignore
 
 
-- GuessCountry-metodia kutsutaan JavaScript-clientista.
-- newQuiz ja informResult taas ovat JavaScriptissä määriteltyjä funktioita, joita kutsutaan tästä. Kysymysmerkki on dynaaminen operaattori, joka tulee Dynamics.fs-koodista.
+- GuessCountry-method is called from the JavaScript-client.
+- newQuiz and informResult are functions that are defined in the JavaScript, they are called from here. Question mark is the dynamic operator, which comes from the Dynamics.fs-code.
 
-Nuget-asennuspaketti on lisännyt WorkerRole-projektiin Scripts-hakemiston. Koska SignalR käyttää jQueryä ja SignalR:n omaa JavaScript-clienttia, niin käy vaihtamassa näille kahdelle tiedostolle "Copy to Output Directory" arvoon "Copy if newer": jquery-1.6.4.min.js ja jquery.signalR-2.0.3.min.js
+The NuGet setup package has added to WorkerRole-project a Scripts-folder. Because SignalR uses jQuery and SignalR's own JavaScript-client, go to change the "Copy to Output Directory" to value "Copy if newer" to these two files: jquery-1.6.4.min.js and jquery.signalR-2.0.3.min.js
 
-- Tiedostojen versionumerot voivat vaihdella riippuen siitä, mitkä paketit NuGet hakee. Vastaaviin viitataan Index.html-tiedostossa. Viittausten on oltava samat.
+- The file version numbers may change depending on what files the NuGet will fetch. They have to correspond the references of the Index.html-file.
 
-Tarvitset vielä sisällön Index.html-tiedostolle:
+One more thing, you need the content to the Index.html-file:
 
 
 	[lang=html]
@@ -263,6 +262,6 @@ Tarvitset vielä sisällön Index.html-tiedostolle:
 	</html>
 
 
-Tämä on siis simppeli HTML/JavaScript-tiedosto. Nyt voit käynnistää ohjelman... (F5)
+So this is a basic HTML/JavaScript-file. Now, just run the project... (F5)
 
-[Takaisin valikkoon](../Readme.html)
+[Back to the menu](../ReadmeEng.html)

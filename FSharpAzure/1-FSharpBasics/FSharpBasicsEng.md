@@ -478,7 +478,7 @@ If you compare this to C#, the seq { ... } equivalent is LINQ. But LINQ is kind 
 ## Links ##
 
 If this wasn't complete enough, you might want to [check this material](http://www.tryfsharp.org/Learn).
-If you want to practice list-manipulation-libraries, you could do some [Project Euler](https://projecteuler.net/problems) -exercises. If you want some separate code examples of one subject, then [fssnip.net](http://www.fssnip.net/pages/AllTags) is a good site to begin with.
+If you want to practise list-manipulation-libraries, you could do some [Project Euler](https://projecteuler.net/problems) -exercises. If you want some separate code examples of one subject, then [fssnip.net](http://www.fssnip.net/pages/AllTags) is a good site to begin with.
 
 
 [Back to the menu](../ReadmeEng.html)

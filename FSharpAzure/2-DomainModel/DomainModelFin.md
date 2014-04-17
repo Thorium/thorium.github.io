@@ -121,7 +121,7 @@ Näiden kahden merkittävin ero on siinä, että sitten kun näitä käytetään
 
 Kannattaa valita vaihtoehto 2, jos käytettävät parametrit kuvaavat samaa tietosisältöä, kuten tässä. Silloin operaatio on helpompi muokata muodosta toiseen, esim. vaihtaa Buy -> Sell. Tee mieluummin useita tyyppejä kuin mega-tyyppejä. 
 
-Tämä on helpoin ja selkein tapa mallintaa, näin saat selkeän tietomallin. Haittapuolena on, että operaatiot ovat kiinteitä, eli et voi kirjastomaisesti yhdistää omia rakenteita tekemään mitä tahansa, vaan toiminnallisuuden on kunnioitettava tietomallin toiminnallisuuksia. Usein tämä riittää, kun tavoitteena on rakentaa yksittäinen järjestelmää, jolla on selkeät rajat.
+Tämä on helpoin ja selkein tapa mallintaa, näin saat selkeän tietomallin. Haittapuolena on, että operaatiot ovat kiinteitä (/"kovakoodattu"), eli et voi kirjastomaisesti yhdistää omia rakenteita tekemään mitä tahansa, vaan toiminnallisuuden on kunnioitettava tietomallin toiminnallisuuksia. Usein tämä riittää, kun tavoitteena on rakentaa yksittäinen järjestelmää, jolla on selkeät rajat.
 
 Siinä missä C# usein johtaa olio-mappaus-koodiin tyypistä toiseen, auttavat [F# Object Expressionit](http://msdn.microsoft.com/en-us/library/dd233237.aspx), joilla voi luoda instansseja ilman boilerplate-koodia.
 
@@ -176,7 +176,7 @@ Yhdisteltäessä eri toiminnallisuuksia (jopa eri kirjastojen välillä), on use
 - bind `('T -> M<'R>) -> M<'T> -> M<'R>`
 - return `'T -> M<'T>`
 
-Operaation tietotyypistä voi jo päätellä mitä itse operaatio tekee.
+Vältä sivuvaikutuksia. Operaation tietotyypistä voi jo päätellä mitä itse operaatio tekee.
 
 ## 3. Syntaksi ##
 
