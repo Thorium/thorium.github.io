@@ -66,8 +66,7 @@
 
 <h2>1. &amp; 2. Modelling the Primitives and the Composition</h2>
 
-<p>Functionalities (/conract) can be modelled as data or as computation. 
-Toiminnallisuudet voidaan lähteä mallintamaan joko tietona (contract as data) tai laskentaoperaatioina (contract as computation). Regardless of this, the same tooling is in use.</p>
+<p>Functionalities (/contract) can be modelled as data or as computation. Regardless of this, the same tooling is in use.</p>
 
 <h3>The Tooling of Modelling</h3>
 
@@ -89,7 +88,7 @@ Toiminnallisuudet voidaan lähteä mallintamaan joko tietona (contract as data) 
 </ul></li>
 </ul>
 
-<p>In theory this boolean-algebra is enough to model everything in information technology. The cleanest domain is achieved using these (i.e. avoid object-oriented-structures), but in practice you sometimes want to use also these:</p>
+<p>In theory this Boolean-algebra is enough to model everything in information technology. The cleanest domain is achieved using these (i.e. avoid object-oriented-structures), but in practice you sometimes want to use also these:</p>
 
 <ul>
 <li><strong>Record</strong>, if there is a lot of bundled data (e.g. "ERP-object")</li>
@@ -101,11 +100,11 @@ Toiminnallisuudet voidaan lähteä mallintamaan joko tietona (contract as data) 
 
 <p>Let's take an example, simple stocks exchange trading.</p>
 
-<p>How would you model the trades:</p>
+<p>How would you model the trades?</p>
 
 <ul>
 <li>I want to buy 100 Microsoft stocks.</li>
-<li>I want to buy 500 Nokian stocks.</li>
+<li>I want to buy 500 Nokia stocks.</li>
 <li>I want to sell 300 Google stocks.</li>
 </ul>
 
@@ -257,7 +256,7 @@ Toiminnallisuudet voidaan lähteä mallintamaan joko tietona (contract as data) 
 
 <p>Usually the better solution is the model 2, if the parameters describe the same data content, like in here. Then the operation is easier to change from one form to other, e.g. Buy -> Sell. Rather make more types than few mega-types.</p>
 
-<p>This is the easiest and most clean way to model, and this way you will get a clear data model. The downside is that operations are solid (/"hard-coded"), so you can't compose your own structures to do what ever, like a library: the functionality has to obey the data model functionality. Usually this is enough, when your goal is to build simple little system that has clear boundaries.</p>
+<p>This is the easiest and most clean way to model, and this way you will get a clear data model. The downside is that operations are solid (/"hard-coded"), so you can't compose your own structures to do whatever, like a library: the functionality has to obey the data model functionality. Usually this is enough, when your goal is to build simple little system that has clear boundaries.</p>
 
 <p>When C# code so often leads to object-mapping-code from type to another, comes <a href="http://msdn.microsoft.com/en-us/library/dd233237.aspx">F# Object Expressions</a> to rescue, you can create new instances without boilerplate-code.</p>
 
@@ -265,7 +264,7 @@ Toiminnallisuudet voidaan lähteä mallintamaan joko tietona (contract as data) 
 
 <p>For a normal program this is too heavy concept (if you aren't familiar with call-cc and Haskell-libraries), but one good option, if it is a must to try to construct some kind of custom work-flow/process/rule -engine or framework. The difference to the previous one is that the user can refer this as a library and make more custom composition-operations. In that case this can be thought as a combinator-library or a DSL-language.</p>
 
-<p>The model may be modelled as an operation/function <code>('a -&gt; M&lt;'b&gt;)</code>, where a is "the program state", i.e. against what is the combination rules made, and M describes some kind of capsule/monad (for example a list), and b is the result type. The capsule is optional and also a and b don't have to be generics, if more precise business-oriented types are possible to define. At first, let's give a name to the function, just to avoid drowning into arrows:</p>
+<p>The model may be modelled as an operation/function <code>('a -&gt; M&lt;'b&gt;)</code>, where "a" is "the program state", i.e. against what is the combination rules made, and M describes some kind of capsule/monad (for example a list), and "b" is the result type. The capsule is optional and also "a" and "b" don't have to be generics, if more precise business-oriented types are possible to define. At first, let's give a name to the function, just to avoid drowning into arrows:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -361,7 +360,17 @@ Practical code sample (where is also the sell-operation and a pile of others) ca
 
 <h2>3. Syntax</h2>
 
-<p>This is not yet translated...</p>
+<p>This is not translated yet...</p>
+
+<h2>Links / Sources</h2>
+
+<p>Tomas Petricek - Domain Specific Languages in F# - <a href="http://vimeo.com/60546839">Video</a>, <a href="http://www.slideshare.net/tomaspfb/dsls">Slides</a></p>
+
+<p>Simon Peyton-Jones - <a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/financial-contracts/contracts-icfp.htm">Composing contracts: an adventure in financial engineering</a></p>
+
+<p>Lab49 - <a href="http://blog.lab49.com/archives/3011">The Algebra of Data, and the Calculus of Mutation</a></p>
+
+<p>Philip Wadler - <a href="http://ttic.uchicago.edu/~dreyer/course/papers/wadler.pdf">Theorems for free!</a></p>
 
 <p><a href="../ReadmeEng.html">Back to the menu</a></p>
 
