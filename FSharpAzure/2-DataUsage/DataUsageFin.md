@@ -40,7 +40,7 @@ Voit käyttää interactivea testaamaan alla olevaa koodia:
 
     let iterated = Helsinki10 |> Seq.iter System.Console.WriteLine
 
-Testaa myös muita data. ja data.Commons -alta löytyviä settejä. Huomaa Visual Studion Intellisense samalla kun kehität:
+Testaa myös muita "data." ja "data.Commons." -alta löytyviä settejä. Huomaa Visual Studion Intellisense samalla kun kehität:
 
 ![](1-Freebase.png)
 

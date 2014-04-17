@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <!-- 
-      The Informaatiorikas ohjelmointikieli
+      The Information Rich Programming Language
  parameters will be replaced with the 
       document title extracted from the <h1> element or
       file name, if there is no <h1> heading
     -->
-    <title>Informaatiorikas ohjelmointikieli
+    <title>Information Rich Programming Language
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
@@ -37,46 +37,46 @@
       <div class="row" style="margin-top:30px">
         <div class="span1"></div>
         <div class="span10" id="main">
-          <h1>Informaatiorikas ohjelmointikieli</h1>
+          <h1>Information Rich Programming Language</h1>
 
-<p>Nykyään F#-kielessä kääntäjä osaa kääntää eri tietolähteitä osaksi ohjelmointikielen tyyppijärjestelmää niin, että esim. koodaajalla toimii intellisense (kirjoitusaikainen syntaksitarkistus).</p>
+<p>The 3.0 version of F#-compiler is able to compile different data sources as part of the programming language type system. So the developer will get e.g. intellisense (code-write-time syntax checking).</p>
 
-<p>Näitä "TypeProvider" tietolähteitä on olemassa mm. seuraavia:</p>
+<p>There exists these "TypeProviders" for example:</p>
 
 <ul>
-<li><strong>JSON</strong>-datalähteille (ja <strong>XML</strong>-tietolähteille)
+<li><strong>JSON</strong> data source (and <strong>XML</strong> data source)
 <ul>
-<li>Perus-web-serviceiden schemat. Vähän sama kuin, että generoisi Service-referenssejä, mutta kääntäjä tekee sen puolestasi.</li>
+<li>Basic-web-service schemas. A bit like generating service references, but compiler does it for you.</li>
 </ul></li>
-<li><strong>CSV</strong>-tiedostoille
+<li><strong>CSV</strong>-files
 <ul>
-<li>On-line-dataa tarjotaan paljon myös CSV-muodossa.</li>
+<li>Raw online-data is widely served as CSV-feed.</li>
 </ul></li>
-<li><strong>FreeBase</strong>-nettitietokannalle
+<li><strong>FreeBase</strong>-internet-database
 <ul>
-<li>Freebase on tietokanta, johon on koostettu tietoa useista eri tietolähteistä. Täältä ei saa helposti tietorakenteita, eikä reaaliaikaista dataa, mutta kylläkin sekalaisia data-listoja itsessään.</li>
+<li>Freebase is an internet database, which aggregates information from several data sources. You won't easily get data structures from here, nor real-time-data, but a lot miscellaneous data-lists.</li>
 </ul></li>
-<li><strong>WorldBankille</strong>
+<li><strong>WorldBank</strong>
 <ul>
-<li>Maailmanpankki on YK:n alla toimiva järjestö, josta saa tietoa eri maista.</li>
+<li>World Bank is organization under United Nations. World Bank offers data from different countries.</li>
 </ul></li>
-<li><strong>SQL</strong>-palvelimelle
+<li><strong>SQL</strong>-server
 <ul>
-<li>Vähän sama kuin generoisi EF-tietomallin, mutta jälleen, kääntäjä hoitaa kaiken, et voi mennä itse sörkkimään väliin, mikä on hyvä juttu.</li>
+<li>Like generating EntityFramework data model, but again, compiler takes care of everything, you can't poke and mess with it, which is a good thing.</li>
 </ul></li>
 <li><strong>Azure Marketplace</strong>
 <ul>
-<li>Jos esim. haluat ostaa domain-mallisi muualta ja itse keskittyä vain liiketoimintalogiikkaan.</li>
+<li>If you want to for example buy a ready-made domain-model and focus only to your core business logics.</li>
 <li><a href="http://datamarket.azure.com/browse/data?price=free">http://datamarket.azure.com/browse/data?price=free</a></li>
 </ul></li>
-<li>Ja näitä voi tehdä itse lisää...</li>
+<li>And you can make your own TypeProvider...</li>
 </ul>
 
-<p>Testataan muutamia, käyttäen <a href="http://fsharp.github.io/FSharp.Data/">FSharp.Data</a>-kirjastoa. Voit käyttää aiemmin tehtyä WorkerRole-projektia. (Tarvitset nettiyhteyden ja näitä käytettäessä Visual Studio saattaa kysyä lupaa netin käyttämiseen, vastaa "Enable".)</p>
+<p>Test a few, using <a href="http://fsharp.github.io/FSharp.Data/">FSharp.Data</a>-library. You may use the same earlier WorkerRole-project. (You need an internet connection and when using these, Visual Studio may ask permission to use internet. If so, respond "Enable".)</p>
 
 <h2>FreeBase TypeProvider</h2>
 
-<p>Voit käyttää interactivea testaamaan alla olevaa koodia:</p>
+<p>You can use interactive to test the code below:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -110,21 +110,21 @@
 </tr>
 </table>
 
-<p>Testaa myös muita "data." ja "data.Commons." -alta löytyviä settejä. Huomaa Visual Studion Intellisense samalla kun kehität:</p>
+<p>Test also other sets under "data." and "data.Commons.". Note the Visual Studio Intellisense while you type:</p>
 
 <p><img src="1-Freebase.png" alt="" /></p>
 
 <h2>CSV TypeProvider</h2>
 
-<p>Edellisestä saatiin siis lista Helsingin pörssin osakkeista.</p>
+<p>The previous gave the listing of symbols in Helsinki Stock Exchange.</p>
 
-<p>CSV-type-provider toimii TypeProviderille tyypillisellä tavalla:</p>
+<p>CSV-type-provider works common way for TypeProviders:</p>
 
 <ol>
-<li>Tarvitsemme kovakoodatun Scheman, tiedon muodon. Tämä on yleensä jonkinlainen otos vanhaa dataa, johon viitataan kehityskoodissa.
+<li>You need a hard-coded Schema, the form of the data. This is usually some kind of sample of old data, which is referred from development code.
 <ul>
-<li>Lisää projektiin uusi tiedosto, TextFile1.csv</li>
-<li><p>Tallenna sen sisällöksi tämä:</p>
+<li>Add a new file to the project, TextFile1.csv</li>
+<li><p>Save this to its content:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
 <span class="l">2: </span>
@@ -143,13 +143,13 @@
 </tr>
 </table></li>
 </ul></li>
-<li>Tarvitsemme reaaliaikaisen datanlähteen
+<li>You need source of real-time data
 <ul>
-<li>Käytämme <a href="http://ichart.finance.yahoo.com/">Yahoo Finance</a>-palvelua. Vastaavia nettipalveluita on muitakin, mutta tätä muutkin käyttävät.</li>
+<li>Let's use <a href="http://ichart.finance.yahoo.com/">Yahoo Finance</a>-service. There exists a lot of corresponding internet services, but this is also what others are using.</li>
 </ul></li>
 </ol>
 
-<p>Jatketaan edellisen logiikan perään: nyt voit hakea dataa oheisella koodilla:</p>
+<p>So, continue to previous logics: you can now fetch data with the following code:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -167,73 +167,65 @@
 </tr>
 </table>
 
-<p>Valitettavasti Yahoon USD-EUR-kurssi ei ollut ajan tasalla, joten se on haettava jostain muualta.</p>
+<p>Unfortunately the USD-EUR exchange rate of Yahoo was not up-to-date, so it has to be fetched from somewhere else.</p>
 
-<p>Jos kirjoitit tiedostonimen TextFile1.csv oikein, niin tässäkin intellisense osaa tyypittää sarakkeet oikein ja jopa tietomuodot (System.DateTime, decimal, jne):</p>
+<p>If you typed the file name TextFile1.csv correctly, then intellisense will work and you will get the right column names and even data types (System.DateTime, decimal, etc.):</p>
 
 <p><img src="2-Csv.png" alt="" /></p>
 
-<h2>Harjoitustehtävät</h2>
+<h2>Exercises</h2>
 
-<h4>Harjoitustehtävä 1</h4>
+<h4>Exercise 1</h4>
 
-<p>Tee ohjelma, joka kyselee "kumpi oli presidentti":</p>
+<p>Create a quiz-program that asks "which one was a president":</p>
 
 <blockquote>
-  <p>Kumpi oli presidentti, Richard Burton vai Gerald Ford?</p>
+  <p>Which one was a president, Richard Burton or Gerald Ford?</p>
 </blockquote>
 
-<p>Ohjelman toimintaperiaate:</p>
+<p>Program functionality:</p>
 
 <ol>
-<li>Hae Freebase:sta (Commons.Government alta) lista USA:n presidenteistä. Vain nimet.
+<li>From Freebase (under Commons.Government) get a list of presidents of the USA. Select only names.
 <ul>
-<li>Sijoita tilapäismuuttujaan niin, ettei kyselyitä tule liian usein.</li>
+<li>Place those to temp-variable to avoid querying the source too often.</li>
 </ul></li>
-<li>Hae Freebase:sta (Commons.Film alta) lista näyttelijöistä. Vain nimet. Ota vain 50 ensimmäistä.
+<li>From Freebase (under Commons.Film) get a list of actors. Select only names. Take only 50 first ones.
 <ul>
-<li>Sijoita tilapäismuuttujaan niin, ettei kyselyitä tule liian usein.</li>
+<li>Place those to temp-variable to avoid querying the source too often.</li>
 </ul></li>
-<li>Kysely-toiminto:
+<li>Question-function:
 <ul>
-<li>Arvo kummastakin listasta yksi nimi ja esitä ne satunnaisjärjestyksessä kumpi-kysymyksen muodossa.</li>
+<li>Take one random name from both of the lists and ask those (in random order) as a form of "Which one"-question.</li>
 </ul></li>
-<li>Tarkistus-toiminto:
+<li>Check the answer -function:
 <ul>
-<li>Ota parametrina nimi ja tarkista löytyykö annettu nimi presidentti-listalta.</li>
+<li>Take a name as parameter and check if the corresponding name is in the list of presidents.</li>
 </ul></li>
 </ol>
 
-<h4>Harjoitustehtävä 2</h4>
+<h4>Exercise 2</h4>
 
-<p>Maailma on täynnä avoimia API-rajapintoja:</p>
+<p>The world is full of open APIs:</p>
 
 <ul>
-<li>Suomalaisia:
-<ul>
-<li><a href="http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php">Reittiopas</a>,</li>
-<li><a href="http://www.vr.fi/fi/index/palvelut/avoin_data/Junatkartalla-rajapinta.html">VR</a>,</li>
+<li>Probably all the great corporations like YouTube, Amazon, jne.</li>
+<li><a href="http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php">Helsinki area mass transit</a>,</li>
 <li><a href="http://onki.fi/api/v2/http/#reposearch">Ontologia API</a></li>
 <li><a href="https://github.com/ninchat/ninchat-api/blob/v1/api.md">Ninchat API</a></li>
-<li>Avointen palveluiden <a href="http://www.suomi.fi/suomifi/tyohuone/yhteiset_palvelut/avoin_data/">listaus</a>.</li>
-</ul></li>
-<li>Kansainvälisiä:
-<ul>
-<li>Luultavasti kaikki isot yritykset kuten YouTube, Amazon, jne.</li>
-<li><a href="http://en.wikipedia.org/wiki/List_of_financial_data_feeds">Finanssi-feed-lista</a></li>
+<li><a href="http://en.wikipedia.org/wiki/List_of_financial_data_feeds">Finance-feed-listing</a></li>
 <li>BTC: <a href="http://www.quandl.com/api/v1/datasets/BITCOIN/MTGOXUSD.csv?&amp;trim_start=2010-07-17&amp;trim_end=2013-07-08&amp;sort_order=desc">Quandl</a>, <a href="https://btc-e.com/api/2/btc_usd/trades">BTC-e</a>, <a href="https://localbitcoins.com/api-docs/">LocalBitcoins</a></li>
-</ul></li>
 </ul>
 
-<p>Rekisteröidy käyttäjäksi johonkin, ja tutki API-rajapintaa <a href="http://fsharp.github.io/FSharp.Data/library/JsonProvider.html">JSON-TypeProviderin</a> avulla.</p>
+<p>Register as a user to one of these and explore the API-interface with  <a href="http://fsharp.github.io/FSharp.Data/library/JsonProvider.html">JSON-TypeProvider</a>.</p>
 
-<p>Jos tarvitset usein SQL-palvelinta, voit myös koittaa käyttää SqlEntityConnection-TypeProvideria.</p>
+<p>If you often use SQL-server, you could use SqlEntityConnection-TypeProvider.</p>
 
-<p><a href="../Readme.html">Takaisin valikkoon</a></p>
+<p><a href="../ReadmeEng.html">Back to the menu</a></p>
 
           <div class="tip" id="fs1">namespace Microsoft.FSharp.Data</div>
-<div class="tip" id="fs2">val data : obj<br /><br />Full name: DataUsageFin.data</div>
-<div class="tip" id="fs3">val Helsinki10 : seq&lt;obj&gt;<br /><br />Full name: DataUsageFin.Helsinki10</div>
+<div class="tip" id="fs2">val data : obj<br /><br />Full name: DataUsageEng.data</div>
+<div class="tip" id="fs3">val Helsinki10 : seq&lt;obj&gt;<br /><br />Full name: DataUsageEng.Helsinki10</div>
 <div class="tip" id="fs4">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
 <div class="tip" id="fs5">val take : count:int -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.take</div>
 <div class="tip" id="fs6">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.map</div>

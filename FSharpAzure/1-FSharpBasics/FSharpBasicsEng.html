@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <!-- 
-      The F# lyhyt oppimäärä
+      The F# in Brief
  parameters will be replaced with the 
       document title extracted from the <h1> element or
       file name, if there is no <h1> heading
     -->
-    <title>F# lyhyt oppimäärä
+    <title>F# in Brief
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
@@ -37,36 +37,36 @@
       <div class="row" style="margin-top:30px">
         <div class="span1"></div>
         <div class="span10" id="main">
-          <h1>F# lyhyt oppimäärä</h1>
+          <h1>F# in Brief</h1>
 
-<p>F# on selkeä ohjelmointikieli, joka ohjaa lähtökohtaisesti käyttäjäänsä funktionaalisiin ratkaisuihin. Tätä kautta ohjelman tila mallintuu oikein, ja ohjelmat säikeistyvät hyvin ja niillä on totuttua parempi ylläpidettävyys.</p>
+<p>F# is a clear programming language, which, by default, drives user towards functional programming solutions. This way the program state modelling goes correctly and programs are easily multi-threaded and they have good maintainability.</p>
 
 <blockquote>
   <p>"Functional programming combines the flexibility and power of abstract mathematics with the intuitive clarity of abstract mathematics." - XKCD</p>
 </blockquote>
 
-<p>Vaikka lyhyt on kaunista, ja F# on tarvittaessa hyvinkin abstrakti kieli, niin tärkeintä ei ole saada aikaan lyhyin syntaksi, vaan tilanteeseen sopivin/selkein. On kielen voimakkuutta, että asiat voidaan tehdä monella tavalla, mutta hyvyyttä, että kieli ohjaa intuitiivisesti parhaaseen ratkaisuun.</p>
+<p>Although small is beautiful, and F# can be very abstract language, it is not about to get the most succinct syntax. It is about the best (and most clear) syntax fitting for the situation. The power of a language is to be able to do things in many ways, but goodness to intuitively drive the user to the best solution.</p>
 
-<p>Ehkä pieni harppaus kokeellisesta yritys-erehdys-ohjelmistoylläpidosta vähän matemaattisempaan suuntaan ei olisi pahasta?</p>
+<p>Maybe a small step from experimental trial-and-error-program-maintenance to a bit more mathematical way wouldn't be so bad?</p>
 
-<p>Koodia oppii lukemaan nopeasti, mutta kivuton kirjoittaminen vaatii aikansa: uuden opettelu vaatii malttia. F#-kääntäjä on tiukempi kuin C#, sen kanssa saa alussa vähän hakata päätä seinään, mutta kun koodi menee kääntäjästä läpi, niin todennäköisemmin ohjelma ei kaadu ajonaikaisesti. Toisaalta se tuo onnistumisentunteita, ja saa C#-veteraaninkin huomaamaan, että koodaaminen voi olla kivaa.</p>
+<p>You may learn to read the code easily, but painless writing of the programs will take its time: learning new things will take some patience. F#-compiler is stricter than C# compiler, so you have to hit your head to the wall at first, but when the code compiles, it will more probably not fail runtime. On the other hand it will give some achievement-feeling and make C#-veteran to feel that coding can be fun.</p>
 
-<h2>F-Sharp-projektin luonti Visual Studiossa</h2>
+<h2>Creating F-Sharp-project in the Visual Studio</h2>
 
-<p>Voit käyttää Azure-Worker-rolea (josta erilliset ohjeet), tai tehdä kokonaan uuden projektin. Oletuksena projektista kääntyy dll, samoin kuin C#-projektista, ja dll:t ovat yhteensopivia.</p>
+<p>You can either use Azure-Worker-role (which has separate instructions), or make a new project. By default F# project will compile as dll, like C#-project, and those are compatible which each other.</p>
 
-<p>Jos haluat tehdä uuden projektin Visual Studiossa, niin se menee näin:
+<p>If you want to make a new project in Visual Studio:
 File -> New -> Project... -> Other Languages -> Visual F# ->F# Library</p>
 
-<h2>C# ja F# yhteispeli (ja miksei myös VB.NET)</h2>
+<h2>C# with F# (and why not also VB.NET)</h2>
 
-<p>C# on parhaimmillaan kun tarvitaan valmiit wizardit riittävät, esim. XAML-kehityksessä. F#:sta voi referoida ja käyttää suoraa C#-dll:iä. Samassa Visual Studio "solutionissa" voi olla sekä F# että C# projekteja, mutta muutosten näkyminen toisesta toiseen vaatii referoitavan projektin kääntämistä.</p>
+<p>The strengths of C# is the ready-made wizards when they are enough, like in XAML-development. From F# you may reference and use C#-dlls directly. The same Visual Studio solution may have both F# and C# projects, but the visibility of the changes needs a compilation of the referenced project.</p>
 
-<p>Lisää kokeeksi C#-projekti (kirjasto, console-app, testiprojekti, tms) samaan "solutioniin" F#-projektin rinnalle, ja lisää viittaus:
-Solution Explorerista C#-projektin References-kansion päällä hiiren oikeaa nappia ja:
-Add reference... -> Solution -> rasti F#-projektin ruutuun ja ok.</p>
+<p>Try to add C#-project (library, console-app, test project, or something) to the same solution with F# project and add a reference:
+From Solution Explorer, C#-project, References-folder: right click and:
+Add reference... -> Solution -> check mark F#-project and OK.</p>
 
-<p>Tässä malliluokka F#-sisällöksi (näitä käydään tarkemmin läpi alempana):</p>
+<p>Here is a sample content for F#-file (with more details below):</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -110,7 +110,7 @@ Add reference... -> Solution -> rasti F#-projektin ruutuun ja ok.</p>
 </tr>
 </table>
 
-<p>...ja C#-projektin luokasta niitä voi (projektin käännön jälkeen) käyttää ihan suoraa:</p>
+<p>...and those can be used (after compilation) from the C#-project's class directly:</p>
 
 <pre lang="csharp"><span class="k">var</span> class1 = <span class="k">new</span> MyLibrary.MyClass1();
 <span class="k">var</span> fromFs = class1.X;
@@ -126,39 +126,39 @@ IEnumerable&lt;<span class="k">string</span>&gt; response = MyLibrary.MyModule.M
 <span class="k">var</span> class2 = <span class="k">new</span> MyLibrary.MyModule.UserData1();
 class2.Email = <span class="s">"no@spam.com"</span>;</pre>
 
-<p>Näin vanhalla C#-koodaajalla on turvaverkko, johon voi luottaa ennenkuin F# on täysin hallinnassa.
-Samaan tapaan toimisi myös referointi VB.NET-komponenttiin.</p>
+<p>This will be a safety net for old C#-developer before F# is totally under belt.
+Likewise would work referencing to VB.NET-component.</p>
 
-<p>Huomattavat rajat:</p>
+<p>Notable limitations:</p>
 
 <ul>
-<li>F#:ssa yleensä kirjoitetaan vakioiden/muuttujien/funktioiden nimet pienellä.
+<li>Property/variable/function names are usually written in lower case in F#.
 <ul>
-<li>Tosin se on vain käytäntö, jotta erottaa nämä tyypeistä/luokista.</li>
+<li>But this is only a practice to separate those from types/classes.</li>
 </ul></li>
-<li>F#-perus-lista on oma linkitetty listansa.
+<li>F#-default-list is a linked list of F#-core.
 <ul>
-<li>Seq on tyypitetty IEnumerable.</li>
+<li>Seq is a strongly typed IEnumerable.</li>
 </ul></li>
-<li>F#-perus-funktio on myös omansa
+<li>Also F#-default-function is a function of F#-core.
 <ul>
-<li>F#:sta voi kutsua C#-metodia joka ottaa C# Func-parametrin, F#-funktio kelpaa tähän suuntaan.</li>
-<li>Mutta jos F#:sta palauttaa oletus-funktion metodista ulos, niin C#-kehittäjä vähän hämmästyy.</li>
-<li>F#:sta voi erikseen luoda ja palauttaa ulos C#:pin Func-tietotyyppin, mutta sen käyttö F#:pin sisällä ei ole luonnollista.
+<li>From F# you may call C#-method that takes C# Func-parameter, F#-function is OK in this way.</li>
+<li>But if you return a function from F#, then the C# developer will get confused.</li>
+<li>You may explicitly return C# Func -data type from F#, but using C# Func inside F# is not natural.
 <ul>
-<li>C#:ssa Func ja Action ovat eri luokat ja void ei ole tietotyyppi.</li>
-<li>F# void on nimeltään unit ja se on tietotyyppi.</li>
+<li>Func and Action are separate classes in C#, and "void" is not a type.</li>
+<li>F# void is called unit and it is a data type.</li>
 </ul></li>
 </ul></li>
 </ul>
 
-<p>Näillä rajoilla on merkitystä lähinnä, jos ennalta tiedetään, että kehitetään F#:sta komponenttia C#-kehityksen käyttöön.</p>
+<p>These limitations will matter, if you know in the first place, that you will develop F#-component to use from C#-development.</p>
 
-<p>Sitten itse kieleen:</p>
+<p>Then the language itself:</p>
 
 <h2>Hello world</h2>
 
-<p>Käyttäen .NET-luokkia, "Hello World"-ohjelman voi tehdä esim. näin:</p>
+<p>With .NET classes, "Hello World"-program can be created e.g. this way:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -174,12 +174,12 @@ Samaan tapaan toimisi myös referointi VB.NET-komponenttiin.</p>
 </tr>
 </table>
 
-<p>Lähtökohtaisesti F# ohjaa siihen, että et voi käyttää "muuttujia" (/vakioita) uudestaan, eli kun x on kerran määritelty, niin käytä mieluummin seuraavalla kerralla muuttujaa x2 kuin x. (Tosin ehkä paremmalla nimeämiskäytännöllä.) Oikeastihan tarvitset muuttujia vain ylläpitämään luuppien tilaa. Lähtökohtaisesti F# ohjaa käyttämään rekursiota luuppien sijaan, mutta tästä lisää myöhemmin.</p>
+<p>F# will drive you to the direction that you don't re-use your "variables" (/values) by default. So that when x is once defined, rather use x2 next time (...with better naming conventions). Actually you need variables only to maintain mutable state of loops. F# will drive you to use recursion instead of loops by default. More about this later...</p>
 
-<p>Vertailuoperaatio on vain yksi yhtäkuinmerkki.
-Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käytettävissä.</p>
+<p>When comparing equality, just one equals sign is used.
+Comments are // or (<em> and </em>). Private and public scopes are in use.</p>
 
-<p>Voit myös antaa kohteille vielä selkeämpiä välilyönnillisiä nimiä (tosin huonona puolena suomalaisen näppäimistö-layout:in hankaluus):</p>
+<p>You may also give values long names with spaces like these (but international keyboard layouts will make these a bit more difficult to use):</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -193,9 +193,9 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 
 <h2>Interactive</h2>
 
-<p>Olettaen, että Resharper ei ole ihan sotkenut pikanäppäimiäsi:</p>
+<p>Assuming that Resharper has not totally messed-up your keyboard short-cuts:</p>
 
-<p>Painamalla Ctrl+Alt+F saat esille interactive-ikkunan ("REPL-loop"), jossa voit suorittaa koodia lennosta. Voit kirjoittaa koodia ikkunaan suoraa, ja suorittaa sen kirjoittamalla ennen enterin painallusta kaksi puolipistettä, esim:</p>
+<p>Press Ctrl+Alt+F to get the interactive-window ("REPL-loop"), where you may execute code on-the-fly. You may write code directly to this window and execute it by writing two semicolons before the last enter-key, for example:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -207,15 +207,15 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Tai sitten voit suoraa projektitiedostosta maalata kasan koodia, ja lähettää sen interactive-ikkunaan (joko hiiren oikealla napilla ja "Execute in interactive" tai) näppäinyhdistelmällä Alt+Enter.</p>
+<p>Or you can also select multiple lines of code from your F#-file and then send it to the interactive-window (from right mouse click menu, "Execute in interactive", or) with keyboard short-cut Alt+Enter</p>
 
-<p>Yleensä kannattaa ensin antaa haluamansa alkuarvot parametreille ja sitten lähettää haluamansa koodinpala interactiveen.</p>
+<p>Usually the best practice is to define initial values for parameters and then send the wanted code-block to interactive.</p>
 
-<p>F#:lle on myös hyvät yksikkötesti- ja BDD-frameworkit, mutta interactiven ansiosta niitä ei tarvita kokeelliseen kehitykseen, vaan lähinnä ylläpidon varmistamiseen.</p>
+<p>There are some good unit testing and BDD -frameworks that can be used with F#. But interactive is better for experimental-development so these frameworks are mostly needed to ensure maintainability.</p>
 
-<h2>Tyypitys</h2>
+<h2>Type system</h2>
 
-<p>Tyyppijärjestelmähän on tarkoitettu siihen, että kääntäjä palvelee koodaajaa, eikä toisinpäin. Oletuksena F# löytää tyypit itsekin, mutta joskus käyttäjä haluaa tyypittää käsin:</p>
+<p>Type system is for compiler to serve the developer, not for developer to serve the compiler. F# will do a good job to resolve types by itself, but sometimes the developer wants to define types manually:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -231,11 +231,11 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Geneeriset tyypit (klassinen T, T1, T2, jne) merkitään tyyppijärjestelmässä heittomerkillä: 'a, 'b, 'c, jne</p>
+<p>Generic types (the classic T, T1, T2, ...) have the type syntax of: 'a, 'b, 'c, ...</p>
 
-<h2>Putkitus</h2>
+<h2>Pipes</h2>
 
-<p>F#:ssa on operaatio "|>", joka siirtää metodin viimeisen parametrin ensimmäiseksi:</p>
+<p>F# has operation "|>", which moves the last parameter of a method to first:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -249,13 +249,13 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Tätä voit ajatella vähän kuin C#-extension-metodina: jos metodit ovat verbejä, on usein luonnollista aloittaa lause substantiivilla, kielestä tulee luonnollisempaa:</p>
+<p>This can be thought a bit like C# extension methods: if functions are verbs, it is usually more natural to start a sentence with substantive, the language is more natural:</p>
 
-<p>"koira haukkuu ihmiselle" vs. "haukkuu(koira, ihmiselle)"</p>
+<p>"a dog barks to a human" versus "barks(a dog, to a human)"</p>
 
-<h2>Funktiot</h2>
+<h2>Functions</h2>
 
-<p>F#:ssa ei tarvita sulkuja funktioparametreissa ja pilkku on varattu Tuple-luokkien käyttöön, joten parametrillisen funktion voit tehdä näin:</p>
+<p>You don't need brackets in function parameters, and comma is reserved for Tuple-class, so you may define a function with parameters like this:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -267,7 +267,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Funktion tyyppisyntaksi on sama kuin C#-kielen Func<...>-luokan parametrit, esim: Func<int, int, string> on funktio joka ottaa kaksi numeroa ja palauttaa merkkijonon. F#:ssa parametrien välissä on nuoli, eli vastaavan funktion tyyppisyntaksi on</p>
+<p>The function type syntax is like C#-language Func<...>-class parameters, e.g.: Func<int, int, string> is a function that takes input two numbers and returns a string. In F#, there is an arrow between parameters, so the corresponding function type syntax is</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -279,9 +279,9 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Funktion tyyppisyntaksista voi hyvin pitkälle päätellä mitä funktio tekee.</p>
+<p>You can often figure out what the function does just by the function type syntax.</p>
 
-<p>Parametriton funktio määriteltäisiin suluilla, tätä tarvitset, jos et halua suorittaa evaluointia heti. return-komentoa ei yleensä tarvi, koska funktio palauttaa viimeisen käskyn arvon ulos joka tapauksessa. Funktiot voivat olla sisäkkäin.</p>
+<p>Parameter-less function are defined with brackets. You need this when you don't want to execute evaluation immediately. "return"-statement is not usually needed, because the function will return the value of the last call anyway. Functions can locate inside of other functions.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -305,34 +305,34 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Lambda-funktion voi tehdään fun-sanalla ja nuolella.</p>
+<p>Lambda-function is constructed by the fun-keyword and arrow.</p>
 
-<h2>Listat</h2>
+<h2>Lists</h2>
 
-<p>F#:ssa on LINQ:a monipuolisemmat  listojenkäsittelykirjastot, mutta voit halutessasi käyttää myös LINQ-kirjastoa, jos sen jo osaat.</p>
+<p>F# has even more diverse list-manipulation-libraries than the LINQ-library, but you may also use the LINQ-library if you already know that well.</p>
 
-<p>F#:ssa näkyy usein käytettävän kolmea eri tyyppiä listoja, joilla on kaikilla suurin piirtein samat käsittelykirjastot. Karrikoidusti tyypit menevät näin:</p>
+<p>There appears to be three different types of lists widely used, which have mostly the same operations in the libraries. Exaggerate by generalizing, it goes like this:</p>
 
 <ul>
 <li>List
 <ul>
-<li>Ylläpidettävin koodi.</li>
-<li>Immutable: alkiot eivät muutu</li>
-<li>Kaksi kaksoispistettä voidaan käyttää tunnistamaan ensimmäinen ja loput alkiot</li>
-<li>At-merkkiä "@" voi käyttää yhdistämään kaksi listaa.</li>
+<li>Best maintainability in the code.</li>
+<li>Immutable: items won't change</li>
+<li>Two colon signs may be used to match/separate the first item and a list of the rest.</li>
+<li>At-sign "@" may be used to concatenate/merge two lists.</li>
 </ul></li>
 <li>Array
 <ul>
-<li>Tehokkain suoritus. Vastaa C#-arrayta.</li>
-<li>Lähtökohtaisesti ei ole hyvä tapa viitata suoraa indeksiin. Se tapahtuu laittamalla piste ennen hakasulkuja.</li>
+<li>Best efficiency. Corresponds the C#-array.</li>
+<li>By default, it is an anti-pattern to point directly at the index. It can be done by writing period-sign before square brackets.</li>
 </ul></li>
 <li>Seq
 <ul>
-<li>Yhteensopivin. Tämä vastaa C# IEnumerablea.</li>
+<li>Best compatibility. This corresponds the C# IEnumerable.</li>
 </ul></li>
 </ul>
 
-<p>Listoja voi muuttaa muodosta toiseen: List.toArray, List.toSeq, Seq.toList, Array.toSeq, jne. Pari koodiesimerkkiä:</p>
+<p>Lists can be converted to other forms: List.toArray, List.toSeq, Seq.toList, Array.toSeq, ... Some code examples:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -382,7 +382,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Funktioita voi myös yhdistellä (function composition) ">>" -merkillä, tosin tätä näkee harvemmin. "Tee ensin tämä, sitten tämä."</p>
+<p>You can compose function with ">>" -operator. "First do this then this."</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -398,7 +398,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Listan tyypin voi halutessaan merkitä joko C#-tyylisesti tai OCaml-tyylisesti:</p>
+<p>Manual typing can be done either C#-way or OCaml-way:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -414,9 +414,9 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 
 <h2>Tuple</h2>
 
-<p>Listojen lisäksi toinen yleinen rakenne on Tuple: lista on n-kappaletta yhtä samaa tyyppiä, tuple on yksi kappale n:ää eri tyyppiä. C#:ssa on myös Tuple, ja tämä luokka on sama.</p>
+<p>Besides lists, other common structure is a Tuple: List is n-times one same type of items, tuple is one item of each n separate types. C# also have the Tuple-class and this is the same class.</p>
 
-<p>Voit toki tehdä Tuplen C#-tapaan System.Tuple.Create(1, "a", 1.0), mutta tähän on myös helpompi tapa, pelkkä pilkku. Tuplen voi myös takaisin purkaa osiinsa, joko fst- ja snd-käskyillä, tai sitten määrittelemällä "temp-muuttujat" yhtäkuin-merkin vasemmalla puolella:</p>
+<p>You could create tuple like C#-way System.Tuple.Create(1, "a", 1.0), but there is a lot easier way, just plain comma-sign. Tuple may be dissembled to pieces, either with fst- and snd-operations, or by defining "temp-variables" in the left side of equality-operator:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -430,13 +430,13 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Tyyppisyntaksissa tuple merkitään tähdellä, esim: int*string.</p>
+<p>Tuple is marked as times-sign "<em>" in the type syntax, like: int</em>string.</p>
 
-<h2>Luokat</h2>
+<h2>Classes</h2>
 
-<p>F# on myös erinomainen oliokieli.</p>
+<p>F# is also a great Object-Oriented-language.</p>
 
-<p>Olio, jolla on yksi property, email, jossa on getteri ja setteri, ja oletusarvo sille on tyhjä merkkijono, tehtäisiin näin:</p>
+<p>Object having one property, email, which has a getter and a setter, and the default value for that is an empty string, would be implemented like this:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -454,9 +454,9 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Kun luot uuden instanssin oliosta, niin new-sana on vapaaehtoinen.</p>
+<p>When you create a new instance of an object, the new-keyword is optional.</p>
 
-<p>Olio, jolla on yksi konstruktorissa asetettava readonly-property, email, ja lisäksi tyhjä konstruktori, joka asettaa tyhjän arvon tehtäisiin näin:</p>
+<p>Object, having constructor with parameter of a readonly-property, email, and also empty constructor (setting empty string as default), would be implemented like this:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -472,7 +472,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Perintä-syntaksi ei ole yhtä näppärä kuin C#:ssa, koska vahvaan tyyppitarkistukseen rajapinnat pitää aina periyttää eksplisiittisesti:</p>
+<p>Inheritance-syntax is not as handy as in C#, because the type checking needs explicit implementation of interfaces:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -512,7 +512,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 
 <h2>Discriminated union</h2>
 
-<p>Voit tehdä "joko-tai"-tyyppejä:</p>
+<p>You can construct "either-or"-types:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -544,11 +544,11 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Käyttötarkoituksena esimerkiksi ohjelman tilanhallinta, jo kääntäjätasolla, ilman sotkuista ajonaikaista if-logiikkaviidakkoa. Nämä ovat erittäin käteviä yhdessä pattern matchingin kanssa.</p>
+<p>One usage of this is the program state management, in compile-time, avoiding the runtime if-logic-jungle. Discriminated unions are very handy with pattern matching.</p>
 
-<h2>Astetta erikoisemmat tyypit</h2>
+<h2>Some more particular types</h2>
 
-<p>Tyyppi voi olla myös vain alias, tai "joko-tai" voi esiintyä myös yksinään:</p>
+<p>Type can be only alias, or "either-or" can have only one case:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -564,7 +564,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Tyyppi voi olla tietue, record:</p>
+<p>Type may be a record:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -586,7 +586,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>...tai sillä voidaan Measure-attribuutin kanssa määritellä vahva vain-käännösaikainen tyypitys. Vähän kuin oma luokka kapseloimaan vain yksi laskennallinen arvo (mutta näyttämään se aina ulos), jotta eri asiat tai mittayksiköt eivät varmasti mene sekaisin vahingossa:</p>
+<p>...or it could define a compile-time-checking with Measure-attribute. A bit like separate class to capsulate only one value (but exposing/displaying that always), so that different things or unit of measures won't ever mix by accident:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -622,13 +622,13 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Helpoin tapa muuttaa perus-.NET-tyyppi mitaksi on kertoa se yhdellä mitalla. Esteettinen haittapuoli on, että tämä tuo "pienempi kuin" ja "suurempi kuin" merkkejä koodiin.</p>
+<p>The easiest way to convert basic-.NET-type to a unit-of-measure is multiplying it by one unit. Aesthetic downside is that this will bring "greater than" and "less than" signs to the source code.</p>
 
 <h2>Pattern matching</h2>
 
-<p>Pattern-matching on tavallaan selkeä switch/case tai if-elseif-kuvio, jossa ehto ei voi vaihtua kesken kaiken, mutta eri case:illa ei ole constant-vaatimusta. Eri patterneita on useita.</p>
+<p>Pattern-matching is a kind of switch/case or if-elseif-pattern done right, where the condition can't change on on-the-fly, but separate cases don't have the restriction of being constants. There exist several patterns.</p>
 
-<p>Lisäksi funktio voi suoraa olla pattern-funktio tai voidaan käyttää ns. active-patterneita selkeyttämään koodia. Tässä sama toiminnallisuus usealla eri kooditavalla:</p>
+<p>Also, function can directly be a pattern-function or it can use so called "active patterns" to make the intention of the code more clear. Here is the same functionality in multiple ways:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -720,13 +720,13 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Usein, jos mahdollista, on parempi jättää oletus-tapaus kokonaan pois, koska silloin kääntäjä saa kiinni virheet, jos tuntemattomia tapauksia luodaan jälkikäteen koodiin lisää.</p>
+<p>Usually, if possible, it is best practice to leave the default-condition away, because then the compiler will catch mistakes, if unknown conditions are added afterwards to the code.</p>
 
-<h2>Nullittomuus ja option-type</h2>
+<h2>Option type: World without Null</h2>
 
-<p>C#:ssa NULL on sekä "special case" (Fowler: PoEAA) että un-assigned-muuttuja. Kaksi roolia yhdellä asialla tekee sen käytöstä sotkuista.</p>
+<p>In C#, the NULL has two meanings: It is a "special case" (Fowler: PoEAA) and also it is un-assigned-variable. Two roles of the same construct makes things messy.</p>
 
-<p>Lähtökohtaisesti F#:ssa NULL ei ole käytössä. Sen sijaan on käytössä option-type, asialle jota ei ole tiedossa:</p>
+<p>NULL is not used in F# per se. The construct to work as unknown value is option-type:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -776,9 +776,9 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<h2>Rekursiivisuus</h2>
+<h2>Recursion</h2>
 
-<p>Rekursiiviseen funktioon kirjoitetaan rec. Usein itse rekursio kapseloidaan toisen funktion sisään, jotta voidaan peittää "turhat" alkuarvot. Usein myös käytetään muotoa, jossa viimeisenä parametrina menee "akkumulaattori", johon kerätään tulos. Tämä siksi, että kääntäjä optimoi häntärekursiolla stäkin pois, ts. ei tule StackOverflowException:ia, vaikka läpikäytävä rekursio olisi iso.</p>
+<p>Recursive function is stated as keyword rec. The best practice is to encapsulate the recursion itself inside another function, to hide "useless" initial values. One common practice is to use last parameter as "accumulator", to collect the result of the recursion. The reason is that then the compiler can optimize the stack away with the tail-recursion, so you won't get StackOverflowException even if the recursion would be deep.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -800,15 +800,15 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Tämä tyypillinen funktio löytyy tietysti myös suoraa List-kirjastosta, mutta jos tarvitaan enemmän custom-toiminnallisuutta, niin silloin oma rekursio on joskus paikallaan.</p>
+<p>Of course this typical function is also included in the List-library, but if you would need more complex custom-functionality, then writing explicit recursion is sometimes the right solution.</p>
 
 <h2>Computation Expressions</h2>
 
-<p>Nämä ovat eräänlaisia kapseleita kapseloimaan toiminnallisuuden sivuvaikutuksia. Valmiita ovat mm. seq (listoille) ja async (asynkroniselle koodille), mutta näitä voi tehdä itse lisää.</p>
+<p>These are kind of capsules to encapsulate side-effects of some functionality. Out-of-the-box you get e.g. seq (for sequences) and async (for asynchronous code), but you can create more by yourself.</p>
 
-<p>Asynkronisuuden sivuvaikutus on odottaminen. Async.RunSynchronously nyt ei itsessään ole kovin hyödyllinen, mutta Async:illa on paljon muitakin vaihtoehtoja.</p>
+<p>The side-effect of asynchrony is that you have to wait. Async.RunSynchronously is not very useful by itself, but Async has a lot of other possibilities also.</p>
 
-<p>Asian ydin on se, että kun katsotaan koodia kohdassa sum = x + y, niin se näyttää hyvin samalta kuin perus F#-koodi muutenkin, vaikka ollaan sivuvaikutuksen piirissä. Ja itse sivuvaikutus, async, ilmenee koodista eksplisiittisesti. Huutomerkki-syntaksi tarkoittaa kutsua "computation expression"-rajapintaan.</p>
+<p>The main point is that when you look the code sum = x + y below, it seems very typical F#-code, even if we are in the context of the side-effect. And the side-effect itself, the async, is explicitly stated in the code. The bang (exclamation mark, "!"-sign) syntax means a call to the "computation expression"-interface.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -852,7 +852,7 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>Jos verrataan tätä C#:piin, niin seq { ... } vastaava on LINQ. Mutta LINQ on tavallaan oma kielensä, joka koodaajan on opeteltava erikseen. Ja koodaaja ei tiedä tekeekö LINQ:a IEnumerablea, IQueryablea, IObservablea, vai mitä vasten... Vähän naiivi ja C#-henkinen, mutta toimiva esimerkki seq-expressionista:</p>
+<p>If you compare this to C#, the seq { ... } equivalent is LINQ. But LINQ is kind of a language its own, which is a separate learning curve for the developer. And the developer doesn't always know if (s)he is coding LINQ against IEnumerable, IQueryable, IObservable, or what... A bit naive and C#:ish but working example of seq-expression:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -880,153 +880,152 @@ Kommentit ovat // tai (<em> ja </em>). Private ja public näkyvyydet ovat käyte
 </tr>
 </table>
 
-<p>"Computation Expressions" on kauniimpi nimi asialle, josta käytetään myös ilmaisua "Monad".</p>
+<p>"Computation Expressions" is another name to the thing aka. "Monad".</p>
 
-<h2>Harjoitustehtäviä</h2>
+<h2>Exercises</h2>
 
 <ul>
-<li>Luo rekursiivinen ohjelma joka listaa 1000 ensimmäistä Fibonacci-lukujonon lukua (1, 1, 2, 3, 5, 8, 13, ...).</li>
-<li>Luo C#-yksikkötesti tai konsoliaplikaatio kutsumaan edellistä.</li>
+<li>Create a recursive program that lists 1000 first numbers of Fibonacci-sequence (1, 1, 2, 3, 5, 8, 13, ...).</li>
+<li>Create a C# unit test or console application to call that program.</li>
 </ul>
 
-<h2>Linkit</h2>
+<h2>Links</h2>
 
-<p>Jos tämä oli liian hapokasta, niin kannattaa katsoa läpi <a href="https://bitbucket.org/ilmirajat/fsharptraining.fi/src/05a105289a51212202c76794a704721503c55e41/FSharpTraining/">tämä suomenkielinen materiaali</a> ja [tämä englanninkielinen tutorial] (<a href="http://www.tryfsharp.org/Learn).
-Jos">http://www.tryfsharp.org/Learn).
-Jos</a> haluat opetella listakirjastojen toiminnallisuuksia, niin koita tehdä <a href="https://projecteuler.net/problems">Project Euler</a> -tehtäviä. Jos haluat itsenäisen pienen koodiesimerkin jostain aiheesta, niin <a href="http://www.fssnip.net/pages/AllTags">fssnip.net</a> on hyvä saitti lähteä etsimään.</p>
+<p>If this wasn't complete enough, you might want to <a href="http://www.tryfsharp.org/Learn">check this material</a>.
+If you want to practice list-manipulation-libraries, you could do some <a href="https://projecteuler.net/problems">Project Euler</a> -exercises. If you want some separate code examples of one subject, then <a href="http://www.fssnip.net/pages/AllTags">fssnip.net</a> is a good site to begin with.</p>
 
-<p><a href="../Readme.html">Takaisin valikkoon</a></p>
+<p><a href="../ReadmeEng.html">Back to the menu</a></p>
 
           <div class="tip" id="fs1">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
 <div class="tip" id="fs2">val toSeq : list:&#39;T list -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.List.toSeq</div>
-<div class="tip" id="fs3">Multiple items<br />type UserData1 =<br />&#160;&#160;new : unit -&gt; UserData1<br />&#160;&#160;member Email : string<br />&#160;&#160;member Email : string with set<br /><br />Full name: FSharpBasicsFin.UserData1<br /><br />--------------------<br />new : unit -&gt; UserData1</div>
+<div class="tip" id="fs3">Multiple items<br />type UserData1 =<br />&#160;&#160;new : unit -&gt; UserData1<br />&#160;&#160;member Email : string<br />&#160;&#160;member Email : string with set<br /><br />Full name: FSharpBasicsEng.UserData1<br /><br />--------------------<br />new : unit -&gt; UserData1</div>
 <div class="tip" id="fs4">val set : elements:seq&lt;&#39;T&gt; -&gt; Set&lt;&#39;T&gt; (requires comparison)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.set</div>
 <div class="tip" id="fs5">namespace System</div>
 <div class="tip" id="fs6">Multiple items<br />val decimal : value:&#39;T -&gt; decimal (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.decimal<br /><br />--------------------<br />type decimal = System.Decimal<br /><br />Full name: Microsoft.FSharp.Core.decimal<br /><br />--------------------<br />type decimal&lt;&#39;Measure&gt; = decimal<br /><br />Full name: Microsoft.FSharp.Core.decimal&lt;_&gt;</div>
 <div class="tip" id="fs7">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
 <div class="tip" id="fs8">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
-<div class="tip" id="fs9">val sayHello : unit -&gt; string<br /><br />Full name: FSharpBasicsFin.sayHello</div>
+<div class="tip" id="fs9">val sayHello : unit -&gt; string<br /><br />Full name: FSharpBasicsEng.sayHello</div>
 <div class="tip" id="fs10">val hello : string</div>
 <div class="tip" id="fs11">val ello : string</div>
 <div class="tip" id="fs12">val world : string</div>
-<div class="tip" id="fs13">val emptyList : &#39;a list<br /><br />Full name: FSharpBasicsFin.emptyList</div>
-<div class="tip" id="fs14">val listOfLists : int list list<br /><br />Full name: FSharpBasicsFin.listOfLists</div>
-<div class="tip" id="fs15">val myList : int list<br /><br />Full name: FSharpBasicsFin.myList</div>
+<div class="tip" id="fs13">val emptyList : &#39;a list<br /><br />Full name: FSharpBasicsEng.emptyList</div>
+<div class="tip" id="fs14">val listOfLists : int list list<br /><br />Full name: FSharpBasicsEng.listOfLists</div>
+<div class="tip" id="fs15">val myList : int list<br /><br />Full name: FSharpBasicsEng.myList</div>
 <div class="tip" id="fs16">val filter : predicate:(&#39;T -&gt; bool) -&gt; list:&#39;T list -&gt; &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List.filter</div>
 <div class="tip" id="fs17">val i : int</div>
-<div class="tip" id="fs18">val mySeq : seq&lt;int&gt;<br /><br />Full name: FSharpBasicsFin.mySeq</div>
+<div class="tip" id="fs18">val mySeq : seq&lt;int&gt;<br /><br />Full name: FSharpBasicsEng.mySeq</div>
 <div class="tip" id="fs19">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
 <div class="tip" id="fs20">val filter : predicate:(&#39;T -&gt; bool) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.filter</div>
-<div class="tip" id="fs21">val merged : int list<br /><br />Full name: FSharpBasicsFin.merged</div>
-<div class="tip" id="fs22">val head : string<br /><br />Full name: FSharpBasicsFin.head</div>
-<div class="tip" id="fs23">val tail : string list<br /><br />Full name: FSharpBasicsFin.tail</div>
-<div class="tip" id="fs24">val ( A and H to Z ) : char list<br /><br />Full name: FSharpBasicsFin.( A and H to Z )</div>
+<div class="tip" id="fs21">val merged : int list<br /><br />Full name: FSharpBasicsEng.merged</div>
+<div class="tip" id="fs22">val head : string<br /><br />Full name: FSharpBasicsEng.head</div>
+<div class="tip" id="fs23">val tail : string list<br /><br />Full name: FSharpBasicsEng.tail</div>
+<div class="tip" id="fs24">val ( A and H to Z ) : char list<br /><br />Full name: FSharpBasicsEng.( A and H to Z )</div>
 <div class="tip" id="fs25">namespace System.Linq</div>
-<div class="tip" id="fs26">val threeFirst : int []<br /><br />Full name: FSharpBasicsFin.threeFirst</div>
+<div class="tip" id="fs26">val threeFirst : int []<br /><br />Full name: FSharpBasicsEng.threeFirst</div>
 <div class="tip" id="fs27">(extension) System.Collections.Generic.IEnumerable.Take&lt;&#39;TSource&gt;(count: int) : System.Collections.Generic.IEnumerable&lt;&#39;TSource&gt;</div>
 <div class="tip" id="fs28">val toArray : source:seq&lt;&#39;T&gt; -&gt; &#39;T []<br /><br />Full name: Microsoft.FSharp.Collections.Seq.toArray</div>
 <div class="tip" id="fs29">module Array<br /><br />from Microsoft.FSharp.Collections</div>
 <div class="tip" id="fs30">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; array:&#39;T [] -&gt; &#39;U []<br /><br />Full name: Microsoft.FSharp.Collections.Array.map</div>
-<div class="tip" id="fs31">val composed : (int list -&gt; int list)<br /><br />Full name: FSharpBasicsFin.composed</div>
+<div class="tip" id="fs31">val composed : (int list -&gt; int list)<br /><br />Full name: FSharpBasicsEng.composed</div>
 <div class="tip" id="fs32">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; list:&#39;T list -&gt; &#39;U list<br /><br />Full name: Microsoft.FSharp.Collections.List.map</div>
-<div class="tip" id="fs33">val emptyList2 : bigint list<br /><br />Full name: FSharpBasicsFin.emptyList2</div>
+<div class="tip" id="fs33">val emptyList2 : bigint list<br /><br />Full name: FSharpBasicsEng.emptyList2</div>
 <div class="tip" id="fs34">type &#39;T list = List&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.list&lt;_&gt;</div>
 <div class="tip" id="fs35">type bigint = System.Numerics.BigInteger<br /><br />Full name: Microsoft.FSharp.Core.bigint</div>
-<div class="tip" id="fs36">val emptyList3 : bigint list<br /><br />Full name: FSharpBasicsFin.emptyList3</div>
-<div class="tip" id="fs37">val tuple : int * string * float<br /><br />Full name: FSharpBasicsFin.tuple</div>
-<div class="tip" id="fs38">val a : int<br /><br />Full name: FSharpBasicsFin.a</div>
-<div class="tip" id="fs39">val b : string<br /><br />Full name: FSharpBasicsFin.b</div>
-<div class="tip" id="fs40">val c : float<br /><br />Full name: FSharpBasicsFin.c</div>
-<div class="tip" id="fs41">val myInstance1 : UserData1<br /><br />Full name: FSharpBasicsFin.myInstance1</div>
-<div class="tip" id="fs42">Multiple items<br />type UserData2 =<br />&#160;&#160;new : unit -&gt; UserData2<br />&#160;&#160;new : email:string -&gt; UserData2<br />&#160;&#160;member Email : string<br /><br />Full name: FSharpBasicsFin.UserData2<br /><br />--------------------<br />new : unit -&gt; UserData2<br />new : email:string -&gt; UserData2</div>
+<div class="tip" id="fs36">val emptyList3 : bigint list<br /><br />Full name: FSharpBasicsEng.emptyList3</div>
+<div class="tip" id="fs37">val tuple : int * string * float<br /><br />Full name: FSharpBasicsEng.tuple</div>
+<div class="tip" id="fs38">val a : int<br /><br />Full name: FSharpBasicsEng.a</div>
+<div class="tip" id="fs39">val b : string<br /><br />Full name: FSharpBasicsEng.b</div>
+<div class="tip" id="fs40">val c : float<br /><br />Full name: FSharpBasicsEng.c</div>
+<div class="tip" id="fs41">val myInstance1 : UserData1<br /><br />Full name: FSharpBasicsEng.myInstance1</div>
+<div class="tip" id="fs42">Multiple items<br />type UserData2 =<br />&#160;&#160;new : unit -&gt; UserData2<br />&#160;&#160;new : email:string -&gt; UserData2<br />&#160;&#160;member Email : string<br /><br />Full name: FSharpBasicsEng.UserData2<br /><br />--------------------<br />new : unit -&gt; UserData2<br />new : email:string -&gt; UserData2</div>
 <div class="tip" id="fs43">val email : string</div>
 <div class="tip" id="fs44">val x : UserData2</div>
-<div class="tip" id="fs45">member UserData2.Email : string<br /><br />Full name: FSharpBasicsFin.UserData2.Email</div>
-<div class="tip" id="fs46">Multiple items<br />type Base =<br />&#160;&#160;new : unit -&gt; Base<br />&#160;&#160;abstract member Method : unit -&gt; unit<br />&#160;&#160;override Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.Base<br /><br />--------------------<br />new : unit -&gt; Base</div>
+<div class="tip" id="fs45">member UserData2.Email : string<br /><br />Full name: FSharpBasicsEng.UserData2.Email</div>
+<div class="tip" id="fs46">Multiple items<br />type Base =<br />&#160;&#160;new : unit -&gt; Base<br />&#160;&#160;abstract member Method : unit -&gt; unit<br />&#160;&#160;override Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsEng.Base<br /><br />--------------------<br />new : unit -&gt; Base</div>
 <div class="tip" id="fs47">val DoSomething : (unit -&gt; unit)</div>
-<div class="tip" id="fs48">abstract member Base.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.Base.Method</div>
+<div class="tip" id="fs48">abstract member Base.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsEng.Base.Method</div>
 <div class="tip" id="fs49">type unit = Unit<br /><br />Full name: Microsoft.FSharp.Core.unit</div>
 <div class="tip" id="fs50">val x : Base</div>
-<div class="tip" id="fs51">override Base.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.Base.Method</div>
+<div class="tip" id="fs51">override Base.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsEng.Base.Method</div>
 <div class="tip" id="fs52">val x : My inherited class with dispose</div>
-<div class="tip" id="fs53">override My inherited class with dispose.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsFin.My inherited class with dispose.Method</div>
-<div class="tip" id="fs54">override My inherited class with dispose.Dispose : unit -&gt; &#39;a<br /><br />Full name: FSharpBasicsFin.My inherited class with dispose.Dispose</div>
-<div class="tip" id="fs55">type myEnum =<br />&#160;&#160;| A<br />&#160;&#160;| B<br /><br />Full name: FSharpBasicsFin.myEnum</div>
+<div class="tip" id="fs53">override My inherited class with dispose.Method : unit -&gt; unit<br /><br />Full name: FSharpBasicsEng.My inherited class with dispose.Method</div>
+<div class="tip" id="fs54">override My inherited class with dispose.Dispose : unit -&gt; &#39;a<br /><br />Full name: FSharpBasicsEng.My inherited class with dispose.Dispose</div>
+<div class="tip" id="fs55">type myEnum =<br />&#160;&#160;| A<br />&#160;&#160;| B<br /><br />Full name: FSharpBasicsEng.myEnum</div>
 <div class="tip" id="fs56">union case myEnum.A: myEnum</div>
 <div class="tip" id="fs57">union case myEnum.B: myEnum</div>
-<div class="tip" id="fs58">type CalendarEvent =<br />&#160;&#160;| ExactTime of obj<br />&#160;&#160;| MonthAndYear of string * int<br /><br />Full name: FSharpBasicsFin.CalendarEvent</div>
+<div class="tip" id="fs58">type CalendarEvent =<br />&#160;&#160;| ExactTime of obj<br />&#160;&#160;| MonthAndYear of string * int<br /><br />Full name: FSharpBasicsEng.CalendarEvent</div>
 <div class="tip" id="fs59">union case CalendarEvent.ExactTime: obj -&gt; CalendarEvent</div>
 <div class="tip" id="fs60">union case CalendarEvent.MonthAndYear: string * int -&gt; CalendarEvent</div>
-<div class="tip" id="fs61">type Tree =<br />&#160;&#160;| Leaf of int<br />&#160;&#160;| Node of Tree * Tree<br /><br />Full name: FSharpBasicsFin.Tree</div>
+<div class="tip" id="fs61">type Tree =<br />&#160;&#160;| Leaf of int<br />&#160;&#160;| Node of Tree * Tree<br /><br />Full name: FSharpBasicsEng.Tree</div>
 <div class="tip" id="fs62">union case Tree.Leaf: int -&gt; Tree</div>
 <div class="tip" id="fs63">union case Tree.Node: Tree * Tree -&gt; Tree</div>
-<div class="tip" id="fs64">type aliasItem&lt;&#39;a,&#39;b&gt; = System.Collections.Generic.KeyValuePair&lt;&#39;a,&#39;b&gt;<br /><br />Full name: FSharpBasicsFin.aliasItem&lt;_,_&gt;</div>
+<div class="tip" id="fs64">type aliasItem&lt;&#39;a,&#39;b&gt; = System.Collections.Generic.KeyValuePair&lt;&#39;a,&#39;b&gt;<br /><br />Full name: FSharpBasicsEng.aliasItem&lt;_,_&gt;</div>
 <div class="tip" id="fs65">namespace System.Collections</div>
 <div class="tip" id="fs66">namespace System.Collections.Generic</div>
 <div class="tip" id="fs67">Multiple items<br />type KeyValuePair&lt;&#39;TKey,&#39;TValue&gt; =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : key:&#39;TKey * value:&#39;TValue -&gt; KeyValuePair&lt;&#39;TKey, &#39;TValue&gt;<br />&#160;&#160;&#160;&#160;member Key : &#39;TKey<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string<br />&#160;&#160;&#160;&#160;member Value : &#39;TValue<br />&#160;&#160;end<br /><br />Full name: System.Collections.Generic.KeyValuePair&lt;_,_&gt;<br /><br />--------------------<br />System.Collections.Generic.KeyValuePair()<br />System.Collections.Generic.KeyValuePair(key: &#39;TKey, value: &#39;TValue) : unit</div>
-<div class="tip" id="fs68">type OrderId = | Id of Guid<br /><br />Full name: FSharpBasicsFin.OrderId</div>
+<div class="tip" id="fs68">type OrderId = | Id of Guid<br /><br />Full name: FSharpBasicsEng.OrderId</div>
 <div class="tip" id="fs69">union case OrderId.Id: System.Guid -&gt; OrderId</div>
 <div class="tip" id="fs70">Multiple items<br />type Guid =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : b:byte[] -&gt; Guid + 4 overloads<br />&#160;&#160;&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;member Equals : o:obj -&gt; bool + 1 overload<br />&#160;&#160;&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;&#160;&#160;member ToByteArray : unit -&gt; byte[]<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string + 2 overloads<br />&#160;&#160;&#160;&#160;static val Empty : Guid<br />&#160;&#160;&#160;&#160;static member NewGuid : unit -&gt; Guid<br />&#160;&#160;&#160;&#160;static member Parse : input:string -&gt; Guid<br />&#160;&#160;&#160;&#160;static member ParseExact : input:string * format:string -&gt; Guid<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.Guid<br /><br />--------------------<br />System.Guid()<br />System.Guid(b: byte []) : unit<br />System.Guid(g: string) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte []) : unit<br />System.Guid(a: uint32, b: uint16, c: uint16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit</div>
-<div class="tip" id="fs71">type Address =<br />&#160;&#160;{Street: string;<br />&#160;&#160;&#160;Zip: int;<br />&#160;&#160;&#160;City: string;}<br /><br />Full name: FSharpBasicsFin.Address</div>
+<div class="tip" id="fs71">type Address =<br />&#160;&#160;{Street: string;<br />&#160;&#160;&#160;Zip: int;<br />&#160;&#160;&#160;City: string;}<br /><br />Full name: FSharpBasicsEng.Address</div>
 <div class="tip" id="fs72">Address.Street: string</div>
 <div class="tip" id="fs73">Address.Zip: int</div>
 <div class="tip" id="fs74">Address.City: string</div>
-<div class="tip" id="fs75">val myAddrr : Address<br /><br />Full name: FSharpBasicsFin.myAddrr</div>
+<div class="tip" id="fs75">val myAddrr : Address<br /><br />Full name: FSharpBasicsEng.myAddrr</div>
 <div class="tip" id="fs76">Multiple items<br />type MeasureAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; MeasureAttribute<br /><br />Full name: Microsoft.FSharp.Core.MeasureAttribute<br /><br />--------------------<br />new : unit -&gt; MeasureAttribute</div>
-<div class="tip" id="fs77">[&lt;Measure&gt;]<br />type EUR<br /><br />Full name: FSharpBasicsFin.EUR</div>
-<div class="tip" id="fs78">[&lt;Measure&gt;]<br />type LTC<br /><br />Full name: FSharpBasicsFin.LTC</div>
-<div class="tip" id="fs79">val rate : decimal&lt;EUR/LTC&gt;<br /><br />Full name: FSharpBasicsFin.rate</div>
+<div class="tip" id="fs77">[&lt;Measure&gt;]<br />type EUR<br /><br />Full name: FSharpBasicsEng.EUR</div>
+<div class="tip" id="fs78">[&lt;Measure&gt;]<br />type LTC<br /><br />Full name: FSharpBasicsEng.LTC</div>
+<div class="tip" id="fs79">val rate : decimal&lt;EUR/LTC&gt;<br /><br />Full name: FSharpBasicsEng.rate</div>
 <div class="tip" id="fs80">val ratePlain : decimal</div>
-<div class="tip" id="fs81">val myMoneyInEur : x:decimal&lt;LTC&gt; -&gt; decimal&lt;EUR&gt;<br /><br />Full name: FSharpBasicsFin.myMoneyInEur</div>
+<div class="tip" id="fs81">val myMoneyInEur : x:decimal&lt;LTC&gt; -&gt; decimal&lt;EUR&gt;<br /><br />Full name: FSharpBasicsEng.myMoneyInEur</div>
 <div class="tip" id="fs82">val x : decimal&lt;LTC&gt;</div>
-<div class="tip" id="fs83">val converted : decimal&lt;EUR&gt;<br /><br />Full name: FSharpBasicsFin.converted</div>
-<div class="tip" id="fs84">val MyFunction1 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction1</div>
+<div class="tip" id="fs83">val converted : decimal&lt;EUR&gt;<br /><br />Full name: FSharpBasicsEng.converted</div>
+<div class="tip" id="fs84">val MyFunction1 : a:string -&gt; int<br /><br />Full name: FSharpBasicsEng.MyFunction1</div>
 <div class="tip" id="fs85">val a : string</div>
-<div class="tip" id="fs86">val MyFunction2 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction2</div>
-<div class="tip" id="fs87">val MyFunction3 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction3</div>
-<div class="tip" id="fs88">val MyFunction4 : _arg1:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction4</div>
-<div class="tip" id="fs89">val MyFunction5 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction5</div>
+<div class="tip" id="fs86">val MyFunction2 : a:string -&gt; int<br /><br />Full name: FSharpBasicsEng.MyFunction2</div>
+<div class="tip" id="fs87">val MyFunction3 : a:string -&gt; int<br /><br />Full name: FSharpBasicsEng.MyFunction3</div>
+<div class="tip" id="fs88">val MyFunction4 : _arg1:string -&gt; int<br /><br />Full name: FSharpBasicsEng.MyFunction4</div>
+<div class="tip" id="fs89">val MyFunction5 : a:string -&gt; int<br /><br />Full name: FSharpBasicsEng.MyFunction5</div>
 <div class="tip" id="fs90">val x : string</div>
-<div class="tip" id="fs91">val MyFunction6 : a:string -&gt; int<br /><br />Full name: FSharpBasicsFin.MyFunction6</div>
+<div class="tip" id="fs91">val MyFunction6 : a:string -&gt; int<br /><br />Full name: FSharpBasicsEng.MyFunction6</div>
 <div class="tip" id="fs92">val p : string</div>
 <div class="tip" id="fs93">active recognizer FirstVowel: string -&gt; Choice&lt;unit,unit,unit&gt;</div>
 <div class="tip" id="fs94">active recognizer FirstConsonant: string -&gt; Choice&lt;unit,unit,unit&gt;</div>
 <div class="tip" id="fs95">active recognizer Other: string -&gt; Choice&lt;unit,unit,unit&gt;</div>
-<div class="tip" id="fs96">val echo : x:&#39;a -&gt; string<br /><br />Full name: FSharpBasicsFin.echo</div>
+<div class="tip" id="fs96">val echo : x:&#39;a -&gt; string<br /><br />Full name: FSharpBasicsEng.echo</div>
 <div class="tip" id="fs97">val x : &#39;a</div>
 <div class="tip" id="fs98">System.Object.ToString() : string</div>
-<div class="tip" id="fs99">val ( working hours ) : float option<br /><br />Full name: FSharpBasicsFin.( working hours )</div>
+<div class="tip" id="fs99">val ( working hours ) : float option<br /><br />Full name: FSharpBasicsEng.( working hours )</div>
 <div class="tip" id="fs100">val day : int</div>
 <div class="tip" id="fs101">Multiple items<br />type DateTime =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : ticks:int64 -&gt; DateTime + 10 overloads<br />&#160;&#160;&#160;&#160;member Add : value:TimeSpan -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddDays : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddHours : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMilliseconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMinutes : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMonths : months:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddSeconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddTicks : value:int64 -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddYears : value:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.DateTime<br /><br />--------------------<br />System.DateTime()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
 <div class="tip" id="fs102">property System.DateTime.Now: System.DateTime</div>
 <div class="tip" id="fs103">property System.DateTime.DayOfWeek: System.DayOfWeek</div>
 <div class="tip" id="fs104">union case Option.None: Option&lt;&#39;T&gt;</div>
 <div class="tip" id="fs105">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
-<div class="tip" id="fs106">val echoHours1 : string<br /><br />Full name: FSharpBasicsFin.echoHours1</div>
+<div class="tip" id="fs106">val echoHours1 : string<br /><br />Full name: FSharpBasicsEng.echoHours1</div>
 <div class="tip" id="fs107">val h : float</div>
-<div class="tip" id="fs108">val echoHours2 : string option<br /><br />Full name: FSharpBasicsFin.echoHours2</div>
+<div class="tip" id="fs108">val echoHours2 : string option<br /><br />Full name: FSharpBasicsEng.echoHours2</div>
 <div class="tip" id="fs109">module Option<br /><br />from Microsoft.FSharp.Core</div>
 <div class="tip" id="fs110">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; option:&#39;T option -&gt; &#39;U option<br /><br />Full name: Microsoft.FSharp.Core.Option.map</div>
-<div class="tip" id="fs111">val echoHours3 : string option<br /><br />Full name: FSharpBasicsFin.echoHours3</div>
-<div class="tip" id="fs112">val sumItems : myList:int list -&gt; int<br /><br />Full name: FSharpBasicsFin.sumItems</div>
+<div class="tip" id="fs111">val echoHours3 : string option<br /><br />Full name: FSharpBasicsEng.echoHours3</div>
+<div class="tip" id="fs112">val sumItems : myList:int list -&gt; int<br /><br />Full name: FSharpBasicsEng.sumItems</div>
 <div class="tip" id="fs113">val myList : int list</div>
 <div class="tip" id="fs114">val calculate : (int list -&gt; int -&gt; int)</div>
 <div class="tip" id="fs115">val li : int list</div>
 <div class="tip" id="fs116">val acc : int</div>
 <div class="tip" id="fs117">val h : int</div>
 <div class="tip" id="fs118">val t : int list</div>
-<div class="tip" id="fs119">val asyncOperation : Async&lt;unit&gt;<br /><br />Full name: FSharpBasicsFin.asyncOperation</div>
+<div class="tip" id="fs119">val asyncOperation : Async&lt;unit&gt;<br /><br />Full name: FSharpBasicsEng.asyncOperation</div>
 <div class="tip" id="fs120">Multiple items<br />type Async<br />static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member CancelDefaultToken : unit -&gt; unit<br />static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * beginAction:(&#39;Arg1 * &#39;Arg2 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * arg3:&#39;Arg3 * beginAction:(&#39;Arg1 * &#39;Arg2 * &#39;Arg3 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromContinuations : callback:((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member Ignore : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;unit&gt;<br />static member OnCancel : interruption:(unit -&gt; unit) -&gt; Async&lt;IDisposable&gt;<br />static member Parallel : computations:seq&lt;Async&lt;&#39;T&gt;&gt; -&gt; Async&lt;&#39;T []&gt;<br />static member RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:CancellationToken -&gt; &#39;T<br />static member Sleep : millisecondsDueTime:int -&gt; Async&lt;unit&gt;<br />static member Start : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions * ?cancellationToken:CancellationToken -&gt; Task&lt;&#39;T&gt;<br />static member StartChild : computation:Async&lt;&#39;T&gt; * ?millisecondsTimeout:int -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />static member StartChildAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions -&gt; Async&lt;Task&lt;&#39;T&gt;&gt;<br />static member StartImmediate : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartWithContinuations : computation:Async&lt;&#39;T&gt; * continuation:(&#39;T -&gt; unit) * exceptionContinuation:(exn -&gt; unit) * cancellationContinuation:(OperationCanceledException -&gt; unit) * ?cancellationToken:CancellationToken -&gt; unit<br />static member SwitchToContext : syncContext:SynchronizationContext -&gt; Async&lt;unit&gt;<br />static member SwitchToNewThread : unit -&gt; Async&lt;unit&gt;<br />static member SwitchToThreadPool : unit -&gt; Async&lt;unit&gt;<br />static member TryCancelled : computation:Async&lt;&#39;T&gt; * compensation:(OperationCanceledException -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member CancellationToken : Async&lt;CancellationToken&gt;<br />static member DefaultCancellationToken : CancellationToken<br /><br />Full name: Microsoft.FSharp.Control.Async<br /><br />--------------------<br />type Async&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Control.Async&lt;_&gt;</div>
 <div class="tip" id="fs121">static member Async.Sleep : millisecondsDueTime:int -&gt; Async&lt;unit&gt;</div>
-<div class="tip" id="fs122">val waitAndReturn : Async&lt;float&gt;<br /><br />Full name: FSharpBasicsFin.waitAndReturn</div>
+<div class="tip" id="fs122">val waitAndReturn : Async&lt;float&gt;<br /><br />Full name: FSharpBasicsEng.waitAndReturn</div>
 <div class="tip" id="fs123">val async : AsyncBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.async</div>
-<div class="tip" id="fs124">val waitAndReturn2 : Async&lt;float&gt;<br /><br />Full name: FSharpBasicsFin.waitAndReturn2</div>
+<div class="tip" id="fs124">val waitAndReturn2 : Async&lt;float&gt;<br /><br />Full name: FSharpBasicsEng.waitAndReturn2</div>
 <div class="tip" id="fs125">val x : float</div>
 <div class="tip" id="fs126">val y : float</div>
 <div class="tip" id="fs127">val sum : float</div>
-<div class="tip" id="fs128">val result : float<br /><br />Full name: FSharpBasicsFin.result</div>
+<div class="tip" id="fs128">val result : float<br /><br />Full name: FSharpBasicsEng.result</div>
 <div class="tip" id="fs129">static member Async.RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:System.Threading.CancellationToken -&gt; &#39;T</div>
-<div class="tip" id="fs130">val slice : mySeq:seq&lt;int&gt; -&gt; seq&lt;System.Collections.Generic.IEnumerable&lt;int&gt;&gt;<br /><br />Full name: FSharpBasicsFin.slice</div>
+<div class="tip" id="fs130">val slice : mySeq:seq&lt;int&gt; -&gt; seq&lt;System.Collections.Generic.IEnumerable&lt;int&gt;&gt;<br /><br />Full name: FSharpBasicsEng.slice</div>
 <div class="tip" id="fs131">val mySeq : seq&lt;int&gt;</div>
 <div class="tip" id="fs132">val chunkSize : int</div>
 <div class="tip" id="fs133">val seqSlice : (seq&lt;int&gt; -&gt; seq&lt;System.Collections.Generic.IEnumerable&lt;int&gt;&gt;)</div>

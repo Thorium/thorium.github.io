@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <!-- 
-      The Agent-malli ja Actor-malli
+      The Actor-model and Agent-model
  parameters will be replaced with the 
       document title extracted from the <h1> element or
       file name, if there is no <h1> heading
     -->
-    <title>Agent-malli ja Actor-malli
+    <title>Actor-model and Agent-model
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
@@ -37,11 +37,11 @@
       <div class="row" style="margin-top:30px">
         <div class="span1"></div>
         <div class="span10" id="main">
-          <h1>Agent-malli ja Actor-malli</h1>
+          <h1>Actor-model and Agent-model</h1>
 
-<p>Puhuttaessa Actor-mallista termi "Actor" viittaa "toimijaan" tai "tekijään", ei "näyttelijään". Puhuttaessa Agent-mallista termi "Agent" viittaa myös "toimijaan" tai "edustajaan", mutta ei "salaiseen agenttiin". Actor-malli ei ole vaihtoehto domain-mallille: Actor-malli ei ole varsinainen tietomalli, vaan lähinnä ohjelman tilan toteutustekniikka.</p>
+<p>When talking about the Actor-model, the term "Actor" refers to verb act as "someone who does something", not "someone who acts like doing". When talking about the Agent-model, the term "Agent" refers also to "someone who does something" or "represents" (like agency), but not "secret agent". Actor-model is not an alternative to domain-model: Actor-model is not actually an abstract data model, but more like a concrete way to implement the program state.</p>
 
-<p>Jos haluat testailla nopeuksia, saat päälle ajanoton F#-interactiveen kirjoittamalla:</p>
+<p>If you want to test speed in interactive, just type:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -53,36 +53,36 @@
 </tr>
 </table>
 
-<h2>Rinnakkaissuorituksesta</h2>
+<h2>Parallelism</h2>
 
-<p>Rinnakkaista suorittamista on kolmea tyyppiä:</p>
+<p>There are three types of doing parallelism:</p>
 
 <ul>
 <li>Parallel Execution
 <ul>
-<li>Ajetaan samaa koodipolkua yhtaikaa monessa säikeessä.</li>
-<li>Sopii rinnakkaisiin joukko-operaatioihin itsenäisille alkioille</li>
-<li>Sopii tarvittaessa CPU-resursseja paljon ja kun niitä on myös käytettävissä.</li>
-<li>.NET-ympäristössä: Task Parallel Library (TPL), .AsParallel()</li>
+<li>Run the same code path simultaneously in multiple threads.</li>
+<li>Suits well for parallel set-theory operations for collection of independent items</li>
+<li>Suits well for CPU-bound resources when a lot of CPU-cycles available.</li>
+<li>.NET-environment: Task Parallel Library (TPL), .AsParallel()</li>
 </ul></li>
 <li>Concurrency.
 <ul>
-<li>Ajetaan eri koodipolkuja yhtaikaa.</li>
-<li>Sopii silloin kun odotettavat resurssit ovat jotain muuta kuin CPU: Esim I/O tai se, että "odotetaan muita, odotetaan synkronointia".</li>
-<li>Perustuu siihen, että luovutetaan oma säie pois, kun sitä ei tarvita: Kaikkien muidenkin on tehtävä niin!</li>
-<li>.NET-ympäristössä: Async-await</li>
-<li>Hyödynnetään yleisesti viestipohjaisissa ("Message Passing") arkkitehtuureissa</li>
+<li>Run separate code paths simultaneously.</li>
+<li>Suits well when resources are something else than CPU-bound: e.g. I/O or if just "waiting for synchronization".</li>
+<li>Based on giving away the thread when not using it: Everyone else should also do that!</li>
+<li>.NET-environment: Async-await</li>
+<li>Used in message based ("Message Passing") architectures</li>
 </ul></li>
-<li>Lukitaan säikeet ja tila
+<li>Lock the threads and the state
 <ul>
-<li>Ei ajeta rinnakkain</li>
-<li>Ei synkronointikysymyksiä</li>
+<li>No parallelism</li>
+<li>No synchronization issues</li>
 <li>.NET: lock</li>
-<li>Skaalautuvuus- ja suorituskykyongelmat</li>
+<li>Scalability and performance problems</li>
 </ul></li>
 </ul>
 
-<p>Asiaa havainnollistamaan, tässä kolme pientä ohjelmaa, jotka lähinnä kelaavat listan läpi ja nukkuvat joka alkiolla hetken:</p>
+<p>To more concrete example, here are three little programs that enumerate a collection of items through and sleeps a while in every item while enumerating that item:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -190,9 +190,9 @@
 </tr>
 </table>
 
-<p>Ensimmäinen on hidas. Seuraava on huomattavasti nopeampi. Mutta sille käy niin, että koneesta loppuvat threadit kesken. Kolmas on selvästi nopein, koska se vapauttaa säikeet suorittaessaan (ei-cpu-riippuvaista) async-operaatiota.</p>
+<p>The first one is slow. The second one is clearly faster. But it runs out of the threads. The third one is clearly the fastest, because it won't block the threads while executing (non-CPU-bound) async-operation.</p>
 
-<p>Tässä vastaavat suoritusajat (Interactivessa, i7-kannettavalla):</p>
+<p>Here are corresponding execution times (in interactive, with i7-laptop):</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -262,11 +262,11 @@
 </tr>
 </table>
 
-<h2>Viestijonot</h2>
+<h2>Message Queues</h2>
 
-<p>Erilaisia MQ-jono-tuotteita on useita. Mitäpä jos yksinkertainen viestijonotoiminnallisuus olisi integroitu suoraa ohjelmointikieleen?</p>
+<p>There are a lot of different kind of MQ-implementation-products. What if some simple message-queue-functionality would be integrated directly to the programming language?</p>
 
-<p>Testaa oheinen koodi interactiven avulla:</p>
+<p>Test this source code with interactive:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -316,25 +316,25 @@
 </tr>
 </table>
 
-<h2>Actor-malli</h2>
+<h2>Actor-model</h2>
 
-<p>Mitä jos "oliot" tilan kapseloijina korvattaisiin viestipohjaisella ratkaisulla?</p>
+<p>What if "objects" as capturing the program state, would be replaced with message-based solution?</p>
 
-<p>Actor-malli on teoria, joka käyttää “Actor”eita rinnakkaislaskennan alkioina. Actor voi prosessoida tietoa, varastoida tietoa tai kommunikoida muiden actoreiden kanssa. Actor voi jopa ottaa vastaan viestissä itsellensä uuden toiminnallisuuden.</p>
+<p>Actor-model is a theory, which uses “Actors” as parallel-computation-items. Actor may process information, store information or communicate with other actors. Actor may even take a message which gives a totally new functionality to that actor.</p>
 
-<p>Actor-malli on lähtöisin Erlang-kielestä, mutta nykyään vaihtoehtoja alkaa löytyä jo monille eri kielille.</p>
+<p>Actor-model has been implemented to Erlang-language, but lately there have appeared actor-libraries to many programming languages.</p>
 
-<p>Tausta-ajatusta voisi verrata hajautettuun versiohallintajärjestelmään: ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.</p>
+<p>The basic idea is comparable to distributed version control system: you can't actually "stop the program and see what state it is in", as the state is constantly-evolving and may look different from a different point of view.</p>
 
-<h2>Agent-malli</h2>
+<h2>Agent-model</h2>
 
-<p>Agent-malli on käytännössä sama asia kuin Actor-malli, ehkä sillä pienellä erolla, että agent ottaa vastaan pyyntöjä, joten rajapinta on kiinteämpi. F#:ssa Agent-malli on kielessä suoraa tuettuna ja kapseloituna luokkaan nimeltä MailboxProcessor. Usein käytännössä tämä konkretisoituu siten, että isäntä vaan kyselee asioita, ja taustasäie sykkii parsien tapahtumahistoriaa joukko-operaatioilla.</p>
+<p>Agent-model is basically the same thing as actor model with small differences. Agent accepts requests, so the interface is more solid. F#-language have built-in support for Agent-model and it is capsulated to the class called MailboxProcessor. Usually this is concretized like this: the master just asks for things and the background thread does the work of parsing the event history with set-theory-operations.</p>
 
-<p>Edellinen esimerkki lähetti viestikanavana merkkijonoja. Kätevämpää on kuitenkin lähettää discriminated union komentoja ja niiden parametreja.</p>
+<p>The previous example sent strings to the message-channel. Usually it is a better practice to send discriminated union commands and their parameters.</p>
 
-<p>Staattinen MailboxProcessor.Start on sama kuin kutsuisi ensin new MailboxProcessor() ja sitten sille .Start(). Agentille on helppo rakentaa myös timeoutit, virheenkäsittely ja peruutus-operaatiot.</p>
+<p>Static MailboxProcessor.Start is equivalent of creating new MailboxProcessor() and then calling its .Start(). It is easy to construct time-outs, exception handling and cancellation-operations for agents.</p>
 
-<p>Testaa oheista koodia:</p>
+<p>Test the following source code:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -392,40 +392,40 @@
 </tr>
 </table>
 
-<p>PostAndReply ohella on myös AsyncPostAndReply</p>
+<p>In addition to PostAndReply there is also AsyncPostAndReply</p>
 
-<h3>Tarvitaan lisää...</h3>
+<h3>We want more...</h3>
 
-<p>Tämä oli vasta yksi agent, joka ei itsessään vielä oikein eroa .NET ConcurrentDictionary<K, T>:stä muuta kuin siten, että ohjelmointirajapinta on business-loogisia metodeita, eikä CRUD-operaatioita. Mutta varsinaiset hyödyt aletaan saada vasta kun agentteja on useita:</p>
+<p>This was just a single agent, which by itself doesn't separate very much from  .NET ConcurrentDictionary<K, T> other than this: The programming interface is business-logical methods and not CRUD-operations. But the real benefits come to life when there are a lot of actors:</p>
 
-<p>Olion periyttämisen (tai enum-tyyppiproperyjen) sijaan käytetäänkin sitä, että agentit keskustelevat keskenään.</p>
+<p>Instead of object-inheritance (or enum-type-properties) using agents to communicate with each other.</p>
 
 <p><img src="fig1.jpg" alt="" /></p>
 
-<p><em>(kuvan lähde: <a href="http://www.developerfusion.com/article/140677/writing-concurrent-applications-using-f-agents/">Writing Concurrent Applications Using F# Agents</a>)</em></p>
+<p><em>(image source: <a href="http://www.developerfusion.com/article/140677/writing-concurrent-applications-using-f-agents/">Writing Concurrent Applications Using F# Agents</a>)</em></p>
 
-<h2>Harjoitustehtävä</h2>
+<h2>Exercises</h2>
 
-<h4>Harjoitus 1</h4>
+<h4>Exercise 1</h4>
 
-<p>Lisää "Person agent methods"-metodiin uusi metodi, joka palauttaa vain yli 18 vuotiaat ihmiset.</p>
+<p>Add a new method to "Person agent methods": a method that will return only people over the age of 18 years.</p>
 
-<h4>Harjoitus 2</h4>
+<h4>Exercise 2</h4>
 
-<p>Muuta "Person agent methods" agentti olemaan "prosessoimattomat ihmiset" ja tee rinnalle toinen agentti, "prosessoidut ihmiset":</p>
+<p>Modify the "Person agent methods" agent to be "unprocessed people" and make also another agent, "processed people":</p>
 
 <ul>
-<li>Tee pieni business-logiikka ja kommunikaatio, miten agentti prosessoimaton ihminen siirtyy prosessoiduksi.</li>
-<li>Vaihda rajapinta asynkroniseksi (AsyncPostAndReply)</li>
-<li>Voit myös kapseloida agentin tyypin sisälle.</li>
+<li>Create a small business-logic and communication, how the un-processed people moves to processed people.</li>
+<li>Change the interface to asynchronous (AsyncPostAndReply)</li>
+<li>You can also encapsulate the agent inside a type.</li>
 </ul>
 
-<p><a href="../Readme.html">Takaisin valikkoon</a></p>
+<p><a href="../ReadmeEng.html">Back to the menu</a></p>
 
           <div class="tip" id="fs1">namespace System</div>
 <div class="tip" id="fs2">namespace System.Threading</div>
 <div class="tip" id="fs3">namespace System.Threading.Tasks</div>
-<div class="tip" id="fs4">val Execution : unit -&gt; unit<br /><br />Full name: AgentModelFin.Execution</div>
+<div class="tip" id="fs4">val Execution : unit -&gt; unit<br /><br />Full name: AgentModelEng.Execution</div>
 <div class="tip" id="fs5">val iteri : (unit -&gt; unit [])</div>
 <div class="tip" id="fs6">type Array =<br />&#160;&#160;member Clone : unit -&gt; obj<br />&#160;&#160;member CopyTo : array:Array * index:int -&gt; unit + 1 overload<br />&#160;&#160;member GetEnumerator : unit -&gt; IEnumerator<br />&#160;&#160;member GetLength : dimension:int -&gt; int<br />&#160;&#160;member GetLongLength : dimension:int -&gt; int64<br />&#160;&#160;member GetLowerBound : dimension:int -&gt; int<br />&#160;&#160;member GetUpperBound : dimension:int -&gt; int<br />&#160;&#160;member GetValue : params indices:int[] -&gt; obj + 7 overloads<br />&#160;&#160;member Initialize : unit -&gt; unit<br />&#160;&#160;member IsFixedSize : bool<br />&#160;&#160;...<br /><br />Full name: System.Array</div>
 <div class="tip" id="fs7">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; array:&#39;T [] -&gt; &#39;U []<br /><br />Full name: Microsoft.FSharp.Collections.Array.map</div>
@@ -436,10 +436,10 @@
 <div class="tip" id="fs12">Console.WriteLine() : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: string) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: obj) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: uint64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: uint32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: float32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: float) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: decimal) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
 <div class="tip" id="fs13">Int32.ToString() : string<br />Int32.ToString(provider: IFormatProvider) : string<br />Int32.ToString(format: string) : string<br />Int32.ToString(format: string, provider: IFormatProvider) : string</div>
 <div class="tip" id="fs14">val complete : unit []</div>
-<div class="tip" id="fs15">val ParallelExecution : unit -&gt; unit<br /><br />Full name: AgentModelFin.ParallelExecution</div>
+<div class="tip" id="fs15">val ParallelExecution : unit -&gt; unit<br /><br />Full name: AgentModelEng.ParallelExecution</div>
 <div class="tip" id="fs16">module Parallel<br /><br />from Microsoft.FSharp.Collections.ArrayModule</div>
 <div class="tip" id="fs17">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; array:&#39;T [] -&gt; &#39;U []<br /><br />Full name: Microsoft.FSharp.Collections.ArrayModule.Parallel.map</div>
-<div class="tip" id="fs18">val AsyncParallelExecution : unit -&gt; unit<br /><br />Full name: AgentModelFin.AsyncParallelExecution</div>
+<div class="tip" id="fs18">val AsyncParallelExecution : unit -&gt; unit<br /><br />Full name: AgentModelEng.AsyncParallelExecution</div>
 <div class="tip" id="fs19">val iteri : (unit -&gt; Async&lt;unit&gt; [])</div>
 <div class="tip" id="fs20">val async : AsyncBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.async</div>
 <div class="tip" id="fs21">Multiple items<br />type Async<br />static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member CancelDefaultToken : unit -&gt; unit<br />static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * beginAction:(&#39;Arg1 * &#39;Arg2 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * arg3:&#39;Arg3 * beginAction:(&#39;Arg1 * &#39;Arg2 * &#39;Arg3 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromContinuations : callback:((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member Ignore : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;unit&gt;<br />static member OnCancel : interruption:(unit -&gt; unit) -&gt; Async&lt;IDisposable&gt;<br />static member Parallel : computations:seq&lt;Async&lt;&#39;T&gt;&gt; -&gt; Async&lt;&#39;T []&gt;<br />static member RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:CancellationToken -&gt; &#39;T<br />static member Sleep : millisecondsDueTime:int -&gt; Async&lt;unit&gt;<br />static member Start : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions * ?cancellationToken:CancellationToken -&gt; Task&lt;&#39;T&gt;<br />static member StartChild : computation:Async&lt;&#39;T&gt; * ?millisecondsTimeout:int -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />static member StartChildAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions -&gt; Async&lt;Task&lt;&#39;T&gt;&gt;<br />static member StartImmediate : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartWithContinuations : computation:Async&lt;&#39;T&gt; * continuation:(&#39;T -&gt; unit) * exceptionContinuation:(exn -&gt; unit) * cancellationContinuation:(OperationCanceledException -&gt; unit) * ?cancellationToken:CancellationToken -&gt; unit<br />static member SwitchToContext : syncContext:SynchronizationContext -&gt; Async&lt;unit&gt;<br />static member SwitchToNewThread : unit -&gt; Async&lt;unit&gt;<br />static member SwitchToThreadPool : unit -&gt; Async&lt;unit&gt;<br />static member TryCancelled : computation:Async&lt;&#39;T&gt; * compensation:(OperationCanceledException -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member CancellationToken : Async&lt;CancellationToken&gt;<br />static member DefaultCancellationToken : CancellationToken<br /><br />Full name: Microsoft.FSharp.Control.Async<br /><br />--------------------<br />type Async&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Control.Async&lt;_&gt;</div>

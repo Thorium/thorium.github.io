@@ -1,11 +1,11 @@
 
-# Azure Blob- ja Table Storage #
+# Azure Blob- and Table Storage #
 
-Käytetään edellä tehtyä WorkerRole-projektia. Käytämme myös [Fog](http://dmohl.github.io/Fog/)-kirjastoa, jossa on tuki Azuren palveluille: Table Storagelle, Blob Storage, Queue Storage, Serice Bus ja Cache.
+Let's use the WorkerRole from previous tutorials. Let's also use [Fog](http://dmohl.github.io/Fog/)-library, which supports Azure services: Table Storage, Blob Storage, Queue Storage, Service Bus and Cache.
 
-Ensimmäisenä on lisättävä connectionstringit Azuren storageille. Tämä tapahtuu näin:
+First task is to add connection strings to Azure storage. It is done like this:
 
-Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit: **TableStorageConnectionString** ja **BlobStorageConnectionString**. Nämä voivat emulator-ympäristössä olla tyhjät.
+Open the deployment-project file **ServiceDefinition.csdef** and add there settings: **TableStorageConnectionString** and **BlobStorageConnectionString**. In the Azure emulator -environment these can be empty.
 
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -26,7 +26,7 @@ Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit
 	  </WorkerRole>
 	</ServiceDefinition>
 
-Muokkaa myös tiedostoja **ServiceConfiguration.Cloud.cscfg** ja **ServiceConfiguration.Local.cscfg** sisältämään vastaavat settingit:
+Modify also the files **ServiceConfiguration.Cloud.cscfg** and **ServiceConfiguration.Local.cscfg** to contain the corresponding settings:
 	
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -44,11 +44,11 @@ Muokkaa myös tiedostoja **ServiceConfiguration.Cloud.cscfg** ja **ServiceConfig
 	  </Role>
 	</ServiceConfiguration>
 
-Emulaattorille kelpaa arvo  value="UseDevelopmentStorage=true", mutta tuotannossa tämä connection-string on jotain muuta. Ohjeet siihen löytyy [netistä](http://msdn.microsoft.com/library/azure/ee758697.aspx).
+For emulator, it is OK to use value="UseDevelopmentStorage=true", but in the production this connection-string should be something else. For this, there is tutorial in the [net](http://msdn.microsoft.com/library/azure/ee758697.aspx).
 
-### F-Sharp skripti-tiedostojen käyttö ###
+### Using F-Sharp script-files ###
 
-Näiden koodien ajaminen toimii interactive-ympäristöstä tiettyyn pisteeseen asti, mutta itse Azuren kutsukoodien suoritus ei. Voit siis lisätä koodien alkuun:
+Using these codes in interactive-environment works, but execution of the actual Azure-calls won't. So you may add to beginning of the file:
 
     [lang=fsharp]
     #if INTERACTIVE
@@ -57,8 +57,8 @@ Näiden koodien ajaminen toimii interactive-ympäristöstä tiettyyn pisteeseen 
     #r "Microsoft.WindowsAzure.StorageClient.dll"
     #endif
 
-Näissä on huomattava se, että NuGet on voinut hakea sinulle eri version komponentista kuin mitä tässä esimerkissä. Joten jos Visual Studio alleviivaa rivin punaisella ja valittaa, että tiedostoa ei löydy, niin tämä voi johtua siitä, että sinulla on eri polussa uudempi versio siitä.
-Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Script File (*.fsx), joka suoritetaan vain interactive-tyylisessä scriptaus-ajoissa, mutta jää itsestään käännöksen ulkopuolelle. Nämä #r:t toimivat myös siellä, ja projektin .fs-tiedoston voi ladata käskyillä: 
+Note that NuGet may have fetched you different version of the component than in this example. So if Visual Studio underlines the line with red, and says the file doesn't exist, this may be the result of you having newer version of the component, in another path. 
+Another commonly used practice in F# is to add one file of type Script File (*.fsx) to the project. This runs only in interactive-style scripting but will be excluded from the actual compilation. These #r:s works also there and project's  .fs-files could be loaded like this: 
 
     [lang=fsharp]
     #load "MyLogics.fs"
@@ -67,7 +67,7 @@ Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Scr
  
 ## Azure Blob Storage ##
 
-Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikka"luokka" (=tiedosto) ja lisää siihen seuraava koodi:
+Blob-storage is a simple data storage e.g. for files. Open the logics file and add on this code to it:
 
     [lang=fsharp]
     module MyLogics
@@ -91,20 +91,20 @@ Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikka"luo
         "Scientist of the day: " + ``scientist of the day ``.Name
 
     
-Nyt voit lisätä kutsun tähän WorkerRole.fs:n wr.OnStart() -metodissa:
+Now you may call this from the WorkerRole.fs file's method wr.OnStart():
 
     [lang=fsharp]
     MyLogics.demoData |> MyLogics.addToBlob
 
-Kun ajat softan (F5), niin **Server** Explorer:iin (ei Solution Explorer) on (refresh:in jälkeen) ilmestynyt seuraava blobi, jonka voit tupla-klikata auki, jonka blob-listasta voit taas tupla-klikata itse tiedot auki:
+When you start the program (F5), you may find from **Server** Explorer (not Solution Explorer) that (after refresh) there has been appeared a blob which you can double-click to open, and there is the blob-list that you can again double-click to open the data itself:
 
 ![](1-ServerExplorer.png)
 
 ## Azure Table Storage ##
 
-Azure Table Storage on NoSQL-henkinen tietovarasto.
+Azure Table Storage is NoSQL-minded data storage.
 
-Ohessa koodiesimerkki sen käyttöön:
+Here is a code sample to use it:
 
     [lang=fsharp]
     let ``Azure dvd table`` = "Dvd"
@@ -136,8 +136,8 @@ Ohessa koodiesimerkki sen käyttöön:
     let updateDvd dvd = UpdateEntity ``Azure dvd table`` dvd
     let deleteDvd dvd = DeleteEntity ``Azure dvd table`` dvd
 
-Varsinainen Table Storage:n [kyselykieli on varsin suppea](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx). Sen käyttöön Fog-kirjasto ei tarjoa kätevää rajapintaa, joten joudut tekemään asian suoraa Azuren omaa rajapintaa vasten: Referoi **Azure-SDK:n Microsoft.WindowsAzure.StorageClient.dll** (joka löytyy oletuksena polusta: C:\Program Files\Microsoft SDKs\Windows Azure\.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
-Edellisen perään lisättynä, tässä mallikoodi kyselyn tekoon:
+The actual Table Storage [query language is very limited](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx). Fog doesn't provide handy interface for that, so you have to use the Azure-interface directly: Add reference to **Azure-SDK's Microsoft.WindowsAzure.StorageClient.dll** (which is located by default in the path: C:\Program Files\Microsoft SDKs\Windows Azure\.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
+After the previous example, you can add this to execute a query:
 
     [lang=fsharp]
     open Microsoft.WindowsAzure.StorageClient
@@ -155,4 +155,4 @@ Edellisen perään lisättynä, tässä mallikoodi kyselyn tekoon:
 
  
 
-[Takaisin valikkoon](../Readme.html)
+[Back to the menu](../ReadmeEng.html)

@@ -1,5 +1,5 @@
 
-# OWIN-rajapinta ja SignalR-viestitys. #
+# OWIN-rajapinta ja SignalR-viestitys #
 
 [OWIN](http://owin.org/) on rajapinta, johon voi helposti rekisteröidä komponentteja:
 

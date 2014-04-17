@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <!-- 
-      The Azure Blob- ja Table Storage
+      The Azure Blob- and Table Storage
  parameters will be replaced with the 
       document title extracted from the <h1> element or
       file name, if there is no <h1> heading
     -->
-    <title>Azure Blob- ja Table Storage
+    <title>Azure Blob- and Table Storage
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
@@ -37,13 +37,13 @@
       <div class="row" style="margin-top:30px">
         <div class="span1"></div>
         <div class="span10" id="main">
-          <h1>Azure Blob- ja Table Storage</h1>
+          <h1>Azure Blob- and Table Storage</h1>
 
-<p>Käytetään edellä tehtyä WorkerRole-projektia. Käytämme myös <a href="http://dmohl.github.io/Fog/">Fog</a>-kirjastoa, jossa on tuki Azuren palveluille: Table Storagelle, Blob Storage, Queue Storage, Serice Bus ja Cache.</p>
+<p>Let's use the WorkerRole from previous tutorials. Let's also use <a href="http://dmohl.github.io/Fog/">Fog</a>-library, which supports Azure services: Table Storage, Blob Storage, Queue Storage, Service Bus and Cache.</p>
 
-<p>Ensimmäisenä on lisättävä connectionstringit Azuren storageille. Tämä tapahtuu näin:</p>
+<p>First task is to add connection strings to Azure storage. It is done like this:</p>
 
-<p>Avaa deployment-projektin <strong>ServiceDefinition.csdef</strong> ja lisää sinne settingit: <strong>TableStorageConnectionString</strong> ja <strong>BlobStorageConnectionString</strong>. Nämä voivat emulator-ympäristössä olla tyhjät.</p>
+<p>Open the deployment-project file <strong>ServiceDefinition.csdef</strong> and add there settings: <strong>TableStorageConnectionString</strong> and <strong>BlobStorageConnectionString</strong>. In the Azure emulator -environment these can be empty.</p>
 
 <pre lang="xml"><span class="prep">&lt;?</span>xml version=<span class="s">"1.0"</span> encoding=<span class="s">"utf-8"</span><span class="prep">?&gt;</span>
 <span class="k">&lt;</span><span class="i">ServiceDefinition</span> <span class="o">name</span><span class="k">="FSharpAzure"</span> 
@@ -63,7 +63,7 @@
   <span class="k">&lt;/</span><span class="i">WorkerRole</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">ServiceDefinition</span><span class="k">&gt;</span></pre>
 
-<p>Muokkaa myös tiedostoja <strong>ServiceConfiguration.Cloud.cscfg</strong> ja <strong>ServiceConfiguration.Local.cscfg</strong> sisältämään vastaavat settingit:</p>
+<p>Modify also the files <strong>ServiceConfiguration.Cloud.cscfg</strong> and <strong>ServiceConfiguration.Local.cscfg</strong> to contain the corresponding settings:</p>
 
 <pre lang="xml"><span class="prep">&lt;?</span>xml version=<span class="s">"1.0"</span> encoding=<span class="s">"utf-8"</span><span class="prep">?&gt;</span>
 <span class="k">&lt;</span><span class="i">ServiceConfiguration</span> <span class="o">serviceName</span><span class="k">="FSharpAzure"</span> 
@@ -80,11 +80,11 @@
   <span class="k">&lt;/</span><span class="i">Role</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">ServiceConfiguration</span><span class="k">&gt;</span></pre>
 
-<p>Emulaattorille kelpaa arvo  value="UseDevelopmentStorage=true", mutta tuotannossa tämä connection-string on jotain muuta. Ohjeet siihen löytyy <a href="http://msdn.microsoft.com/library/azure/ee758697.aspx">netistä</a>.</p>
+<p>For emulator, it is OK to use value="UseDevelopmentStorage=true", but in the production this connection-string should be something else. For this, there is tutorial in the <a href="http://msdn.microsoft.com/library/azure/ee758697.aspx">net</a>.</p>
 
-<h3>F-Sharp skripti-tiedostojen käyttö</h3>
+<h3>Using F-Sharp script-files</h3>
 
-<p>Näiden koodien ajaminen toimii interactive-ympäristöstä tiettyyn pisteeseen asti, mutta itse Azuren kutsukoodien suoritus ei. Voit siis lisätä koodien alkuun:</p>
+<p>Using these codes in interactive-environment works, but execution of the actual Azure-calls won't. So you may add to beginning of the file:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -104,8 +104,8 @@
 </tr>
 </table>
 
-<p>Näissä on huomattava se, että NuGet on voinut hakea sinulle eri version komponentista kuin mitä tässä esimerkissä. Joten jos Visual Studio alleviivaa rivin punaisella ja valittaa, että tiedostoa ei löydy, niin tämä voi johtua siitä, että sinulla on eri polussa uudempi versio siitä.
-Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Script File (*.fsx), joka suoritetaan vain interactive-tyylisessä scriptaus-ajoissa, mutta jää itsestään käännöksen ulkopuolelle. Nämä #r:t toimivat myös siellä, ja projektin .fs-tiedoston voi ladata käskyillä:</p>
+<p>Note that NuGet may have fetched you different version of the component than in this example. So if Visual Studio underlines the line with red, and says the file doesn't exist, this may be the result of you having newer version of the component, in another path. 
+Another commonly used practice in F# is to add one file of type Script File (*.fsx) to the project. This runs only in interactive-style scripting but will be excluded from the actual compilation. These #r:s works also there and project's  .fs-files could be loaded like this:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -121,7 +121,7 @@ Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Scr
 
 <h2>Azure Blob Storage</h2>
 
-<p>Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikka"luokka" (=tiedosto) ja lisää siihen seuraava koodi:</p>
+<p>Blob-storage is a simple data storage e.g. for files. Open the logics file and add on this code to it:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -169,7 +169,7 @@ Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Scr
 </tr>
 </table>
 
-<p>Nyt voit lisätä kutsun tähän WorkerRole.fs:n wr.OnStart() -metodissa:</p>
+<p>Now you may call this from the WorkerRole.fs file's method wr.OnStart():</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -181,15 +181,15 @@ Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Scr
 </tr>
 </table>
 
-<p>Kun ajat softan (F5), niin <strong>Server</strong> Explorer:iin (ei Solution Explorer) on (refresh:in jälkeen) ilmestynyt seuraava blobi, jonka voit tupla-klikata auki, jonka blob-listasta voit taas tupla-klikata itse tiedot auki:</p>
+<p>When you start the program (F5), you may find from <strong>Server</strong> Explorer (not Solution Explorer) that (after refresh) there has been appeared a blob which you can double-click to open, and there is the blob-list that you can again double-click to open the data itself:</p>
 
 <p><img src="1-ServerExplorer.png" alt="" /></p>
 
 <h2>Azure Table Storage</h2>
 
-<p>Azure Table Storage on NoSQL-henkinen tietovarasto.</p>
+<p>Azure Table Storage is NoSQL-minded data storage.</p>
 
-<p>Ohessa koodiesimerkki sen käyttöön:</p>
+<p>Here is a code sample to use it:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -255,8 +255,8 @@ Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Scr
 </tr>
 </table>
 
-<p>Varsinainen Table Storage:n <a href="http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx">kyselykieli on varsin suppea</a>. Sen käyttöön Fog-kirjasto ei tarjoa kätevää rajapintaa, joten joudut tekemään asian suoraa Azuren omaa rajapintaa vasten: Referoi <strong>Azure-SDK:n Microsoft.WindowsAzure.StorageClient.dll</strong> (joka löytyy oletuksena polusta: C:\Program Files\Microsoft SDKs\Windows Azure.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
-Edellisen perään lisättynä, tässä mallikoodi kyselyn tekoon:</p>
+<p>The actual Table Storage <a href="http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx">query language is very limited</a>. Fog doesn't provide handy interface for that, so you have to use the Azure-interface directly: Add reference to <strong>Azure-SDK's Microsoft.WindowsAzure.StorageClient.dll</strong> (which is located by default in the path: C:\Program Files\Microsoft SDKs\Windows Azure.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
+After the previous example, you can add this to execute a query:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -290,7 +290,7 @@ Edellisen perään lisättynä, tässä mallikoodi kyselyn tekoon:</p>
 </tr>
 </table>
 
-<p><a href="../Readme.html">Takaisin valikkoon</a></p>
+<p><a href="../ReadmeEng.html">Back to the menu</a></p>
 
           <div class="tip" id="fs1">namespace System</div>
 <div class="tip" id="fs2">namespace Microsoft.FSharp.Data</div>

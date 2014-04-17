@@ -26,7 +26,7 @@ let template = Path.Combine(source, templatePath+templateFile)
 let files = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories)
 
 let copyStyles outputPath =
-    let contentOutput = outputPath + @"\content\"
+    let contentOutput = outputPath + @"\..\content\"
     Directory.CreateDirectory(contentOutput) |> ignore
     let miscPath = source + @"\" + templatePath + @"styles\"
     let css, js = "style.css", "tips.js" 

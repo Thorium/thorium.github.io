@@ -1,8 +1,8 @@
 
 # F# ja Azure käytännössä #
 
-Sorry only Finnish as this event is in Finnish.
-Meanwhile, you can use [this](http://www.tryfsharp.org/Learn).
+Sorry this event is in Finnish.
+Meanwhile, you can get quick translation from [here](ReadmeEng.html).
 
 Harjoituksia on kolmea tasoa, ja ne voi tehdä tason sisällä haluamassaan järjestyksessä.
 
@@ -46,5 +46,4 @@ Käyttäen edellisten harjoitusten tuloksia, sinulla on eväät toteuttaa mitä 
 
 ----------
 
-*[F#-event](http://www.meetup.com/FSharpHelsinki/events/173790412/) 
 Näissä harjoituksissa lähdetään tyhjältä pöydältä. Jos kuitenkin sinulla on verkko-ongelmia, tms. niin VS2013-malllisolutionin saa ongelmatilanteissa [tästä](FSharpAzure.zip).*

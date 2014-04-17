@@ -152,7 +152,7 @@ Actor-malli on teoria, joka käyttää “Actor”eita rinnakkaislaskennan alkio
 
 Actor-malli on lähtöisin Erlang-kielestä, mutta nykyään vaihtoehtoja alkaa löytyä jo monille eri kielille.
 
-Tausta-ajatusta voisi verrata versiohallintaan: ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.
+Tausta-ajatusta voisi verrata hajautettuun versiohallintajärjestelmään: ohjelmaa ei ikinä voi ”pysäyttää ja katsoa missä tilassa se on”, vaan tila on kokoajan muuttuva käsite ja eri katsojalle näyttää erilaiselta.
 
 
 ## Agent-malli ##

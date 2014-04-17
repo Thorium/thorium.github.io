@@ -112,7 +112,7 @@ Painamalla Ctrl+Alt+F saat esille interactive-ikkunan ("REPL-loop"), jossa voit 
     [lang=fsharp]
     let z = 4;;
 
-Tai sitten voit suoraa projektitiedostosta maalata kasan koodia, ja lähettää sen interactive-ikkunaan (joko hiiren oikealla napilla ja "Execute in interactive", tai näppäinyhdistelmällä Alt+Enter.
+Tai sitten voit suoraa projektitiedostosta maalata kasan koodia, ja lähettää sen interactive-ikkunaan (joko hiiren oikealla napilla ja "Execute in interactive" tai) näppäinyhdistelmällä Alt+Enter.
 
 Yleensä kannattaa ensin antaa haluamansa alkuarvot parametreille ja sitten lähettää haluamansa koodinpala interactiveen.
 
@@ -210,7 +210,7 @@ Listoja voi muuttaa muodosta toiseen: List.toArray, List.toSeq, Seq.toList, Arra
         |> Array.map(fun i -> i*3)
 
 
-Funktioita voi myös yhdistellä (function composition) ">>" -merkillä, tosin tätä näkee harvemmin.
+Funktioita voi myös yhdistellä (function composition) ">>" -merkillä, tosin tätä näkee harvemmin. "Tee ensin tämä, sitten tämä."
 
     [lang=fsharp]
     let composed = 
@@ -293,7 +293,7 @@ Voit tehdä "joko-tai"-tyyppejä:
     | Leaf of int
     | Node of Tree*Tree
 
-Käyttötarkoituksena esimerkiksi ohjelman tilanhallinta, jo kääntäjätasolla, ilman sotkuista ajonaikaista if-logiikkaa. Nämä ovat erittäin käteviä yhdessä pattern matchingin kanssa. 
+Käyttötarkoituksena esimerkiksi ohjelman tilanhallinta, jo kääntäjätasolla, ilman sotkuista ajonaikaista if-logiikkaviidakkoa. Nämä ovat erittäin käteviä yhdessä pattern matchingin kanssa. 
 
 ## Astetta erikoisemmat tyypit ##
 
@@ -314,7 +314,7 @@ Tyyppi voi olla tietue, record:
     }
     let myAddrr = { Street = "Juvank."; Zip = 33710; City = "Tre"; }
 
-...tai sillä voidaan Measure-attribuutin kanssa määritellä vahva vain-käännösaikainen tyypitys. Vähän kuin oma luokka kapseloimaan vain yksi laskennallinen arvo (mutta näyttämään se aina ulos), jotta eri asiat tai mittayksiköt eivät varmasti mene sekaisin:
+...tai sillä voidaan Measure-attribuutin kanssa määritellä vahva vain-käännösaikainen tyypitys. Vähän kuin oma luokka kapseloimaan vain yksi laskennallinen arvo (mutta näyttämään se aina ulos), jotta eri asiat tai mittayksiköt eivät varmasti mene sekaisin vahingossa:
  
     [lang=fsharp]
     [<Measure>]
@@ -473,13 +473,13 @@ Jos verrataan tätä C#:piin, niin seq { ... } vastaava on LINQ. Mutta LINQ on t
 
 ## Harjoitustehtäviä ##
 
-- Luo rekursiivinen ohjelma joka listaa 1000 ensimmäistä fibonacci-lukua (1, 1, 2, 3, 5, 8, 13, ...).
+- Luo rekursiivinen ohjelma joka listaa 1000 ensimmäistä Fibonacci-lukujonon lukua (1, 1, 2, 3, 5, 8, 13, ...).
 - Luo C#-yksikkötesti tai konsoliaplikaatio kutsumaan edellistä.
 
 
 ## Linkit ##
 
-Jos tämä oli liian hapokasta, niin kannattaa katsoa läpi [tämä materiaali](https://bitbucket.org/ilmirajat/fsharptraining.fi/src/05a105289a51212202c76794a704721503c55e41/FSharpTraining/).
+Jos tämä oli liian hapokasta, niin kannattaa katsoa läpi [tämä suomenkielinen materiaali](https://bitbucket.org/ilmirajat/fsharptraining.fi/src/05a105289a51212202c76794a704721503c55e41/FSharpTraining/) ja [tämä englanninkielinen tutorial] (http://www.tryfsharp.org/Learn).
 Jos haluat opetella listakirjastojen toiminnallisuuksia, niin koita tehdä [Project Euler](https://projecteuler.net/problems) -tehtäviä. Jos haluat itsenäisen pienen koodiesimerkin jostain aiheesta, niin [fssnip.net](http://www.fssnip.net/pages/AllTags) on hyvä saitti lähteä etsimään.
 
 
