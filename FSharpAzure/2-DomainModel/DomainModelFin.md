@@ -233,7 +233,7 @@ Omia computational expressioneita (/monadeita) voi rakentaa lennosta: Keksit vai
         }
 
 - Kontekstin sisällä huutomerkki-käskyt ("syntaktisokeria") ohjaavat builder-"rajapinnan" vastaaviin metodeihin.
-- "Rajapinnasta" ei tarvitse täyttää kuin oleelliset metodit. Homma perustuu continuationiin (tarkemmin: call-cc) ja reify:yn.
+- "Rajapinnasta" ei tarvitse täyttää kuin valitsemasi metodit. Homma perustuu continuationiin (tarkemmin: call-cc) ja reify:yn.
 - Tarkempi kuvaus rajapinnan metodeista ja sisäisestä toiminnasta löytyy netistä.
     - [Rajapinta](http://msdn.microsoft.com/en-us/library/dd233182.aspx)
     - [Lisäinfoa](http://blogs.msdn.com/b/dsyme/archive/2007/09/22/some-details-on-f-computation-expressions-aka-monadic-or-workflow-syntax.aspx)
@@ -263,7 +263,7 @@ Siitä copy & pastella on hutaistu tekstit oheisiin tietotyyppeihin:
     | ``Offer created`` of Terms*Loan
     | ``Offer approved`` of Terms*Loan*bool
     | ``Offer closed`` of Terms*Loan
-    | ``Money transfered`` of Loan
+    | ``Money transferred`` of Loan
     | ``Loan fully paid`` of bool*Loan
     | ``Report created`` of Loan
 
