@@ -1,4 +1,4 @@
-# Creating Azure Worker role #
+# Creating Azure Worker Role #
 
 Let's assume you have Visual Studio 2012 or Visual Studio 2013 installed and you have (the default) support for F#-language. Also you have installed the [Windows Azure SDK](http://www.windowsazure.com/en-us/downloads/):n.
 

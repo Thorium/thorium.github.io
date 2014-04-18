@@ -32,7 +32,7 @@ Myös enemmän satunnaisia satunnaisuuksia saa esim. Nugetista löytyvästä kir
 
 ## Julkinen kaupparajapinta ##
 
-Integraatiorajapinta QuickFix-nimiseen komponenttiin [täällä](https://github.com/joastbg/fsharp-for-quantitative-finance/blob/master/Chapter07/FIX.fs).
+F#-integraatiorajapinta QuickFix-nimiseen komponenttiin [täällä](https://github.com/joastbg/fsharp-for-quantitative-finance/blob/master/Chapter07/FIX.fs).
 
 [QuickFix](http://www.quickfixengine.org/) on open source C++ implementaatio Fix-protokollalle. 
 
