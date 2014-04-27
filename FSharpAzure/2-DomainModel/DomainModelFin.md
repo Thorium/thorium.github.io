@@ -123,7 +123,23 @@ Kannattaa valita vaihtoehto 2, jos käytettävät parametrit kuvaavat samaa tiet
 
 Tämä on helpoin ja selkein tapa mallintaa, näin saat selkeän tietomallin. Haittapuolena on, että operaatiot ovat kiinteitä (/"kovakoodattu"), eli et voi kirjastomaisesti yhdistää omia rakenteita tekemään mitä tahansa, vaan toiminnallisuuden on kunnioitettava tietomallin toiminnallisuuksia. Usein tämä riittää, kun tavoitteena on rakentaa yksittäinen järjestelmää, jolla on selkeät rajat.
 
-Siinä missä C# usein johtaa olio-mappaus-koodiin tyypistä toiseen, auttavat [F# Object Expressionit](http://msdn.microsoft.com/en-us/library/dd233237.aspx), joilla voi luoda instansseja ilman boilerplate-koodia.
+Siinä missä C# usein johtaa olio-mappaus-koodiin tyypistä toiseen, auttavat [F# Object Expressionit](http://msdn.microsoft.com/en-us/library/dd233237.aspx), joilla voi luoda instansseja (structeista, olioista, interfaceista) ilman boilerplate-koodia:
+
+    [lang=fsharp]
+    type MyInvoice = { 
+        Sum : decimal;
+        Tax : decimal;
+        //... 
+        Property01 : string;
+        Property02 : string;
+        Property03 : string;
+        //...
+        Property99 : string;
+    }
+    let myInstance = { Sum=10m; Tax=10m; Property01="a"; Property02="b"; Property03="c"; Property99="zzz" }
+    // Don't have to define all copied propertis like in LINQ-select you would have to:
+    let myNewCopy = { myInstance with Property01="Hello!" }
+
 
 ### Tietomallin mallintaminen laskentaoperaatioina (contract as computation) ###
 

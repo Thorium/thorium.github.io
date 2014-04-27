@@ -123,7 +123,23 @@ Usually the better solution is the model 2, if the parameters describe the same 
 
 This is the easiest and most clean way to model, and this way you will get a clear data model. The downside is that operations are solid (/"hard-coded"), so you can't compose your own structures to do whatever, like a library: the functionality has to obey the data model functionality. Usually this is enough, when your goal is to build simple little system that has clear boundaries.
 
-When C# code so often leads to object-mapping-code from type to another, comes [F# Object Expressions](http://msdn.microsoft.com/en-us/library/dd233237.aspx) to rescue, you can create new instances without boilerplate-code.
+When C# code so often leads to object-mapping-code from type to another, comes [F# Object Expressions](http://msdn.microsoft.com/en-us/library/dd233237.aspx) to rescue, you can create new instances without boilerplate-code:
+
+    [lang=fsharp]
+    type MyInvoice = { 
+        Sum : decimal;
+        Tax : decimal;
+        //... 
+        Property01 : string;
+        Property02 : string;
+        Property03 : string;
+        //...
+        Property99 : string;
+    }
+    let myInstance = { Sum=10m; Tax=10m; Property01="a"; Property02="b"; Property03="c"; Property99="zzz" }
+    // Don't have to define all copied propertis like in LINQ-select you would have to:
+    let myNewCopy = { myInstance with Property01="Hello!" }
+
 
 ### Modelling Contract as Computation ###
 
