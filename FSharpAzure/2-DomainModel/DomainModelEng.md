@@ -270,6 +270,8 @@ You may build your own computational expressions: You just have to pick your sta
     - [Interface](http://msdn.microsoft.com/en-us/library/dd233182.aspx)
     - [Additional information](http://blogs.msdn.com/b/dsyme/archive/2007/09/22/some-details-on-f-computation-expressions-aka-monadic-or-workflow-syntax.aspx)
 
+This can be used to capsulate some state, e.g. in stock-trading it could be the current bank account balance available.
+
 
 ## Exercises ##
 

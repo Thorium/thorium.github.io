@@ -80,13 +80,23 @@ Deployment-projektissa on **ServerDefinition.csdef**-tiedosto, jossa on palvelim
 	  </WorkerRole>
 	</ServiceDefinition>
 
-Seuraavaksi avaa WorkerRole.fs:n tiedosto wr.OnStart() -metodi ja kopioi ennen base.OnStart():ia tapahtumaan seuraava koodinpätkä:
+Seuraavaksi avaa WorkerRole.fs:n tiedosto. Lisää luokan sisälle, ennen metodeita tämä webApp-muuttuja, jota käytetään vapauttamaan resursseja, ja oheinen ylikirjoitettu OnStop-metodi:
+
+	[lang=fsharp]
+    let mutable webApp = Unchecked.defaultof<IDisposable>
+
+    override wr.OnStop() =
+        if webApp <> Unchecked.defaultof<IDisposable> then
+            webApp.Dispose()
+        base.OnStop()
+
+Avaa vielä wr.OnStart() -metodi ja kopioi ennen base.OnStart():ia tapahtumaan seuraava koodinpätkä:
 
 	[lang=fsharp]
     let endpoint = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints.["Endpoint1"]
     let baseUri = sprintf "%s://%A" endpoint.Protocol endpoint.IPEndpoint
     log ("Starting OWIN at " + baseUri) "Information"
-    let options = StartOptions()
+    let options = Microsoft.Owin.Hosting.StartOptions()
     options.Urls.Add(baseUri)
     webApp <- WebApp.Start<MyStartUp.MyWebStartup>(options)
 

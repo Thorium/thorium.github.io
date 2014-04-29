@@ -24,7 +24,7 @@ Test a few, using [FSharp.Data](http://fsharp.github.io/FSharp.Data/)-library. Y
 
 ## FreeBase TypeProvider ##
 
-You can use interactive to test the code below:
+You can use interactive to test the code below (but the file path has to correspond the used NuGet-package version, here 2.0.5):
 
 	[lang=fsharp]
     #if INTERACTIVE
@@ -43,6 +43,8 @@ You can use interactive to test the code below:
 Test also other sets under "data." and "data.Commons.". Note the Visual Studio Intellisense while you type:
 
 ![](1-Freebase.png)
+
+Using this TypeProvider more will require API-key as a parameter to GetDataContext().
 
 ## CSV TypeProvider ##
 

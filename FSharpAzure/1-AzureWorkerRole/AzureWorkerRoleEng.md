@@ -59,6 +59,9 @@ The packages are easiest to search by the Id from the search box of the upper ri
 - [Fog](https://www.nuget.org/packages/Fog)
 	- Nuget-package-id: **Fog**
 	- [Fog](http://dmohl.github.io/Fog/) is a library to make using Azure easier from the F# language. It contains e.g. some caching.
+- [FSharp.Data](https://www.nuget.org/packages/Fog)
+	- Nuget-package-id: **FSharp.Data**
+	- [FSharp.Data](http://fsharp.github.io/FSharp.Data/) contains some common TypeProviders.
 
 As the packages has some updates, you may update those from the Updates-tab to the newest versions. (***Note:** When this tutorial was written, there was some conflicts in the Azure-component reference of hard-coded version number of the Microsoft.Data.Services.Client 5.6.0, but it could be fixed by temporarily switching the versions from the  packages.config-file 5.6.1 to 5.6.0 and then back.*)
 

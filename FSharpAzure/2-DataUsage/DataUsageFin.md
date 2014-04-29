@@ -24,7 +24,7 @@ Testataan muutamia, käyttäen [FSharp.Data](http://fsharp.github.io/FSharp.Data
 
 ## FreeBase TypeProvider ##
 
-Voit käyttää interactivea testaamaan alla olevaa koodia:
+Voit käyttää interactivea testaamaan alla olevaa koodia (kunhan hakemistopolun versionumero, 2.0.5, on NuGet-pakettia vastaava):
 
 	[lang=fsharp]
     #if INTERACTIVE
@@ -43,6 +43,8 @@ Voit käyttää interactivea testaamaan alla olevaa koodia:
 Testaa myös muita "data." ja "data.Commons." -alta löytyviä settejä. Huomaa Visual Studion Intellisense samalla kun kehität:
 
 ![](1-Freebase.png)
+
+Tämän TypeProviderin laajempi käyttö vaatii reskisteröitymisen ja API-keyn parametriksi metodille GetDataContext().
 
 ## CSV TypeProvider ##
 

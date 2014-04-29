@@ -80,13 +80,23 @@ Deployment-project has **ServerDefinition.csdef**-file, which contains server se
 	  </WorkerRole>
 	</ServiceDefinition>
 
-Next, open WorkerRole.fs file and wr.OnStart() method and copy before the call base.OnStart() this small source code:
+Next, open WorkerRole.fs file. Add inside the class, before methods, this webApp-variable, which is used to free-up resources, and also override for OnStop-method:
+
+	[lang=fsharp]
+    let mutable webApp = Unchecked.defaultof<IDisposable>
+
+    override wr.OnStop() =
+        if webApp <> Unchecked.defaultof<IDisposable> then
+            webApp.Dispose()
+        base.OnStop()
+
+Then open wr.OnStart() method and copy before the call base.OnStart() this small source code:
 
 	[lang=fsharp]
     let endpoint = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints.["Endpoint1"]
     let baseUri = sprintf "%s://%A" endpoint.Protocol endpoint.IPEndpoint
     log ("Starting OWIN at " + baseUri) "Information"
-    let options = StartOptions()
+    let options = Microsoft.Owin.Hosting.StartOptions()
     options.Urls.Add(baseUri)
     webApp <- WebApp.Start<MyStartUp.MyWebStartup>(options)
 

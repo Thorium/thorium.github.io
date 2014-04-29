@@ -154,7 +154,29 @@ The default path is the project output-path. So, add to project a TextFile calle
   <span class="k">&lt;/</span><span class="i">WorkerRole</span><span class="k">&gt;</span>
 <span class="k">&lt;/</span><span class="i">ServiceDefinition</span><span class="k">&gt;</span></pre>
 
-<p>Next, open WorkerRole.fs file and wr.OnStart() method and copy before the call base.OnStart() this small source code:</p>
+<p>Next, open WorkerRole.fs file. Add inside the class, before methods, this webApp-variable, which is used to free-up resources, and also override for OnStop-method:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="k">mutable</span> <span class="i">webApp</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="i">Unchecked</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="i">defaultof</span><span class="o">&lt;</span><span class="i">IDisposable</span><span class="o">&gt;</span>
+
+<span class="k">override</span> <span class="i">wr</span><span class="o">.</span><span class="i">OnStop</span>() <span class="o">=</span>
+    <span class="k">if</span> <span class="i">webApp</span> <span class="o">&lt;&gt;</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="i">Unchecked</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="i">defaultof</span><span class="o">&lt;</span><span class="i">IDisposable</span><span class="o">&gt;</span> <span class="k">then</span>
+        <span class="i">webApp</span><span class="o">.</span><span class="i">Dispose</span>()
+    <span class="k">base</span><span class="o">.</span><span class="i">OnStop</span>()</pre>
+</td>
+</tr>
+</table>
+
+<p>Then open wr.OnStart() method and copy before the call base.OnStart() this small source code:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -167,9 +189,9 @@ The default path is the project output-path. So, add to project a TextFile calle
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="k">let</span> <span class="i">endpoint</span> <span class="o">=</span> <span class="i">RoleEnvironment</span><span class="o">.</span><span class="i">CurrentRoleInstance</span><span class="o">.</span><span class="i">InstanceEndpoints</span><span class="o">.</span>[<span class="s">&quot;</span><span class="s">Endpoint1</span><span class="s">&quot;</span>]
-<span class="k">let</span> <span class="i">baseUri</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="i">sprintf</span> <span class="s">&quot;</span><span class="s">%</span><span class="s">s</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">%</span><span class="s">A</span><span class="s">&quot;</span> <span class="i">endpoint</span><span class="o">.</span><span class="i">Protocol</span> <span class="i">endpoint</span><span class="o">.</span><span class="i">IPEndpoint</span>
-<span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="i">log</span> (<span class="s">&quot;</span><span class="s">Starting</span><span class="s"> </span><span class="s">OWIN</span><span class="s"> </span><span class="s">at</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span class="i">baseUri</span>) <span class="s">&quot;</span><span class="s">Information</span><span class="s">&quot;</span>
-<span class="k">let</span> <span class="i">options</span> <span class="o">=</span> <span class="i">StartOptions</span>()
+<span class="k">let</span> <span class="i">baseUri</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="i">sprintf</span> <span class="s">&quot;</span><span class="s">%</span><span class="s">s</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">%</span><span class="s">A</span><span class="s">&quot;</span> <span class="i">endpoint</span><span class="o">.</span><span class="i">Protocol</span> <span class="i">endpoint</span><span class="o">.</span><span class="i">IPEndpoint</span>
+<span onmouseout="hideTip(event, 'fs7', 12)" onmouseover="showTip(event, 'fs7', 12)" class="i">log</span> (<span class="s">&quot;</span><span class="s">Starting</span><span class="s"> </span><span class="s">OWIN</span><span class="s"> </span><span class="s">at</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span class="i">baseUri</span>) <span class="s">&quot;</span><span class="s">Information</span><span class="s">&quot;</span>
+<span class="k">let</span> <span class="i">options</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="i">Microsoft</span><span class="o">.</span><span class="i">Owin</span><span class="o">.</span><span class="i">Hosting</span><span class="o">.</span><span class="i">StartOptions</span>()
 <span class="i">options</span><span class="o">.</span><span class="i">Urls</span><span class="o">.</span><span class="i">Add</span>(<span class="i">baseUri</span>)
 <span class="i">webApp</span> <span class="o">&lt;-</span> <span class="i">WebApp</span><span class="o">.</span><span class="i">Start</span><span class="o">&lt;</span><span class="i">MyStartUp</span><span class="o">.</span><span class="i">MyWebStartup</span><span class="o">&gt;</span>(<span class="i">options</span>)</pre>
 </td>
@@ -215,23 +237,23 @@ The default path is the project output-path. So, add to project a TextFile calle
 <span class="prep">#if</span> <span class="i">INTERACTIVE</span>
 <span class="inactive">#r</span><span class="inactive"> </span><span class="inactive">&quot;../packages/FSharp.Data.2.0.5/lib/net40/FSharp.Data.dll&quot;</span>
 <span class="prep">#endif</span>    
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="i">System</span>
-<span class="k">open</span> <span class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="i">Data</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="i">System</span>
+<span class="k">open</span> <span class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="i">Data</span>
 
 <span class="k">let</span> <span class="i">bank</span> <span class="o">=</span> <span class="i">WorldBankData</span><span class="o">.</span><span class="i">GetDataContext</span>()
 <span class="k">let</span> <span class="i">countries</span> <span class="o">=</span> <span class="i">bank</span><span class="o">.</span><span class="i">Regions</span><span class="o">.</span><span class="i">World</span><span class="o">.</span><span class="i">Countries</span>
-                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="i">filter</span>(<span class="k">fun</span> <span class="i">i</span> <span class="k">-&gt;</span> <span class="i">i</span><span class="o">.</span><span class="i">CapitalCity</span> <span class="o">&lt;&gt;</span> <span class="s">&quot;</span><span class="s">&quot;</span>) 
-                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="i">map</span>(<span class="k">fun</span> <span class="i">i</span> <span class="k">-&gt;</span> <span class="i">i</span><span class="o">.</span><span class="i">Name</span>, <span class="i">i</span><span class="o">.</span><span class="i">CapitalCity</span>)
-<span class="k">let</span> <span class="i">corrects</span> <span class="o">=</span> <span class="i">countries</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 15)" onmouseover="showTip(event, 'fs8', 15)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="i">toArray</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="i">filter</span>(<span class="k">fun</span> <span class="i">i</span> <span class="k">-&gt;</span> <span class="i">i</span><span class="o">.</span><span class="i">CapitalCity</span> <span class="o">&lt;&gt;</span> <span class="s">&quot;</span><span class="s">&quot;</span>) 
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 19)" onmouseover="showTip(event, 'fs12', 19)" class="i">map</span>(<span class="k">fun</span> <span class="i">i</span> <span class="k">-&gt;</span> <span class="i">i</span><span class="o">.</span><span class="i">Name</span>, <span class="i">i</span><span class="o">.</span><span class="i">CapitalCity</span>)
+<span class="k">let</span> <span class="i">corrects</span> <span class="o">=</span> <span class="i">countries</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 20)" onmouseover="showTip(event, 'fs10', 20)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 21)" onmouseover="showTip(event, 'fs13', 21)" class="i">toArray</span>
 <span class="k">let</span> <span class="i">rnd</span> <span class="o">=</span> <span class="i">Random</span>()
 <span class="k">let</span> <span class="i">questionItem</span>() <span class="o">=</span> <span class="i">corrects</span><span class="o">.</span>[<span class="i">rnd</span><span class="o">.</span><span class="i">Next</span>(<span class="i">corrects</span><span class="o">.</span><span class="i">Length</span>)]
 
 <span class="k">let</span> <span class="i">generateQuiz</span>() <span class="o">=</span>
     <span class="k">let</span> <span class="i">correct</span>, <span class="i">capitalCity</span> <span class="o">=</span> <span class="i">questionItem</span>()
-    <span class="i">capitalCity</span>, [<span class="i">correct</span>; <span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="i">fst</span>(<span class="i">questionItem</span>()); <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">fst</span>(<span class="i">questionItem</span>())] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="i">sort</span>
+    <span class="i">capitalCity</span>, [<span class="i">correct</span>; <span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="i">fst</span>(<span class="i">questionItem</span>()); <span onmouseout="hideTip(event, 'fs14', 23)" onmouseover="showTip(event, 'fs14', 23)" class="i">fst</span>(<span class="i">questionItem</span>())] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 25)" onmouseover="showTip(event, 'fs16', 25)" class="i">sort</span>
 
 <span class="k">let</span> <span class="i">checkAnswer</span> <span class="i">country</span> <span class="i">capitalCity</span> <span class="o">=</span>
-    <span class="i">corrects</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 22)" onmouseover="showTip(event, 'fs16', 22)" class="i">exists</span>(<span class="k">fun</span> (<span class="i">cou</span>, <span class="i">cap</span>) <span class="k">-&gt;</span> <span class="i">cou</span> <span class="o">=</span> <span class="i">country</span> <span class="o">&amp;&amp;</span> <span class="i">cap</span> <span class="o">=</span> <span class="i">capitalCity</span>)</pre>
+    <span class="i">corrects</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs17', 26)" onmouseover="showTip(event, 'fs17', 26)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 27)" onmouseover="showTip(event, 'fs18', 27)" class="i">exists</span>(<span class="k">fun</span> (<span class="i">cou</span>, <span class="i">cap</span>) <span class="k">-&gt;</span> <span class="i">cou</span> <span class="o">=</span> <span class="i">country</span> <span class="o">&amp;&amp;</span> <span class="i">cap</span> <span class="o">=</span> <span class="i">capitalCity</span>)</pre>
 </td>
 </tr>
 </table>
@@ -250,14 +272,14 @@ The default path is the project output-path. So, add to project a TextFile calle
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span class="i">preGenerated</span> <span class="o">=</span> [<span class="n">0..</span><span class="n">500</span>] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 23)" onmouseover="showTip(event, 'fs13', 23)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 24)" onmouseover="showTip(event, 'fs17', 24)" class="i">map</span>(<span class="k">fun</span> _ <span class="k">-&gt;</span> <span class="i">generateQuiz</span>())
-<span class="k">let</span> <span class="i">takeNth</span> <span class="i">n</span> <span class="o">=</span> <span class="i">preGenerated</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 25)" onmouseover="showTip(event, 'fs8', 25)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="i">skip</span> <span class="i">n</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 27)" onmouseover="showTip(event, 'fs8', 27)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 28)" onmouseover="showTip(event, 'fs19', 28)" class="i">head</span>
+<span class="k">let</span> <span class="i">preGenerated</span> <span class="o">=</span> [<span class="n">0..</span><span class="n">500</span>] <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="i">map</span>(<span class="k">fun</span> _ <span class="k">-&gt;</span> <span class="i">generateQuiz</span>())
+<span class="k">let</span> <span class="i">takeNth</span> <span class="i">n</span> <span class="o">=</span> <span class="i">preGenerated</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 30)" onmouseover="showTip(event, 'fs10', 30)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs20', 31)" onmouseover="showTip(event, 'fs20', 31)" class="i">skip</span> <span class="i">n</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 32)" onmouseover="showTip(event, 'fs10', 32)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs21', 33)" onmouseover="showTip(event, 'fs21', 33)" class="i">head</span>
 
 <span class="k">type</span> <span class="i">QuizItem</span>(<span class="i">quizId</span>)<span class="o">=</span>
     <span class="k">let</span> <span class="i">item</span> <span class="o">=</span> <span class="i">takeNth</span> <span class="i">quizId</span>
     <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">QuizId</span> <span class="o">=</span> <span class="i">quizId</span>
-    <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Capital</span> <span class="o">=</span> <span class="i">item</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs12', 29)" onmouseover="showTip(event, 'fs12', 29)" class="i">fst</span>
-    <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Countries</span> <span class="o">=</span> <span class="i">item</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="i">snd</span></pre>
+    <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Capital</span> <span class="o">=</span> <span class="i">item</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs14', 34)" onmouseover="showTip(event, 'fs14', 34)" class="i">fst</span>
+    <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Countries</span> <span class="o">=</span> <span class="i">item</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs22', 35)" onmouseover="showTip(event, 'fs22', 35)" class="i">snd</span></pre>
 </td>
 </tr>
 </table>
@@ -287,25 +309,25 @@ The default path is the project output-path. So, add to project a TextFile calle
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 31)" onmouseover="showTip(event, 'fs1', 31)" class="i">Microsoft</span><span class="o">.</span><span class="i">AspNet</span><span class="o">.</span><span class="i">SignalR</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 36)" onmouseover="showTip(event, 'fs1', 36)" class="i">Microsoft</span><span class="o">.</span><span class="i">AspNet</span><span class="o">.</span><span class="i">SignalR</span>
 <span class="k">open</span> <span class="i">Dynamic</span>
 
 <span class="k">type</span> <span class="i">CountryHub</span>() <span class="o">=</span>
     <span class="k">inherit</span> <span class="i">Hub</span>()
 
     <span class="k">override</span> <span class="i">this</span><span class="o">.</span><span class="i">OnConnected</span>() <span class="o">=</span>
-        <span class="k">base</span><span class="o">.</span><span class="i">OnConnected</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 32)" onmouseover="showTip(event, 'fs2', 32)" class="i">ignore</span>
+        <span class="k">base</span><span class="o">.</span><span class="i">OnConnected</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 37)" onmouseover="showTip(event, 'fs2', 37)" class="i">ignore</span>
         <span class="i">QuizItem</span>(<span class="i">rnd</span><span class="o">.</span><span class="i">Next</span>(<span class="n">500</span>)) <span class="o">|&gt;</span> <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">newQuiz</span>
 
-    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">GuessCountry</span>(<span class="i">quizzId</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs21', 33)" onmouseover="showTip(event, 'fs21', 33)" class="i">int</span>, <span class="i">country</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs22', 34)" onmouseover="showTip(event, 'fs22', 34)" class="i">string</span>)<span class="o">:</span><span onmouseout="hideTip(event, 'fs23', 35)" onmouseover="showTip(event, 'fs23', 35)" class="i">unit</span> <span class="o">=</span>
-        <span class="k">let</span> <span class="i">capital</span> <span class="o">=</span> <span class="i">takeNth</span> <span class="i">quizzId</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs12', 36)" onmouseover="showTip(event, 'fs12', 36)" class="i">fst</span>
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">GuessCountry</span>(<span class="i">quizzId</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs23', 38)" onmouseover="showTip(event, 'fs23', 38)" class="i">int</span>, <span class="i">country</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs24', 39)" onmouseover="showTip(event, 'fs24', 39)" class="i">string</span>)<span class="o">:</span><span onmouseout="hideTip(event, 'fs25', 40)" onmouseover="showTip(event, 'fs25', 40)" class="i">unit</span> <span class="o">=</span>
+        <span class="k">let</span> <span class="i">capital</span> <span class="o">=</span> <span class="i">takeNth</span> <span class="i">quizzId</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs14', 41)" onmouseover="showTip(event, 'fs14', 41)" class="i">fst</span>
         <span class="k">match</span> <span class="i">checkAnswer</span> <span class="i">country</span> <span class="i">capital</span> <span class="k">with</span>
         | <span class="k">true</span> <span class="k">-&gt;</span>
-            <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">informResult</span>(<span class="s">&quot;</span><span class="s">Correct</span><span class="s">!</span><span class="s">&quot;</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 37)" onmouseover="showTip(event, 'fs2', 37)" class="i">ignore</span>
-            <span class="i">QuizItem</span>(<span class="i">rnd</span><span class="o">.</span><span class="i">Next</span>(<span class="n">500</span>)) <span class="o">|&gt;</span> <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">newQuiz</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 38)" onmouseover="showTip(event, 'fs2', 38)" class="i">ignore</span>
+            <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">informResult</span>(<span class="s">&quot;</span><span class="s">Correct</span><span class="s">!</span><span class="s">&quot;</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 42)" onmouseover="showTip(event, 'fs2', 42)" class="i">ignore</span>
+            <span class="i">QuizItem</span>(<span class="i">rnd</span><span class="o">.</span><span class="i">Next</span>(<span class="n">500</span>)) <span class="o">|&gt;</span> <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">newQuiz</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 43)" onmouseover="showTip(event, 'fs2', 43)" class="i">ignore</span>
             <span class="c">//this.Clients.All?informResult(&quot;Correct found&quot;)</span>
         | <span class="k">false</span> <span class="k">-&gt;</span>
-            <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">informResult</span>(<span class="s">&quot;</span><span class="s">Wrong</span><span class="s">!</span><span class="s"> </span><span class="s">Try</span><span class="s"> </span><span class="s">again</span><span class="s">!</span><span class="s">&quot;</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 39)" onmouseover="showTip(event, 'fs2', 39)" class="i">ignore</span></pre>
+            <span class="i">this</span><span class="o">.</span><span class="i">Clients</span><span class="o">.</span><span class="i">Caller</span><span class="o">?</span><span class="i">informResult</span>(<span class="s">&quot;</span><span class="s">Wrong</span><span class="s">!</span><span class="s"> </span><span class="s">Try</span><span class="s"> </span><span class="s">again</span><span class="s">!</span><span class="s">&quot;</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 44)" onmouseover="showTip(event, 'fs2', 44)" class="i">ignore</span></pre>
 </td>
 </tr>
 </table>
@@ -419,26 +441,28 @@ The default path is the project output-path. So, add to project a TextFile calle
           <div class="tip" id="fs1">namespace Microsoft</div>
 <div class="tip" id="fs2">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
 <div class="tip" id="fs3">val typeof&lt;&#39;T&gt; : System.Type<br /><br />Full name: Microsoft.FSharp.Core.Operators.typeof</div>
-<div class="tip" id="fs4">val sprintf : format:Printf.StringFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.sprintf</div>
-<div class="tip" id="fs5">val log : value:&#39;T -&gt; &#39;T (requires member Log)<br /><br />Full name: Microsoft.FSharp.Core.Operators.log</div>
-<div class="tip" id="fs6">namespace System</div>
-<div class="tip" id="fs7">namespace Microsoft.FSharp.Data</div>
-<div class="tip" id="fs8">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
-<div class="tip" id="fs9">val filter : predicate:(&#39;T -&gt; bool) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.filter</div>
-<div class="tip" id="fs10">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.map</div>
-<div class="tip" id="fs11">val toArray : source:seq&lt;&#39;T&gt; -&gt; &#39;T []<br /><br />Full name: Microsoft.FSharp.Collections.Seq.toArray</div>
-<div class="tip" id="fs12">val fst : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T1<br /><br />Full name: Microsoft.FSharp.Core.Operators.fst</div>
-<div class="tip" id="fs13">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
-<div class="tip" id="fs14">val sort : list:&#39;T list -&gt; &#39;T list (requires comparison)<br /><br />Full name: Microsoft.FSharp.Collections.List.sort</div>
-<div class="tip" id="fs15">module Array<br /><br />from Microsoft.FSharp.Collections</div>
-<div class="tip" id="fs16">val exists : predicate:(&#39;T -&gt; bool) -&gt; array:&#39;T [] -&gt; bool<br /><br />Full name: Microsoft.FSharp.Collections.Array.exists</div>
-<div class="tip" id="fs17">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; list:&#39;T list -&gt; &#39;U list<br /><br />Full name: Microsoft.FSharp.Collections.List.map</div>
-<div class="tip" id="fs18">val skip : count:int -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.skip</div>
-<div class="tip" id="fs19">val head : source:seq&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Collections.Seq.head</div>
-<div class="tip" id="fs20">val snd : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T2<br /><br />Full name: Microsoft.FSharp.Core.Operators.snd</div>
-<div class="tip" id="fs21">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
-<div class="tip" id="fs22">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
-<div class="tip" id="fs23">type unit = Unit<br /><br />Full name: Microsoft.FSharp.Core.unit</div>
+<div class="tip" id="fs4">module Unchecked<br /><br />from Microsoft.FSharp.Core.Operators</div>
+<div class="tip" id="fs5">val defaultof&lt;&#39;T&gt; : &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.Unchecked.defaultof</div>
+<div class="tip" id="fs6">val sprintf : format:Printf.StringFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.sprintf</div>
+<div class="tip" id="fs7">val log : value:&#39;T -&gt; &#39;T (requires member Log)<br /><br />Full name: Microsoft.FSharp.Core.Operators.log</div>
+<div class="tip" id="fs8">namespace System</div>
+<div class="tip" id="fs9">namespace Microsoft.FSharp.Data</div>
+<div class="tip" id="fs10">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs11">val filter : predicate:(&#39;T -&gt; bool) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.filter</div>
+<div class="tip" id="fs12">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.map</div>
+<div class="tip" id="fs13">val toArray : source:seq&lt;&#39;T&gt; -&gt; &#39;T []<br /><br />Full name: Microsoft.FSharp.Collections.Seq.toArray</div>
+<div class="tip" id="fs14">val fst : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T1<br /><br />Full name: Microsoft.FSharp.Core.Operators.fst</div>
+<div class="tip" id="fs15">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
+<div class="tip" id="fs16">val sort : list:&#39;T list -&gt; &#39;T list (requires comparison)<br /><br />Full name: Microsoft.FSharp.Collections.List.sort</div>
+<div class="tip" id="fs17">module Array<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs18">val exists : predicate:(&#39;T -&gt; bool) -&gt; array:&#39;T [] -&gt; bool<br /><br />Full name: Microsoft.FSharp.Collections.Array.exists</div>
+<div class="tip" id="fs19">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; list:&#39;T list -&gt; &#39;U list<br /><br />Full name: Microsoft.FSharp.Collections.List.map</div>
+<div class="tip" id="fs20">val skip : count:int -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.skip</div>
+<div class="tip" id="fs21">val head : source:seq&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Collections.Seq.head</div>
+<div class="tip" id="fs22">val snd : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T2<br /><br />Full name: Microsoft.FSharp.Core.Operators.snd</div>
+<div class="tip" id="fs23">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
+<div class="tip" id="fs24">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs25">type unit = Unit<br /><br />Full name: Microsoft.FSharp.Core.unit</div>
           
         </div>
         <div class="span1"></div>

@@ -5,7 +5,7 @@ Käytetään edellä tehtyä WorkerRole-projektia. Käytämme myös [Fog](http:/
 
 Ensimmäisenä on lisättävä connectionstringit Azuren storageille. Tämä tapahtuu näin:
 
-Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit: **TableStorageConnectionString** ja **BlobStorageConnectionString**. Nämä voivat emulator-ympäristössä olla tyhjät.
+Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit: **TableStorageConnectionString** ja **BlobStorageConnectionString**. Nämä voivat emulator-ympäristössä olla tyhjät. Tiedostojen sisältö, lähinnä schema-versio "2013-10.2.2", riippuu käytettävästä AzureSDK-versiosta, tässä 2.2.
 
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -104,7 +104,7 @@ Kun ajat softan (F5), niin **Server** Explorer:iin (ei Solution Explorer) on (re
 
 Azure Table Storage on NoSQL-henkinen tietovarasto.
 
-Ohessa koodiesimerkki sen käyttöön:
+Ohessa koodiesimerkki sen käyttöön (testattu AzureSDK 2.2:sella):
 
     [lang=fsharp]
     let ``Azure dvd table`` = "Dvd"

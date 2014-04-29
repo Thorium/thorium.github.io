@@ -5,7 +5,7 @@ Let's use the WorkerRole from previous tutorials. Let's also use [Fog](http://dm
 
 First task is to add connection strings to Azure storage. It is done like this:
 
-Open the deployment-project file **ServiceDefinition.csdef** and add there settings: **TableStorageConnectionString** and **BlobStorageConnectionString**. In the Azure emulator -environment these can be empty.
+Open the deployment-project file **ServiceDefinition.csdef** and add there settings: **TableStorageConnectionString** and **BlobStorageConnectionString**. In the Azure emulator -environment these can be empty. File content (schema-version "2013-10.2.2") has to correspond your AzureSDK-version, here 2.2:
 
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -104,7 +104,7 @@ When you start the program (F5), you may find from **Server** Explorer (not Solu
 
 Azure Table Storage is NoSQL-minded data storage.
 
-Here is a code sample to use it:
+Here is a code sample to use it (tested on AzureSDK 2.2):
 
     [lang=fsharp]
     let ``Azure dvd table`` = "Dvd"
