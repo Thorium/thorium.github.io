@@ -59,6 +59,9 @@ Asennettavat paketit on helpoin hakea Id:n perusteella popup-ikkunan ylälaidan 
 - [Fog](https://www.nuget.org/packages/Fog)
 	- Nuget-paketti-id: **Fog**
 	- [Fog](http://dmohl.github.io/Fog/) on kirjasto helpottamaan Azuren käyttöä F#:lla, sisältäen mm. välimuistitusta.
+- [FSharp.Data](https://www.nuget.org/packages/Fog)
+	- Nuget-paketti-id: **FSharp.Data**
+	- [FSharp.Data](http://fsharp.github.io/FSharp.Data/) sisältää yleisiä TypeProvidereita.
 
 Koska paketit ovat päivittyneet, voi vielä Updates-välilehdeltä käydä päivittelemässä ne uusimpiin versioihin. (***Huom:** Ohjeen kirjoittamishetkellä uusin versio Azure-komponenteista aiheutti ristiriitaa kovakoodatulla riippuvuudella Microsoft.Data.Services.Client 5.6.0, mutta tämän sai korjattua välillä vaihtamalla riippuvuudet packages.config-tiedostosta 5.6.1:sestä 5.6.0:aan ja takaisin.*)
 
