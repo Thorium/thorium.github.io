@@ -271,6 +271,7 @@ Omia computational expressioneita (/monadeita) voi rakentaa lennosta: Keksit vai
     - [Rajapinta](http://msdn.microsoft.com/en-us/library/dd233182.aspx)
     - [Lisäinfoa](http://blogs.msdn.com/b/dsyme/archive/2007/09/22/some-details-on-f-computation-expressions-aka-monadic-or-workflow-syntax.aspx)
 
+Tätä voidaan käyttää kapseloimaan jokin asiaan liittyvä tila, osakekauppaesimerkissä se voisi olla vaikkapa pankkitilin rahamäärä, joka on käytössä kauppoihin.
 
 ## Harjoitustehtävät ##
 
