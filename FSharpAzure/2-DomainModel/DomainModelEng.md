@@ -53,36 +53,36 @@ Primitives would be the single trades. Composition is combining those to some ki
 Usually the best practice is to model functionality (commands, verbs) rather than basic-objects (nouns). The model could look for example like this:
 
     [lang=fsharp]
-    module ``Option case 1`` =
+    module ``OptionTrade case 1`` =
 
         //Primitives:
-        type Option = 
+        type OptionTrade = 
         | Buy of string*decimal // Buy "MSFT" 100 (amount)
         | Sell of string*decimal
         //Composition combinators:
-        | ContractUntil of System.DateTime*Option
-        | ContractAfter of System.DateTime*Option
-        | Combine of Option*Option //or Option list
+        | ContractUntil of System.DateTime*OptionTrade
+        | ContractAfter of System.DateTime*OptionTrade
+        | Combine of OptionTrade*OptionTrade //or OptionTrade list
 
 Or like this:
 
     [lang=fsharp]
-    module ``Option case 2`` =
+    module ``OptionTrade case 2`` =
 
         //Primitives:
         type OperationKind = Buy | Sell
         type DateTimeKind = Until | After
-        type Option = 
+        type OptionTrade = 
         | Operation of OperationKind*string*decimal
         //Composition combinators:
-        | Contract of DateTimeKind*System.DateTime*Option
-        | Combine of Option*Option
+        | Contract of DateTimeKind*System.DateTime*OptionTrade
+        | Combine of OptionTrade*OptionTrade
 
 The main difference between these two is that when these are later used, how easy is it to access the parameter data:
 
     [lang=fsharp]
-    module ``Option case 1 usage`` =
-        open ``Option case 1``
+    module ``OptionTrade case 1 usage`` =
+        open ``OptionTrade case 1``
         
         let create = 
             Combine(
@@ -101,8 +101,8 @@ The main difference between these two is that when these are later used, how eas
                      if dt>=System.DateTime.Now then purge opt else "" //...
                 | Combine (a,b) -> purge a + purge b
 
-    module ``Option case 2 usage`` =
-        open ``Option case 2``
+    module ``OptionTrade case 2 usage`` =
+        open ``OptionTrade case 2``
                 
         let create = 
             Combine(
@@ -148,7 +148,7 @@ For a normal program this is too heavy concept (if you aren't familiar with call
 The model may be modelled as an operation/function `('a -> M<'b>)`, where "a" is "the program state", i.e. against what is the combination rules made, and M describes some kind of capsule/monad (for example a list), and "b" is the result type. The capsule is optional and also "a" and "b" don't have to be generics, if more precise business-oriented types are possible to define. At first, let's give a name to the function, just to avoid drowning into arrows:
 
     [lang=fsharp]
-    type Option<'a,'b> =
+    type OptionTrade<'a,'b> =
     | Operation of ('a -> List<'b>)
 
 Now you may create a function that compose the functionality, e.g. with list:
@@ -157,7 +157,7 @@ Now you may create a function that compose the functionality, e.g. with list:
     let combine (Operation f1) (Operation f2) = 
         Operation(fun a -> [f1(a); f2(a)])
     
-    // Option -> Option -> Option
+    // OptionTrade -> OptionTrade -> OptionTrade
 
 and define yet another function, the execution itself:
 
@@ -193,6 +193,14 @@ When different functionalities are combined (even between different libraries), 
 - bind `('T -> M<'R>) -> M<'T> -> M<'R>`
 - return `'T -> M<'T>`
 
+For example, map would be like this (with one and two parameters):
+
+    [lang=fsharp]
+    //Map with one parameters, just basic composition:
+    let map f (Operation f1) = Operation(fun a -> f(f1(a)))
+    //Map with f having two parameters:
+    let map2 f (Operation f1) (Operation f2) = Operation(fun a -> f (f1 a) (f2 a))
+
 Avoid side-effects. Operation functionality can be figured out from the type syntax.
 
 ## 3. Syntax ##
@@ -219,6 +227,13 @@ You can make your own [operators](http://msdn.microsoft.com/en-us/library/dd2332
         sell "GOOG" 300m
 
     let myDone2 = eval myCombination2 "now!"
+
+Overloading operators can be done also as usual member-functions to types. In F# you can also do extension methods (and extension properties!):
+
+    [lang=fsharp]
+    type System.String with
+        member x.yell = x + "!"
+    // "hello".yell
 
 ### Builder-syntax ###
 
@@ -302,6 +317,19 @@ Because there is only one sell-operation and combine-function takes several para
     let ``return`` (Operation f1) = Operation(fun a -> [f1(a)])
 
 Implement the sell-operation and try to get it working in the original example.
+
+This is how you can declare your own functions:
+
+    [lang=fsharp]
+    //Example use, with list-parameter, one parameters:
+    let doubleTradeAmount = map (fun al -> [fst(al |> List.head),snd(al |> List.head)*2m])
+    let goneDouble = doubleTradeAmount (buy "MSFT" 100m)
+    eval goneDouble ("not-used-initial-state",0m)
+
+As you can see, the list-context is useless here and causes just extra List.head-calls. You can try to remove the list from the computations.
+
+Create a custom function using map2-function.
+
 
 ## Links / Sources ##
 

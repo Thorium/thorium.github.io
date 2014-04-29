@@ -32,7 +32,7 @@ Mallinnus kannattaa tehdä käyttäen kolmea työkalua:
 	- Siirtymä tilojen välillä
 	- Toiminnon mallinnus
 
-Teoriassa boolean-operaatiot riittävät tietotekniikassa mallintamaan kaiken. Selkein domain tuleekin käyttäen näitä (ts. vältä oliorakenteita), mutta käytännössä halutaan ehkä käyttää apuna vielä seuraavia:
+Teoriassa boolean-operaatiot riittävät tietotekniikassa mallintamaan kaiken. Selkein domain tuleekin käyttäen näitä (ts. lähtökohtaisesti vältä oliorakenteita), mutta käytännössä halutaan ehkä käyttää apuna vielä seuraavia:
 
 - **Record**, jos yhteen-niputettavaa tietoa on paljon (esim. "ERP-olio")
 - **Lista**, jos yksittäisiä kohteita ei haluta listata
@@ -53,36 +53,36 @@ Alkiot (primitiivit) olisivat yksittäisiä kauppoja, ja kompositio on sitä, et
 Usein kannattaa lähteä mallintamaan järjestelmän toimintoja (commandeja, verbejä), eikä niinkään "perus-olioita" (substantiiveja). Malli voisi näyttää esimerkiksi tältä:
 
     [lang=fsharp]
-    module ``Option case 1`` =
+    module ``OptionTrade case 1`` =
 
         //Primitives:
-        type Option = 
+        type OptionTrade = 
         | Buy of string*decimal // Buy "MSFT" 100 (amount)
         | Sell of string*decimal
         //Composition combinators:
-        | ContractUntil of System.DateTime*Option
-        | ContractAfter of System.DateTime*Option
-        | Combine of Option*Option //or Option list
+        | ContractUntil of System.DateTime*OptionTrade
+        | ContractAfter of System.DateTime*OptionTrade
+        | Combine of OptionTrade*OptionTrade //or OptionTrade list
 
 Tai tältä:
 
     [lang=fsharp]
-    module ``Option case 2`` =
+    module ``OptionTrade case 2`` =
 
         //Primitives:
         type OperationKind = Buy | Sell
         type DateTimeKind = Until | After
-        type Option = 
+        type OptionTrade = 
         | Operation of OperationKind*string*decimal
         //Composition combinators:
-        | Contract of DateTimeKind*System.DateTime*Option
-        | Combine of Option*Option
+        | Contract of DateTimeKind*System.DateTime*OptionTrade
+        | Combine of OptionTrade*OptionTrade
 
 Näiden kahden merkittävin ero on siinä, että sitten kun näitä käytetään, niin kuinka helposti päästään käsiksi parametritietoihin:
 
     [lang=fsharp]
-    module ``Option case 1 usage`` =
-        open ``Option case 1``
+    module ``OptionTrade case 1 usage`` =
+        open ``OptionTrade case 1``
         
         let create = 
             Combine(
@@ -101,8 +101,8 @@ Näiden kahden merkittävin ero on siinä, että sitten kun näitä käytetään
                      if dt>=System.DateTime.Now then purge opt else "" //...
                 | Combine (a,b) -> purge a + purge b
 
-    module ``Option case 2 usage`` =
-        open ``Option case 2``
+    module ``OptionTrade case 2 usage`` =
+        open ``OptionTrade case 2``
                 
         let create = 
             Combine(
@@ -148,7 +148,7 @@ Tämä on perus-ohjelmaan usein turhan monimutkainen konsepti (ellei call-cc ja 
 Tietomallia voidaan mallintaa toimintona/funktiona `('a -> M<'b>)`, jossa a on "ohjelman tila", ts. mitä vastaan kombinaatiosääntöjä tehdään, ja M kuvaa jonkinlaista kapselia/monadia (vaikkapa lista), ja b taas on tuloksen tyyppi. Kapseli on vapaaehtoinen ja myöskään a ja b ei tarvitse olla geneerisiä, jos tarkemmat tyypit on business-mielessä mahdollista määrittää. Aluksi annetaan funktiolle nimi, jotta ei hukuta nuoliin:
 
     [lang=fsharp]
-    type Option<'a,'b> =
+    type OptionTrade<'a,'b> =
     | Operation of ('a -> List<'b>)
 
 Nyt voidaan luoda funktio, joka yhdistää kaksi toiminnallisuutta, esim. listalla:
@@ -157,7 +157,7 @@ Nyt voidaan luoda funktio, joka yhdistää kaksi toiminnallisuutta, esim. listal
     let combine (Operation f1) (Operation f2) = 
         Operation(fun a -> [f1(a); f2(a)])
     
-    // Option -> Option -> Option
+    // OptionTrade -> OptionTrade -> OptionTrade
 
 ja määritellään vielä toinen funktio, itse suoritus:
 
@@ -192,6 +192,16 @@ Yhdisteltäessä eri toiminnallisuuksia (jopa eri kirjastojen välillä), on use
 - bind `('T -> M<'R>) -> M<'T> -> M<'R>`
 - return `'T -> M<'T>`
 
+Esim map menisi näin (yhdellä ja kahdella parametrilla):
+
+    [lang=fsharp]
+    //Map with one parameters, just basic composition:
+    let map f (Operation f1) = Operation(fun a -> f(f1(a)))
+    //Map with f having two parameters:
+    let map2 f (Operation f1) (Operation f2) = Operation(fun a -> f (f1 a) (f2 a))
+
+    
+
 Vältä sivuvaikutuksia. Operaation tietotyypistä voi jo päätellä mitä itse operaatio tekee.
 
 ## 3. Syntaksi ##
@@ -219,6 +229,13 @@ mutta tälle on myös erittäin mukavia käyttötarkoituksia omissa DSL-kieliss�
 
     let myDone2 = eval myCombination2 "now!"
 
+Ylikuormitettavat operaattorit voi myös määrittää tavallisina member-funktioina tyypille. F#:ssa voit tehdä myös extension-metodeja (ja extension-propertyjä!):
+
+    [lang=fsharp]
+    type System.String with
+        member x.yell = x + "!"
+    // "hello".yell
+    
 ### Builder-syntaksi ###
 
 Omia computational expressioneita (/monadeita) voi rakentaa lennosta: Keksit vain tilan/sivuvaikutuksen, jonka kapseloit. Tämän sisällä ohjelmoidaan `konteksti{ ... }` -syntaksilla (jossa "konteksti" voi olla melkein mikä tahansa valitsemasi sana).
@@ -301,6 +318,19 @@ Koska myyntejä on vain yksi, ja combine ottaa kaksi parametria, niin tarvitaan 
     let ``return`` (Operation f1) = Operation(fun a -> [f1(a)])
 
 Toteuta myyntioperaatio ja koita saada se toimimaan alkuperäisessä esimerkissä.
+
+Tässä esimerkki miten tehdään omia funktioita:
+
+    [lang=fsharp]
+    //Example use, with list-parameter, one parameters:
+    let doubleTradeAmount = map (fun al -> [fst(al |> List.head),snd(al |> List.head)*2m])
+    let goneDouble = doubleTradeAmount (buy "MSFT" 100m)
+    eval goneDouble ("not-used-initial-state",0m)
+
+Kuten huomataan, niin tässä kontekstissa turhasta listakapselista on nyt vaivaa (turha List.head). Voit koittaa ottaa listan pois.
+
+Tee jokin oma operaatio, joka käyttää map2-funktiota.
+
 
 ## Linkit / Lähteet ##
 
