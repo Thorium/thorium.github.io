@@ -28,7 +28,7 @@ Voit käyttää interactivea testaamaan alla olevaa koodia (kunhan hakemistopolu
 
 	[lang=fsharp]
     #if INTERACTIVE
-    #r "../packages/FSharp.Data.2.0.5/lib/net40/FSharp.Data.dll"
+    #r "../packages/FSharp.Data.2.0.7/lib/net40/FSharp.Data.dll"
     #endif
 
     open FSharp.Data

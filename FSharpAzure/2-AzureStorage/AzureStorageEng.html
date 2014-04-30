@@ -48,7 +48,9 @@
 
 <p>First task is to add connection strings to Azure storage. It is done like this:</p>
 
-<p>Open the deployment-project file <strong>ServiceDefinition.csdef</strong> and add there settings: <strong>TableStorageConnectionString</strong> and <strong>BlobStorageConnectionString</strong>. In the Azure emulator -environment these can be empty. File content (schema-version "2013-10.2.2") has to correspond your AzureSDK-version, here 2.2:</p>
+<p>Open the deployment-project file <strong>ServiceDefinition.csdef</strong> and add there settings: <strong>TableStorageConnectionString</strong> and <strong>BlobStorageConnectionString</strong>. In the Azure emulator -environment these can be empty.</p>
+
+<p>File content attribute <code>name="FSharpAzure"</code> refers to the name of the solution and  <code>schemaVersion="2013-10.2.2"</code> refers to the used AzureSDK, here 2.2, but 2.3 would be  <code>schemaVersion="2014-01.2.3"</code>.</p>
 
 <pre lang="xml"><span class="prep">&lt;?</span>xml version=<span class="s">"1.0"</span> encoding=<span class="s">"utf-8"</span><span class="prep">?&gt;</span>
 <span class="k">&lt;</span><span class="i">ServiceDefinition</span> <span class="o">name</span><span class="k">="FSharpAzure"</span> 
@@ -194,7 +196,7 @@ Another commonly used practice in F# is to add one file of type Script File (*.f
 
 <p>Azure Table Storage is NoSQL-minded data storage.</p>
 
-<p>Here is a code sample to use it (tested on AzureSDK 2.2):</p>
+<p>Here is a code sample to use it (tested on AzureSDK 2.2, but the new version seems to have some issues):</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>

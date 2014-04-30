@@ -5,7 +5,9 @@ Käytetään edellä tehtyä WorkerRole-projektia. Käytämme myös [Fog](http:/
 
 Ensimmäisenä on lisättävä connectionstringit Azuren storageille. Tämä tapahtuu näin:
 
-Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit: **TableStorageConnectionString** ja **BlobStorageConnectionString**. Nämä voivat emulator-ympäristössä olla tyhjät. Tiedostojen sisältö, lähinnä schema-versio "2013-10.2.2", riippuu käytettävästä AzureSDK-versiosta, tässä 2.2.
+Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit: **TableStorageConnectionString** ja **BlobStorageConnectionString**. Nämä voivat emulator-ympäristössä olla tyhjät. 
+
+Tiedostojen sisällössä attribuutti `name="FSharpAzure"` viittaa solutionin nimeen ja `schemaVersion="2013-10.2.2"` käytettyyn AzureSDK:iin, tässä 2.2, mutta 2.3 olisi `schemaVersion="2014-01.2.3"`.
 
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -45,6 +47,10 @@ Muokkaa myös tiedostoja **ServiceConfiguration.Cloud.cscfg** ja **ServiceConfig
 	</ServiceConfiguration>
 
 Emulaattorille kelpaa arvo  value="UseDevelopmentStorage=true", mutta tuotannossa tämä connection-string on jotain muuta. Ohjeet siihen löytyy [netistä](http://msdn.microsoft.com/library/azure/ee758697.aspx).
+
+### Microsoft.WindowsAzure.StorageClient.dll ###
+
+ Referoi **Azure-SDK:n Microsoft.WindowsAzure.StorageClient.dll** (joka löytyy oletuksena polusta: C:\Program Files\Microsoft SDKs\Windows Azure\.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
 
 ### F-Sharp skripti-tiedostojen käyttö ###
 
@@ -91,7 +97,7 @@ Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikka"luo
         "Scientist of the day: " + ``scientist of the day ``.Name
 
     
-Nyt voit lisätä kutsun tähän WorkerRole.fs:n wr.OnStart() -metodissa:
+Nyt voit lisätä kutsun tähän WorkerRole.fs:n wr.OnStart() -metodissa (ennen kutsua base.OnStart()):
 
     [lang=fsharp]
     MyLogics.demoData |> MyLogics.addToBlob
@@ -104,7 +110,7 @@ Kun ajat softan (F5), niin **Server** Explorer:iin (ei Solution Explorer) on (re
 
 Azure Table Storage on NoSQL-henkinen tietovarasto.
 
-Ohessa koodiesimerkki sen käyttöön (testattu AzureSDK 2.2:sella):
+Ohessa koodiesimerkki sen käyttöön (testattu AzureSDK 2.2:sella, mutta viimeisellä versiolla tuntuisi olevan jonkinlaista ongelmaa):
 
     [lang=fsharp]
     let ``Azure dvd table`` = "Dvd"
@@ -136,7 +142,7 @@ Ohessa koodiesimerkki sen käyttöön (testattu AzureSDK 2.2:sella):
     let updateDvd dvd = UpdateEntity ``Azure dvd table`` dvd
     let deleteDvd dvd = DeleteEntity ``Azure dvd table`` dvd
 
-Varsinainen Table Storage:n [kyselykieli on varsin suppea](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx). Sen käyttöön Fog-kirjasto ei tarjoa kätevää rajapintaa, joten joudut tekemään asian suoraa Azuren omaa rajapintaa vasten: Referoi **Azure-SDK:n Microsoft.WindowsAzure.StorageClient.dll** (joka löytyy oletuksena polusta: C:\Program Files\Microsoft SDKs\Windows Azure\.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
+Varsinainen Table Storage:n [kyselykieli on varsin suppea](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx). Sen käyttöön Fog-kirjasto ei tarjoa kätevää rajapintaa, joten joudut tekemään asian suoraa Azuren omaa rajapintaa vasten.
 Edellisen perään lisättynä, tässä mallikoodi kyselyn tekoon:
 
     [lang=fsharp]

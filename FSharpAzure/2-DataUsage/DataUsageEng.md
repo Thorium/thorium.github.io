@@ -28,7 +28,7 @@ You can use interactive to test the code below (but the file path has to corresp
 
 	[lang=fsharp]
     #if INTERACTIVE
-    #r "../packages/FSharp.Data.2.0.5/lib/net40/FSharp.Data.dll"
+    #r "../packages/FSharp.Data.2.0.7/lib/net40/FSharp.Data.dll"
     #endif
 
     open FSharp.Data
