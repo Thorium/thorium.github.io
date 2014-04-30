@@ -45,3 +45,7 @@ But F# is a general purpose language, so you can code what you want. :-)
 ----------
 
 *These exercises start from the scratch. Still, if you have network problems or something, you may download an example-VS2013-solution from [here](FSharpAzure.zip).*
+
+----------
+
+*Special thanks to [tomasp](https://twitter.com/tomaspetricek) and [dmohl](https://twitter.com/dmohl) about their tools used in this tutorial.* :-)
