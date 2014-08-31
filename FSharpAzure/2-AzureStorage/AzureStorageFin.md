@@ -1,13 +1,13 @@
 
 # Azure Blob- ja Table Storage #
 
-Käytetään edellä tehtyä WorkerRole-projektia. Käytämme myös [Fog](http://dmohl.github.io/Fog/)-kirjastoa, jossa on tuki Azuren palveluille: Table Storagelle, Blob Storage, Queue Storage, Serice Bus ja Cache.
+Käytetään edellä tehtyä WorkerRole-projektia. Käytämme myös Windows Azure Storage -kirjastoa. (Aiemmassa versiossa tätä ohjetta käytettiin Fog-kirjastoa, mutta se ei toiminut hyvin uusimpien Azure SDK:iden kanssa.)
 
 Ensimmäisenä on lisättävä connectionstringit Azuren storageille. Tämä tapahtuu näin:
 
 Avaa deployment-projektin **ServiceDefinition.csdef** ja lisää sinne settingit: **TableStorageConnectionString** ja **BlobStorageConnectionString**. Nämä voivat emulator-ympäristössä olla tyhjät. 
 
-Tiedostojen sisällössä attribuutti `name="FSharpAzure"` viittaa solutionin nimeen ja `schemaVersion="2013-10.2.2"` käytettyyn AzureSDK:iin, tässä 2.2, mutta 2.3 olisi `schemaVersion="2014-01.2.3"`.
+Tiedostojen sisällössä attribuutti `name="FSharpAzure"` viittaa solutionin nimeen ja `schemaVersion="2013-10.2.2"` käytettyyn AzureSDK:iin, tässä 2.2, mutta 2.3 olisi `schemaVersion="2014-01.2.3"`ja 2.4 olisi `schemaVersion="2014-06.2.4"`.
 
 	[lang=xml]
 	<?xml version="1.0" encoding="utf-8"?>
@@ -48,10 +48,6 @@ Muokkaa myös tiedostoja **ServiceConfiguration.Cloud.cscfg** ja **ServiceConfig
 
 Emulaattorille kelpaa arvo  value="UseDevelopmentStorage=true", mutta tuotannossa tämä connection-string on jotain muuta. Ohjeet siihen löytyy [netistä](http://msdn.microsoft.com/library/azure/ee758697.aspx).
 
-### Microsoft.WindowsAzure.StorageClient.dll ###
-
- Referoi **Azure-SDK:n Microsoft.WindowsAzure.StorageClient.dll** (joka löytyy oletuksena polusta: C:\Program Files\Microsoft SDKs\Windows Azure\.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
-
 ### F-Sharp skripti-tiedostojen käyttö ###
 
 Näiden koodien ajaminen toimii interactive-ympäristöstä tiettyyn pisteeseen asti, mutta itse Azuren kutsukoodien suoritus ei. Voit siis lisätä koodien alkuun:
@@ -70,22 +66,47 @@ Toinen F#:ssa tyypillinen tapa on lisätä projektiin yksi tiedosto tyyppiä Scr
     #load "MyLogics.fs"
     open MyLogics
 
- 
-## Azure Blob Storage ##
+## Välimuisti ja asetusten haku ##
 
-Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikka"luokka" (=tiedosto) ja lisää siihen seuraava koodi:
+Tässä koodi, joka toimii sekä Blob:in että Table:n yhteydessä.
+Avaa logiikka"luokka" (=tiedosto) ja lisää siihen seuraava koodi:
 
     [lang=fsharp]
     module MyLogics
     
-    open Fog.Storage.Blob
+    open System
+    open Microsoft.WindowsAzure.ServiceRuntime
+    open Microsoft.WindowsAzure.Storage
+
+    open System.Collections.Concurrent
+    let dict = ConcurrentDictionary() //for caching
+
+    let fetchSetting = RoleEnvironment.GetConfigurationSettingValue >> CloudStorageAccount.Parse
+
+Käytetään memoize:a välimuistitukseen. Memoize/memoization poikkeaa normaalista cache-välimuistista siten, että välimuistitetaankin funktio, eikä vain sen parametreja.
+ 
+## Azure Blob Storage ##
+
+Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Lisää edellisen perään seuraava toiminnallisuus:
+
+    [lang=fsharp]
+    let blobConnection (container:string) = 
+        let account = fetchSetting "BlobStorageConnectionString"
+        let client = account.CreateCloudBlobClient()
+        client.GetContainerReference(container.ToLower())
+
+    let uploadBlobToContainer containerName blobName (item:string) = 
+        let memoize f = fun x -> dict.GetOrAdd(Some x, lazy (f x)).Force()
+        let container = memoize(fun cont -> blobConnection cont) containerName
+        async {
+            let! ok = container.CreateIfNotExistsAsync() |> Async.AwaitTask
+            let blob = container.GetBlockBlobReference(blobName)
+            let enc = System.Text.Encoding.ASCII.GetBytes(item)
+            use ms = new System.IO.MemoryStream(enc, 0, enc.Length)
+            do! blob.UploadFromStreamAsync ms |> Async.AwaitIAsyncResult |> Async.Ignore
+        }
     
-    let containerName = "testContainer"
-    let blobFileName = "testBlob"
-    let blob = GetBlobReference containerName blobFileName
-    
-    let addToBlob text = 
-        text |> blob.UploadText
+    let addToBlob = uploadBlobToContainer "testContainer" "testBlob"
 
     open System
     open FSharp.Data
@@ -100,7 +121,7 @@ Blob-storage on simppeli tietovarasto esim. tiedostoja varten. Avaa logiikka"luo
 Nyt voit lisätä kutsun tähän WorkerRole.fs:n wr.OnStart() -metodissa (ennen kutsua base.OnStart()):
 
     [lang=fsharp]
-    MyLogics.demoData |> MyLogics.addToBlob
+    MyLogics.demoData |> MyLogics.addToBlob |> Async.RunSynchronously
 
 Kun ajat softan (F5), niin **Server** Explorer:iin (ei Solution Explorer) on (refresh:in jälkeen) ilmestynyt seuraava blobi, jonka voit tupla-klikata auki, jonka blob-listasta voit taas tupla-klikata itse tiedot auki:
 
@@ -110,7 +131,7 @@ Kun ajat softan (F5), niin **Server** Explorer:iin (ei Solution Explorer) on (re
 
 Azure Table Storage on NoSQL-henkinen tietovarasto.
 
-Ohessa koodiesimerkki sen käyttöön (testattu AzureSDK 2.2:sella, mutta viimeisellä versiolla tuntuisi olevan jonkinlaista ongelmaa):
+Ohessa koodiesimerkki sen käyttöön:
 
     [lang=fsharp]
     let ``Azure dvd table`` = "Dvd"
@@ -118,47 +139,53 @@ Ohessa koodiesimerkki sen käyttöön (testattu AzureSDK 2.2:sella, mutta viimei
     [<Measure>]
     type stars
 
-    open System
-    open System.Data.Services.Common
+    open Microsoft.WindowsAzure.Storage.Table
 
-    [<DataServiceKey("PartitionKey", "RowKey")>] 
-    type MyDvdEntity() = 
-        member val PartitionKey = String.Empty with get, set
-        member val RowKey = String.Empty with get, set
-        member val Timestamp = DateTime.UtcNow with get, set
-        member val Name = String.Empty with get, set
-        member val Rating = 0<stars> with get, set
+    type MyDvdEntity(partitionKey, rowKey, name, rating) = 
+        inherit TableEntity(partitionKey, rowKey)
+        new(name, rating) = MyDvdEntity("defaultPartition", System.Guid.NewGuid().ToString(), name, rating)
+        new() = MyDvdEntity("", 0<stars>)
+        member val Name = name with get, set
+        member val Rating = rating with get, set
 
-    open Fog.Storage.Table
+    let tableConnection tableName = 
+        let account = fetchSetting "TableStorageConnectionString"
+        let client = account.CreateCloudTableClient()
+        client.GetTableReference(tableName)
+
+    let doAction tableName operation = 
+        let memoize f = fun x -> dict.GetOrAdd(Some x, lazy (f x)).Force()
+        let table = memoize(fun tb -> tableConnection tb) tableName
+        async {
+            let! created = table.CreateIfNotExistsAsync() |> Async.AwaitTask
+            return! table.ExecuteAsync(operation) |> Async.AwaitTask
+        }
 
     let addDvd name rating = 
-            MyDvdEntity(
-                PartitionKey = "myPartition",
-                RowKey = System.Guid.NewGuid().ToString("N"),
-                Name = name,
-                Rating = rating
-            ) |> CreateEntity ``Azure dvd table``
+        let dvd = MyDvdEntity(
+                    PartitionKey = "myPartition",
+                    RowKey = System.Guid.NewGuid().ToString(),
+                    Name = name,
+                    Rating = rating
+                  )
+        dvd, dvd
+        |> TableOperation.Insert //Insert, Delete, Replace, etc.
+        |> doAction ``Azure dvd table``
+        |> Async.RunSynchronously
 
-    let updateDvd dvd = UpdateEntity ``Azure dvd table`` dvd
-    let deleteDvd dvd = DeleteEntity ``Azure dvd table`` dvd
+    let updateDvd dvd = 
+        dvd |> TableOperation.Replace |> doAction ``Azure dvd table`` |> Async.RunSynchronously
 
-Varsinainen Table Storage:n [kyselykieli on varsin suppea](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx). Sen käyttöön Fog-kirjasto ei tarjoa kätevää rajapintaa, joten joudut tekemään asian suoraa Azuren omaa rajapintaa vasten.
-Edellisen perään lisättynä, tässä mallikoodi kyselyn tekoon:
+    let deleteDvd dvd = 
+        dvd |> TableOperation.Delete |> doAction ``Azure dvd table`` |> Async.RunSynchronously
+
+...ja vastaavasti tätä kutsutaan WorkerRole.fs-tiedostosta, kutsu OnStart-metodiin, ennen base.OnStart:ia, esim:
 
     [lang=fsharp]
-    open Microsoft.WindowsAzure.StorageClient
-
-    let tableClient = BuildTableClient()
-    ``Azure dvd table`` |> tableClient.CreateTableIfNotExist |> ignore
-
-    let getUsers() = 
-        let context = tableClient.GetDataServiceContext()
-        let query = 
-            query { for item in context.CreateQuery<MyDvdEntity>(``Azure dvd table``) do
-                    select item }
-        // query makes IQueryable, so you can use System.Linq if you want.
-        query.AsTableServiceQuery().Execute()
-
- 
+    let dvd, result = MyLogics.addDvd "Godfather" 4<stars>
+    dvd.Rating <- 5<MyLogics.stars>
+    let result2 = MyLogics.updateDvd dvd
+	
+Varsinainen Table Storage:n [kyselykieli on varsin suppea](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx), eikä uusi Table Service Layer tue LINQ:a, joten kyselyt pitää tehdä joko TableOperation.Retrieve-metodin kautta tai rakentamalla erikseen TableQuery ja suorittamalla se ExecuteQuery-metodilla. 
 
 [Takaisin valikkoon](../Readme.html)

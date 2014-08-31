@@ -24,6 +24,8 @@ Test a few, using [FSharp.Data](http://fsharp.github.io/FSharp.Data/)-library. Y
 
 ## FreeBase TypeProvider ##
 
+(If there is a lot of traffic under same IP, the [Freebase](http://www.freebase.com/) will block it for a while. Then you have to wait or use [Google registration](https://console.developers.google.com/).)
+
 You can use interactive to test the code below (but the file path has to correspond the used NuGet-package version, here 2.0.5):
 
 	[lang=fsharp]
@@ -32,6 +34,10 @@ You can use interactive to test the code below (but the file path has to corresp
     #endif
 
     open FSharp.Data
+    //[<Literal>]
+    //let FreebaseApiKey = "<freebase-enabled google API key>"
+    //type FreebaseDataWithKey = FreebaseDataProvider<Key=FreebaseApiKey>
+
     let data = FreebaseData.GetDataContext()
     let Helsinki10 = 
         data.Commons.Business.``Stock exchanges``.Individuals.OMXH.``Companies traded``

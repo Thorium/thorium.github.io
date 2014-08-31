@@ -1,13 +1,14 @@
 
 # Azure Blob- and Table Storage #
 
-Let's use the WorkerRole from previous tutorials. Let's also use [Fog](http://dmohl.github.io/Fog/)-library, which supports Azure services: Table Storage, Blob Storage, Queue Storage, Service Bus and Cache.
+Let's use the WorkerRole from previous tutorials and also Windows Azure Storage -library.
+(Earlier version of this tutorial used Fog-library but it didn't work well with the latest Azure SDKs.)
 
 First task is to add connection strings to Azure storage. It is done like this:
 
 Open the deployment-project file **ServiceDefinition.csdef** and add there settings: **TableStorageConnectionString** and **BlobStorageConnectionString**. In the Azure emulator -environment these can be empty. 
 
-File content attribute `name="FSharpAzure"` refers to the name of the solution and  `schemaVersion="2013-10.2.2"` refers to the used AzureSDK, here 2.2, but 2.3 would be  `schemaVersion="2014-01.2.3"`.
+File content attribute `name="FSharpAzure"` refers to the name of the solution and  `schemaVersion="2013-10.2.2"` refers to the used AzureSDK, here 2.2, but 2.3 would be  `schemaVersion="2014-01.2.3"`and 2.4 would be `schemaVersion="2014-06.2.4"`.
 
 
 	[lang=xml]
@@ -67,22 +68,48 @@ Another commonly used practice in F# is to add one file of type Script File (*.f
     #load "MyLogics.fs"
     open MyLogics
 
- 
-## Azure Blob Storage ##
+## Caching and settings ##
 
-Blob-storage is a simple data storage e.g. for files. Open the logics file and add on this code to it:
+This code works with Blob and Table -storages.
+Open the logics file and add on this code to it:
 
     [lang=fsharp]
     module MyLogics
     
-    open Fog.Storage.Blob
+    open System
+    open Microsoft.WindowsAzure.ServiceRuntime
+    open Microsoft.WindowsAzure.Storage
+
+    open System.Collections.Concurrent
+    let dict = ConcurrentDictionary() //for caching
+
+    let fetchSetting = RoleEnvironment.GetConfigurationSettingValue >> CloudStorageAccount.Parse
+
+We use memoize for caching. Memoize/memoization caches the whole function call and not only input parameters like normal caching.
+ 
+ 
+## Azure Blob Storage ##
+
+Blob-storage is a simple data storage e.g. for files. Add this code under the previous:
+
+    [lang=fsharp]
+    let blobConnection (container:string) = 
+        let account = fetchSetting "BlobStorageConnectionString"
+        let client = account.CreateCloudBlobClient()
+        client.GetContainerReference(container.ToLower())
+
+    let uploadBlobToContainer containerName blobName (item:string) = 
+        let memoize f = fun x -> dict.GetOrAdd(Some x, lazy (f x)).Force()
+        let container = memoize(fun cont -> blobConnection cont) containerName
+        async {
+            let! ok = container.CreateIfNotExistsAsync() |> Async.AwaitTask
+            let blob = container.GetBlockBlobReference(blobName)
+            let enc = System.Text.Encoding.ASCII.GetBytes(item)
+            use ms = new System.IO.MemoryStream(enc, 0, enc.Length)
+            do! blob.UploadFromStreamAsync ms |> Async.AwaitIAsyncResult |> Async.Ignore
+        }
     
-    let containerName = "testContainer"
-    let blobFileName = "testBlob"
-    let blob = GetBlobReference containerName blobFileName
-    
-    let addToBlob text = 
-        text |> blob.UploadText
+    let addToBlob = uploadBlobToContainer "testContainer" "testBlob"
 
     open System
     open FSharp.Data
@@ -92,7 +119,6 @@ Blob-storage is a simple data storage e.g. for files. Open the logics file and a
             |> Seq.skip DateTime.Now.DayOfYear //
             |> Seq.head
         "Scientist of the day: " + ``scientist of the day ``.Name
-
     
 Now you may call this from the WorkerRole.fs file's method wr.OnStart():
 
@@ -107,7 +133,7 @@ When you start the program (F5), you may find from **Server** Explorer (not Solu
 
 Azure Table Storage is NoSQL-minded data storage.
 
-Here is a code sample to use it (tested on AzureSDK 2.2, but the new version seems to have some issues):
+Here is a code sample to use it:
 
     [lang=fsharp]
     let ``Azure dvd table`` = "Dvd"
@@ -115,47 +141,53 @@ Here is a code sample to use it (tested on AzureSDK 2.2, but the new version see
     [<Measure>]
     type stars
 
-    open System
-    open System.Data.Services.Common
+    open Microsoft.WindowsAzure.Storage.Table
 
-    [<DataServiceKey("PartitionKey", "RowKey")>] 
-    type MyDvdEntity() = 
-        member val PartitionKey = String.Empty with get, set
-        member val RowKey = String.Empty with get, set
-        member val Timestamp = DateTime.UtcNow with get, set
-        member val Name = String.Empty with get, set
-        member val Rating = 0<stars> with get, set
+    type MyDvdEntity(partitionKey, rowKey, name, rating) = 
+        inherit TableEntity(partitionKey, rowKey)
+        new(name, rating) = MyDvdEntity("defaultPartition", System.Guid.NewGuid().ToString(), name, rating)
+        new() = MyDvdEntity("", 0<stars>)
+        member val Name = name with get, set
+        member val Rating = rating with get, set
 
-    open Fog.Storage.Table
+    let tableConnection tableName = 
+        let account = fetchSetting "TableStorageConnectionString"
+        let client = account.CreateCloudTableClient()
+        client.GetTableReference(tableName)
+
+    let doAction tableName operation = 
+        let memoize f = fun x -> dict.GetOrAdd(Some x, lazy (f x)).Force()
+        let table = memoize(fun tb -> tableConnection tb) tableName
+        async {
+            let! created = table.CreateIfNotExistsAsync() |> Async.AwaitTask
+            return! table.ExecuteAsync(operation) |> Async.AwaitTask
+        }
 
     let addDvd name rating = 
-            MyDvdEntity(
-                PartitionKey = "myPartition",
-                RowKey = System.Guid.NewGuid().ToString("N"),
-                Name = name,
-                Rating = rating
-            ) |> CreateEntity ``Azure dvd table``
+        let dvd = MyDvdEntity(
+                    PartitionKey = "myPartition",
+                    RowKey = System.Guid.NewGuid().ToString(),
+                    Name = name,
+                    Rating = rating
+                  )
+        dvd, dvd
+        |> TableOperation.Insert //Insert, Delete, Replace, etc.
+        |> doAction ``Azure dvd table``
+        |> Async.RunSynchronously
 
-    let updateDvd dvd = UpdateEntity ``Azure dvd table`` dvd
-    let deleteDvd dvd = DeleteEntity ``Azure dvd table`` dvd
+    let updateDvd dvd = 
+        dvd |> TableOperation.Replace |> doAction ``Azure dvd table`` |> Async.RunSynchronously
 
-The actual Table Storage [query language is very limited](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx). Fog doesn't provide handy interface for that, so you have to use the Azure-interface directly: Add reference to **Azure-SDK's Microsoft.WindowsAzure.StorageClient.dll** (which is located by default in the path: C:\Program Files\Microsoft SDKs\Windows Azure\.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
-After the previous example, you can add this to execute a query:
+    let deleteDvd dvd = 
+        dvd |> TableOperation.Delete |> doAction ``Azure dvd table`` |> Async.RunSynchronously
+
+...and corresponding calls to WorkerRole.fs to OnStart-method before base.OnStart, e.g.:
 
     [lang=fsharp]
-    open Microsoft.WindowsAzure.StorageClient
+    let dvd, result = MyLogics.addDvd "Godfather" 4<stars>
+    dvd.Rating <- 5<MyLogics.stars>
+    let result2 = MyLogics.updateDvd dvd
 
-    let tableClient = BuildTableClient()
-    ``Azure dvd table`` |> tableClient.CreateTableIfNotExist |> ignore
-
-    let getUsers() = 
-        let context = tableClient.GetDataServiceContext()
-        let query = 
-            query { for item in context.CreateQuery<MyDvdEntity>(``Azure dvd table``) do
-                    select item }
-        // query makes IQueryable, so you can use System.Linq if you want.
-        query.AsTableServiceQuery().Execute()
-
- 
+The actual Table Storage [query language is very limited](http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx) and the new Table Service Layer doesn't support LINQ so the queries has to be done with TableOperation.Retrieve-method, or constructing separate TableQuery and execute it with ExecuteQuery-method.
 
 [Back to the menu](../ReadmeEng.html)

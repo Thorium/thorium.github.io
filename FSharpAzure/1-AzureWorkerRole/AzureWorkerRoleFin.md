@@ -56,9 +56,9 @@ Asennettavat paketit on helpoin hakea Id:n perusteella popup-ikkunan ylälaidan 
 - [FSharp.Web.Http](http://www.nuget.org/packages/FSharp.Web.Http/)
 	- Nuget-paketti-id: **FSharp.Web.Http**
 	- [Frank](http://frank-fs.github.io/frank/)-kirjasto helpottamaan http-kommunikaatiota ja Web-API-rajapinnan-luontia F#-kielellä.
-- [Fog](https://www.nuget.org/packages/Fog)
-	- Nuget-paketti-id: **Fog**
-	- [Fog](http://dmohl.github.io/Fog/) on kirjasto helpottamaan Azuren käyttöä F#:lla, sisältäen mm. välimuistitusta.
+- [Windows Azure Storage](https://www.nuget.org/packages/WindowsAzure.Storage/)
+	- Nuget-paketti-id: **WindowsAzure.Storage**
+	- Kirjasto Azuren tietovarastojen käyttöön.
 - [FSharp.Data](https://www.nuget.org/packages/Fog)
 	- Nuget-paketti-id: **FSharp.Data**
 	- [FSharp.Data](http://fsharp.github.io/FSharp.Data/) sisältää yleisiä TypeProvidereita.

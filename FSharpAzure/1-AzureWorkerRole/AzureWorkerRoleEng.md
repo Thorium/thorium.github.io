@@ -1,6 +1,6 @@
 # Creating Azure Worker Role #
 
-Let's assume you have Visual Studio 2012 or Visual Studio 2013 installed and you have (the default) support for F#-language. Also you have installed the [Windows Azure SDK](http://www.windowsazure.com/en-us/downloads/):n.
+Let's assume you have Visual Studio 2012 or Visual Studio 2013 installed and you have (the default) support for F#-language. Also you have installed the [Windows Azure SDK](http://www.windowsazure.com/en-us/downloads/).
 
 Open the Visual Studio and select from the menu: File -> New -> Project
 
@@ -56,9 +56,9 @@ The packages are easiest to search by the Id from the search box of the upper ri
 - [FSharp.Web.Http](http://www.nuget.org/packages/FSharp.Web.Http/)
 	- Nuget-package-id: **FSharp.Web.Http**
 	- [Frank](http://frank-fs.github.io/frank/)-library to ease Http and Web-API-communication with F#-language.
-- [Fog](https://www.nuget.org/packages/Fog)
-	- Nuget-package-id: **Fog**
-	- [Fog](http://dmohl.github.io/Fog/) is a library to make using Azure easier from the F# language. It contains e.g. some caching.
+- [Windows Azure Storage](https://www.nuget.org/packages/WindowsAzure.Storage/)
+	- Nuget-paketti-id: **WindowsAzure.Storage**
+	- Library to take Azure data storages into use.
 - [FSharp.Data](https://www.nuget.org/packages/Fog)
 	- Nuget-package-id: **FSharp.Data**
 	- [FSharp.Data](http://fsharp.github.io/FSharp.Data/) contains some common TypeProviders.

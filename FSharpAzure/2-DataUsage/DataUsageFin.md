@@ -24,6 +24,8 @@ Testataan muutamia, käyttäen [FSharp.Data](http://fsharp.github.io/FSharp.Data
 
 ## FreeBase TypeProvider ##
 
+(Jos saman IP:n takaa tulee paljon liikennettä, [Freebase](http://www.freebase.com/) blokkaa anonyymin liikenteen, silloin odota hetki tai käytä [Googlen rekisteröintiä](https://console.developers.google.com/).)
+
 Voit käyttää interactivea testaamaan alla olevaa koodia (kunhan hakemistopolun versionumero, 2.0.5, on NuGet-pakettia vastaava):
 
 	[lang=fsharp]
@@ -32,6 +34,10 @@ Voit käyttää interactivea testaamaan alla olevaa koodia (kunhan hakemistopolu
     #endif
 
     open FSharp.Data
+    //[<Literal>]
+    //let FreebaseApiKey = "<freebase-enabled google API key>"
+    //type FreebaseDataWithKey = FreebaseDataProvider<Key=FreebaseApiKey>
+
     let data = FreebaseData.GetDataContext()
     let Helsinki10 = 
         data.Commons.Business.``Stock exchanges``.Individuals.OMXH.``Companies traded``
