@@ -1,0 +1,4 @@
+*.dll
+*.pdb
+*.nupkg
+[Pp]ackages/*.xml

@@ -81,6 +81,8 @@
 
 <h2>FreeBase TypeProvider</h2>
 
+<p>(If there is a lot of traffic under same IP, the <a href="http://www.freebase.com/">Freebase</a> will block it for a while. Then you have to wait or use <a href="https://console.developers.google.com/">Google registration</a>.)</p>
+
 <p>You can use interactive to test the code below (but the file path has to correspond the used NuGet-package version, here 2.0.5):</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
@@ -96,6 +98,10 @@
 <span class="l">10: </span>
 <span class="l">11: </span>
 <span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
@@ -104,6 +110,10 @@
 <span class="prep">#endif</span>
 
 <span class="k">open</span> <span class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Data</span>
+<span class="c">//[&lt;Literal&gt;]</span>
+<span class="c">//let FreebaseApiKey = &quot;&lt;freebase-enabled google API key&gt;&quot;</span>
+<span class="c">//type FreebaseDataWithKey = FreebaseDataProvider&lt;Key=FreebaseApiKey&gt;</span>
+
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">data</span> <span class="o">=</span> <span class="i">FreebaseData</span><span class="o">.</span><span class="i">GetDataContext</span>()
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">Helsinki10</span> <span class="o">=</span> 
     <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="i">data</span><span class="o">.</span><span class="i">Commons</span><span class="o">.</span><span class="i">Business</span><span class="o">.</span><span class="i">``Stock exchanges``</span><span class="o">.</span><span class="i">Individuals</span><span class="o">.</span><span class="i">OMXH</span><span class="o">.</span><span class="i">``Companies traded``</span>
@@ -248,6 +258,6 @@
         <div class="span1"></div>
       </div>
     </div>
-	<br/><div style="color:gray; text-align: center;"><img alt="Creative Commons -k�ytt�lupa" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /> Tuomas Hietanen, 2014, thorium(at)iki.fi, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:gray;">Creative Commons</a></div>
+	<br/><div style="color:gray; text-align: center;"><img alt="Creative Commons -copyright" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /> Tuomas Hietanen, 2014, thorium(at)iki.fi, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:gray;">Creative Commons</a></div>
   </body>
 </html>

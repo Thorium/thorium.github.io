@@ -44,13 +44,14 @@
         <div class="span10" id="main">
           <h1>Azure Blob- and Table Storage</h1>
 
-<p>Let's use the WorkerRole from previous tutorials. Let's also use <a href="http://dmohl.github.io/Fog/">Fog</a>-library, which supports Azure services: Table Storage, Blob Storage, Queue Storage, Service Bus and Cache.</p>
+<p>Let's use the WorkerRole from previous tutorials and also Windows Azure Storage -library.
+(Earlier version of this tutorial used Fog-library but it didn't work well with the latest Azure SDKs.)</p>
 
 <p>First task is to add connection strings to Azure storage. It is done like this:</p>
 
 <p>Open the deployment-project file <strong>ServiceDefinition.csdef</strong> and add there settings: <strong>TableStorageConnectionString</strong> and <strong>BlobStorageConnectionString</strong>. In the Azure emulator -environment these can be empty.</p>
 
-<p>File content attribute <code>name="FSharpAzure"</code> refers to the name of the solution and  <code>schemaVersion="2013-10.2.2"</code> refers to the used AzureSDK, here 2.2, but 2.3 would be  <code>schemaVersion="2014-01.2.3"</code>.</p>
+<p>File content attribute <code>name="FSharpAzure"</code> refers to the name of the solution and  <code>schemaVersion="2013-10.2.2"</code> refers to the used AzureSDK, here 2.2, but 2.3 would be  <code>schemaVersion="2014-01.2.3"</code>and 2.4 would be <code>schemaVersion="2014-06.2.4"</code>.</p>
 
 <pre lang="xml"><span class="prep">&lt;?</span>xml version=<span class="s">"1.0"</span> encoding=<span class="s">"utf-8"</span><span class="prep">?&gt;</span>
 <span class="k">&lt;</span><span class="i">ServiceDefinition</span> <span class="o">name</span><span class="k">="FSharpAzure"</span> 
@@ -126,9 +127,44 @@ Another commonly used practice in F# is to add one file of type Script File (*.f
 </tr>
 </table>
 
+<h2>Caching and settings</h2>
+
+<p>This code works with Blob and Table -storages.
+Open the logics file and add on this code to it:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">module</span> <span class="i">MyLogics</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">System</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">Microsoft</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">WindowsAzure</span><span class="o">.</span><span class="i">ServiceRuntime</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="i">Microsoft</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="i">WindowsAzure</span><span class="o">.</span><span class="i">Storage</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 6)" onmouseover="showTip(event, 'fs1', 6)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="i">Collections</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="i">Concurrent</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="i">dict</span> <span class="o">=</span> <span class="i">ConcurrentDictionary</span>() <span class="c">//for caching</span>
+
+<span class="k">let</span> <span class="i">fetchSetting</span> <span class="o">=</span> <span class="i">RoleEnvironment</span><span class="o">.</span><span class="i">GetConfigurationSettingValue</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">CloudStorageAccount</span><span class="o">.</span><span class="i">Parse</span></pre>
+</td>
+</tr>
+</table>
+
+<p>We use memoize for caching. Memoize/memoization caches the whole function call and not only input parameters like normal caching.</p>
+
 <h2>Azure Blob Storage</h2>
 
-<p>Blob-storage is a simple data storage e.g. for files. Open the logics file and add on this code to it:</p>
+<p>Blob-storage is a simple data storage e.g. for files. Add this code under the previous:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -150,27 +186,41 @@ Another commonly used practice in F# is to add one file of type Script File (*.f
 <span class="l">17: </span>
 <span class="l">18: </span>
 <span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">module</span> <span class="i">MyLogics</span>
+<span class="k">let</span> <span class="i">blobConnection</span> (<span class="i">container</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="i">string</span>) <span class="o">=</span> 
+    <span class="k">let</span> <span class="i">account</span> <span class="o">=</span> <span class="i">fetchSetting</span> <span class="s">&quot;</span><span class="s">BlobStorageConnectionString</span><span class="s">&quot;</span>
+    <span class="k">let</span> <span class="i">client</span> <span class="o">=</span> <span class="i">account</span><span class="o">.</span><span class="i">CreateCloudBlobClient</span>()
+    <span class="i">client</span><span class="o">.</span><span class="i">GetContainerReference</span>(<span class="i">container</span><span class="o">.</span><span class="i">ToLower</span>())
 
-<span class="k">open</span> <span class="i">Fog</span><span class="o">.</span><span class="i">Storage</span><span class="o">.</span><span class="i">Blob</span>
+<span class="k">let</span> <span class="i">uploadBlobToContainer</span> <span class="i">containerName</span> <span class="i">blobName</span> (<span class="i">item</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="i">string</span>) <span class="o">=</span> 
+    <span class="k">let</span> <span class="i">memoize</span> <span class="i">f</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs6', 12)" onmouseover="showTip(event, 'fs6', 12)" class="i">dict</span><span class="o">.</span><span class="i">GetOrAdd</span>(<span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="i">Some</span> <span class="i">x</span>, <span class="k">lazy</span> (<span class="i">f</span> <span class="i">x</span>))<span class="o">.</span><span class="i">Force</span>()
+    <span class="k">let</span> <span class="i">container</span> <span class="o">=</span> <span class="i">memoize</span>(<span class="k">fun</span> <span class="i">cont</span> <span class="k">-&gt;</span> <span class="i">blobConnection</span> <span class="i">cont</span>) <span class="i">containerName</span>
+    <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="i">async</span> {
+        <span class="k">let!</span> <span class="i">ok</span> <span class="o">=</span> <span class="i">container</span><span class="o">.</span><span class="i">CreateIfNotExistsAsync</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="i">AwaitTask</span>
+        <span class="k">let</span> <span class="i">blob</span> <span class="o">=</span> <span class="i">container</span><span class="o">.</span><span class="i">GetBlockBlobReference</span>(<span class="i">blobName</span>)
+        <span class="k">let</span> <span class="i">enc</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 17)" onmouseover="showTip(event, 'fs1', 17)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">Text</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="i">Encoding</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="i">ASCII</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">GetBytes</span>(<span class="i">item</span>)
+        <span class="k">use</span> <span class="i">ms</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs1', 22)" onmouseover="showTip(event, 'fs1', 22)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="i">IO</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 24)" onmouseover="showTip(event, 'fs17', 24)" class="i">MemoryStream</span>(<span class="i">enc</span>, <span class="n">0</span>, <span class="i">enc</span><span class="o">.</span><span class="i">Length</span>)
+        <span class="k">do!</span> <span class="i">blob</span><span class="o">.</span><span class="i">UploadFromStreamAsync</span> <span class="i">ms</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 25)" onmouseover="showTip(event, 'fs10', 25)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="i">AwaitIAsyncResult</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 27)" onmouseover="showTip(event, 'fs10', 27)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 28)" onmouseover="showTip(event, 'fs19', 28)" class="i">Ignore</span>
+    }
 
-<span class="k">let</span> <span class="i">containerName</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">testContainer</span><span class="s">&quot;</span>
-<span class="k">let</span> <span class="i">blobFileName</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">testBlob</span><span class="s">&quot;</span>
-<span class="k">let</span> <span class="i">blob</span> <span class="o">=</span> <span class="i">GetBlobReference</span> <span class="i">containerName</span> <span class="i">blobFileName</span>
+<span class="k">let</span> <span class="i">addToBlob</span> <span class="o">=</span> <span class="i">uploadBlobToContainer</span> <span class="s">&quot;</span><span class="s">testContainer</span><span class="s">&quot;</span> <span class="s">&quot;</span><span class="s">testBlob</span><span class="s">&quot;</span>
 
-<span class="k">let</span> <span class="i">addToBlob</span> <span class="i">text</span> <span class="o">=</span> 
-    <span class="i">text</span> <span class="o">|&gt;</span> <span class="i">blob</span><span class="o">.</span><span class="i">UploadText</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">System</span>
-<span class="k">open</span> <span class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">Data</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 29)" onmouseover="showTip(event, 'fs1', 29)" class="i">System</span>
+<span class="k">open</span> <span class="i">FSharp</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="i">Data</span>
 <span class="k">let</span> <span class="i">demoData</span> <span class="o">=</span>
     <span class="k">let</span> <span class="i">``scientist of the day ``</span> <span class="o">=</span> 
         <span class="i">FreebaseData</span><span class="o">.</span><span class="i">GetDataContext</span>()<span class="o">.</span><span class="i">Commons</span><span class="o">.</span><span class="i">Computers</span><span class="o">.</span><span class="i">``Computer Scientists``</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">skip</span> <span class="i">DateTime</span><span class="o">.</span><span class="i">Now</span><span class="o">.</span><span class="i">DayOfYear</span> <span class="c">//</span>
-        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="i">head</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs21', 31)" onmouseover="showTip(event, 'fs21', 31)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs22', 32)" onmouseover="showTip(event, 'fs22', 32)" class="i">skip</span> <span class="i">DateTime</span><span class="o">.</span><span class="i">Now</span><span class="o">.</span><span class="i">DayOfYear</span> <span class="c">//</span>
+        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs21', 33)" onmouseover="showTip(event, 'fs21', 33)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs23', 34)" onmouseover="showTip(event, 'fs23', 34)" class="i">head</span>
     <span class="s">&quot;</span><span class="s">Scientist</span><span class="s"> </span><span class="s">of</span><span class="s"> </span><span class="s">the</span><span class="s"> </span><span class="s">day</span><span class="s">:</span><span class="s"> </span><span class="s">&quot;</span> <span class="o">+</span> <span class="i">``scientist of the day ``</span><span class="o">.</span><span class="i">Name</span></pre>
 </td>
 </tr>
@@ -196,7 +246,7 @@ Another commonly used practice in F# is to add one file of type Script File (*.f
 
 <p>Azure Table Storage is NoSQL-minded data storage.</p>
 
-<p>Here is a code sample to use it (tested on AzureSDK 2.2, but the new version seems to have some issues):</p>
+<p>Here is a code sample to use it:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -227,101 +277,126 @@ Another commonly used practice in F# is to add one file of type Script File (*.f
 <span class="l">26: </span>
 <span class="l">27: </span>
 <span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="k">let</span> <span class="i">``Azure dvd table``</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Dvd</span><span class="s">&quot;</span>
 
-[&lt;<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">Measure</span>&gt;]
+[&lt;<span onmouseout="hideTip(event, 'fs24', 35)" onmouseover="showTip(event, 'fs24', 35)" class="i">Measure</span>&gt;]
 <span class="k">type</span> <span class="i">stars</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 8)" onmouseover="showTip(event, 'fs1', 8)" class="i">System</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 9)" onmouseover="showTip(event, 'fs1', 9)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="i">Data</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="i">Services</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="i">Common</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 36)" onmouseover="showTip(event, 'fs2', 36)" class="i">Microsoft</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 37)" onmouseover="showTip(event, 'fs3', 37)" class="i">WindowsAzure</span><span class="o">.</span><span class="i">Storage</span><span class="o">.</span><span class="i">Table</span>
 
-[&lt;<span class="i">DataServiceKey</span>(<span class="s">&quot;</span><span class="s">PartitionKey</span><span class="s">&quot;</span>, <span class="s">&quot;</span><span class="s">RowKey</span><span class="s">&quot;</span>)&gt;] 
-<span class="k">type</span> <span class="i">MyDvdEntity</span>() <span class="o">=</span> 
-    <span class="k">member</span> <span class="k">val</span> <span class="i">PartitionKey</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="i">String</span><span class="o">.</span><span class="i">Empty</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="i">set</span>
-    <span class="k">member</span> <span class="k">val</span> <span class="i">RowKey</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="i">String</span><span class="o">.</span><span class="i">Empty</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="i">set</span>
-    <span class="k">member</span> <span class="k">val</span> <span class="i">Timestamp</span> <span class="o">=</span> <span class="i">DateTime</span><span class="o">.</span><span class="i">UtcNow</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="i">set</span>
-    <span class="k">member</span> <span class="k">val</span> <span class="i">Name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="i">String</span><span class="o">.</span><span class="i">Empty</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="i">set</span>
-    <span class="k">member</span> <span class="k">val</span> <span class="i">Rating</span> <span class="o">=</span> <span class="n">0</span><span class="o">&lt;</span><span class="i">stars</span><span class="o">&gt;</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs11', 20)" onmouseover="showTip(event, 'fs11', 20)" class="i">set</span>
+<span class="k">type</span> <span class="i">MyDvdEntity</span>(<span class="i">partitionKey</span>, <span class="i">rowKey</span>, <span class="i">name</span>, <span class="i">rating</span>) <span class="o">=</span> 
+    <span class="k">inherit</span> <span class="i">TableEntity</span>(<span class="i">partitionKey</span>, <span class="i">rowKey</span>)
+    <span class="k">new</span>(<span class="i">name</span>, <span class="i">rating</span>) <span class="o">=</span> <span class="i">MyDvdEntity</span>(<span class="s">&quot;</span><span class="s">defaultPartition</span><span class="s">&quot;</span>, <span onmouseout="hideTip(event, 'fs1', 38)" onmouseover="showTip(event, 'fs1', 38)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 39)" onmouseover="showTip(event, 'fs25', 39)" class="i">Guid</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 40)" onmouseover="showTip(event, 'fs26', 40)" class="i">NewGuid</span>()<span class="o">.</span><span class="i">ToString</span>(), <span class="i">name</span>, <span class="i">rating</span>)
+    <span class="k">new</span>() <span class="o">=</span> <span class="i">MyDvdEntity</span>(<span class="s">&quot;</span><span class="s">&quot;</span>, <span class="n">0</span><span class="o">&lt;</span><span class="i">stars</span><span class="o">&gt;</span>)
+    <span class="k">member</span> <span class="k">val</span> <span class="i">Name</span> <span class="o">=</span> <span class="i">name</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs27', 41)" onmouseover="showTip(event, 'fs27', 41)" class="i">set</span>
+    <span class="k">member</span> <span class="k">val</span> <span class="i">Rating</span> <span class="o">=</span> <span class="i">rating</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs27', 42)" onmouseover="showTip(event, 'fs27', 42)" class="i">set</span>
 
-<span class="k">open</span> <span class="i">Fog</span><span class="o">.</span><span class="i">Storage</span><span class="o">.</span><span class="i">Table</span>
+<span class="k">let</span> <span class="i">tableConnection</span> <span class="i">tableName</span> <span class="o">=</span> 
+    <span class="k">let</span> <span class="i">account</span> <span class="o">=</span> <span class="i">fetchSetting</span> <span class="s">&quot;</span><span class="s">TableStorageConnectionString</span><span class="s">&quot;</span>
+    <span class="k">let</span> <span class="i">client</span> <span class="o">=</span> <span class="i">account</span><span class="o">.</span><span class="i">CreateCloudTableClient</span>()
+    <span class="i">client</span><span class="o">.</span><span class="i">GetTableReference</span>(<span class="i">tableName</span>)
+
+<span class="k">let</span> <span class="i">doAction</span> <span class="i">tableName</span> <span class="i">operation</span> <span class="o">=</span> 
+    <span class="k">let</span> <span class="i">memoize</span> <span class="i">f</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs6', 43)" onmouseover="showTip(event, 'fs6', 43)" class="i">dict</span><span class="o">.</span><span class="i">GetOrAdd</span>(<span onmouseout="hideTip(event, 'fs8', 44)" onmouseover="showTip(event, 'fs8', 44)" class="i">Some</span> <span class="i">x</span>, <span class="k">lazy</span> (<span class="i">f</span> <span class="i">x</span>))<span class="o">.</span><span class="i">Force</span>()
+    <span class="k">let</span> <span class="i">table</span> <span class="o">=</span> <span class="i">memoize</span>(<span class="k">fun</span> <span class="i">tb</span> <span class="k">-&gt;</span> <span class="i">tableConnection</span> <span class="i">tb</span>) <span class="i">tableName</span>
+    <span onmouseout="hideTip(event, 'fs9', 45)" onmouseover="showTip(event, 'fs9', 45)" class="i">async</span> {
+        <span class="k">let!</span> <span class="i">created</span> <span class="o">=</span> <span class="i">table</span><span class="o">.</span><span class="i">CreateIfNotExistsAsync</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 46)" onmouseover="showTip(event, 'fs10', 46)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 47)" onmouseover="showTip(event, 'fs11', 47)" class="i">AwaitTask</span>
+        <span class="k">return!</span> <span class="i">table</span><span class="o">.</span><span class="i">ExecuteAsync</span>(<span class="i">operation</span>) <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 48)" onmouseover="showTip(event, 'fs10', 48)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 49)" onmouseover="showTip(event, 'fs11', 49)" class="i">AwaitTask</span>
+    }
 
 <span class="k">let</span> <span class="i">addDvd</span> <span class="i">name</span> <span class="i">rating</span> <span class="o">=</span> 
-        <span class="i">MyDvdEntity</span>(
-            <span class="i">PartitionKey</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">myPartition</span><span class="s">&quot;</span>,
-            <span class="i">RowKey</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 21)" onmouseover="showTip(event, 'fs1', 21)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs12', 22)" onmouseover="showTip(event, 'fs12', 22)" class="i">Guid</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 23)" onmouseover="showTip(event, 'fs13', 23)" class="i">NewGuid</span>()<span class="o">.</span><span class="i">ToString</span>(<span class="s">&quot;</span><span class="s">N</span><span class="s">&quot;</span>),
-            <span class="i">Name</span> <span class="o">=</span> <span class="i">name</span>,
-            <span class="i">Rating</span> <span class="o">=</span> <span class="i">rating</span>
-        ) <span class="o">|&gt;</span> <span class="i">CreateEntity</span> <span class="i">``Azure dvd table``</span>
+    <span class="k">let</span> <span class="i">dvd</span> <span class="o">=</span> <span class="i">MyDvdEntity</span>(
+                <span class="i">PartitionKey</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">myPartition</span><span class="s">&quot;</span>,
+                <span class="i">RowKey</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 50)" onmouseover="showTip(event, 'fs1', 50)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 51)" onmouseover="showTip(event, 'fs25', 51)" class="i">Guid</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 52)" onmouseover="showTip(event, 'fs26', 52)" class="i">NewGuid</span>()<span class="o">.</span><span class="i">ToString</span>(),
+                <span class="i">Name</span> <span class="o">=</span> <span class="i">name</span>,
+                <span class="i">Rating</span> <span class="o">=</span> <span class="i">rating</span>
+              )
+    <span class="i">dvd</span>, <span class="i">dvd</span>
+    <span class="o">|&gt;</span> <span class="i">TableOperation</span><span class="o">.</span><span class="i">Insert</span> <span class="c">//Insert, Delete, Replace, etc.</span>
+    <span class="o">|&gt;</span> <span class="i">doAction</span> <span class="i">``Azure dvd table``</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 53)" onmouseover="showTip(event, 'fs10', 53)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 54)" onmouseover="showTip(event, 'fs28', 54)" class="i">RunSynchronously</span>
 
-<span class="k">let</span> <span class="i">updateDvd</span> <span class="i">dvd</span> <span class="o">=</span> <span class="i">UpdateEntity</span> <span class="i">``Azure dvd table``</span> <span class="i">dvd</span>
-<span class="k">let</span> <span class="i">deleteDvd</span> <span class="i">dvd</span> <span class="o">=</span> <span class="i">DeleteEntity</span> <span class="i">``Azure dvd table``</span> <span class="i">dvd</span></pre>
+<span class="k">let</span> <span class="i">updateDvd</span> <span class="i">dvd</span> <span class="o">=</span> 
+    <span class="i">dvd</span> <span class="o">|&gt;</span> <span class="i">TableOperation</span><span class="o">.</span><span class="i">Replace</span> <span class="o">|&gt;</span> <span class="i">doAction</span> <span class="i">``Azure dvd table``</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 55)" onmouseover="showTip(event, 'fs10', 55)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 56)" onmouseover="showTip(event, 'fs28', 56)" class="i">RunSynchronously</span>
+
+<span class="k">let</span> <span class="i">deleteDvd</span> <span class="i">dvd</span> <span class="o">=</span> 
+    <span class="i">dvd</span> <span class="o">|&gt;</span> <span class="i">TableOperation</span><span class="o">.</span><span class="i">Delete</span> <span class="o">|&gt;</span> <span class="i">doAction</span> <span class="i">``Azure dvd table``</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 57)" onmouseover="showTip(event, 'fs10', 57)" class="i">Async</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs28', 58)" onmouseover="showTip(event, 'fs28', 58)" class="i">RunSynchronously</span></pre>
 </td>
 </tr>
 </table>
 
-<p>The actual Table Storage <a href="http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx">query language is very limited</a>. Fog doesn't provide handy interface for that, so you have to use the Azure-interface directly: Add reference to <strong>Azure-SDK's Microsoft.WindowsAzure.StorageClient.dll</strong> (which is located by default in the path: C:\Program Files\Microsoft SDKs\Windows Azure.NET SDK\v2.2\bin\Microsoft.WindowsAzure.StorageClient.dll ).
-After the previous example, you can add this to execute a query:</p>
+<p>...and corresponding calls to WorkerRole.fs to OnStart-method before base.OnStart, e.g.:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs14', 24)" onmouseover="showTip(event, 'fs14', 24)" class="i">Microsoft</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 25)" onmouseover="showTip(event, 'fs15', 25)" class="i">WindowsAzure</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 26)" onmouseover="showTip(event, 'fs16', 26)" class="i">StorageClient</span>
-
-<span class="k">let</span> <span class="i">tableClient</span> <span class="o">=</span> <span class="i">BuildTableClient</span>()
-<span class="i">``Azure dvd table``</span> <span class="o">|&gt;</span> <span class="i">tableClient</span><span class="o">.</span><span class="i">CreateTableIfNotExist</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="i">ignore</span>
-
-<span class="k">let</span> <span class="i">getUsers</span>() <span class="o">=</span> 
-    <span class="k">let</span> <span class="i">context</span> <span class="o">=</span> <span class="i">tableClient</span><span class="o">.</span><span class="i">GetDataServiceContext</span>()
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">query</span> <span class="o">=</span> 
-        <span onmouseout="hideTip(event, 'fs18', 29)" onmouseover="showTip(event, 'fs18', 29)" class="i">query</span> { <span class="k">for</span> <span class="i">item</span> <span class="k">in</span> <span class="i">context</span><span class="o">.</span><span class="i">CreateQuery</span><span class="o">&lt;</span><span class="i">MyDvdEntity</span><span class="o">&gt;</span>(<span class="i">``Azure dvd table``</span>) <span class="k">do</span>
-                <span class="i">select</span> <span class="i">item</span> }
-    <span class="c">// query makes IQueryable, so you can use System.Linq if you want.</span>
-    <span onmouseout="hideTip(event, 'fs18', 30)" onmouseover="showTip(event, 'fs18', 30)" class="i">query</span><span class="o">.</span><span class="i">AsTableServiceQuery</span>()<span class="o">.</span><span class="i">Execute</span>()</pre>
+<span class="k">let</span> <span class="i">dvd</span>, <span class="i">result</span> <span class="o">=</span> <span class="i">MyLogics</span><span class="o">.</span><span class="i">addDvd</span> <span class="s">&quot;</span><span class="s">Godfather</span><span class="s">&quot;</span> <span class="n">4</span><span class="o">&lt;</span><span class="i">stars</span><span class="o">&gt;</span>
+<span class="i">dvd</span><span class="o">.</span><span class="i">Rating</span> <span class="o">&lt;-</span> <span class="n">5</span><span class="o">&lt;</span><span class="i">MyLogics</span><span class="o">.</span><span class="i">stars</span><span class="o">&gt;</span>
+<span class="k">let</span> <span class="i">result2</span> <span class="o">=</span> <span class="i">MyLogics</span><span class="o">.</span><span class="i">updateDvd</span> <span class="i">dvd</span></pre>
 </td>
 </tr>
 </table>
+
+<p>The actual Table Storage <a href="http://msdn.microsoft.com/en-us/library/windowsazure/dd135725.aspx">query language is very limited</a> and the new Table Service Layer doesn't support LINQ so the queries has to be done with TableOperation.Retrieve-method, or constructing separate TableQuery and execute it with ExecuteQuery-method.</p>
 
 <p><a href="../ReadmeEng.html">Back to the menu</a></p>
 
           <div class="tip" id="fs1">namespace System</div>
-<div class="tip" id="fs2">namespace Microsoft.FSharp.Data</div>
-<div class="tip" id="fs3">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
-<div class="tip" id="fs4">val skip : count:int -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.skip</div>
-<div class="tip" id="fs5">val head : source:seq&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Collections.Seq.head</div>
-<div class="tip" id="fs6">Multiple items<br />type MeasureAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; MeasureAttribute<br /><br />Full name: Microsoft.FSharp.Core.MeasureAttribute<br /><br />--------------------<br />new : unit -&gt; MeasureAttribute</div>
-<div class="tip" id="fs7">namespace System.Data</div>
-<div class="tip" id="fs8">namespace System.Data.Services</div>
-<div class="tip" id="fs9">namespace System.Data.Services.Common</div>
-<div class="tip" id="fs10">module String<br /><br />from Microsoft.FSharp.Core</div>
-<div class="tip" id="fs11">val set : elements:seq&lt;&#39;T&gt; -&gt; Set&lt;&#39;T&gt; (requires comparison)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.set</div>
-<div class="tip" id="fs12">Multiple items<br />type Guid =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : b:byte[] -&gt; Guid + 4 overloads<br />&#160;&#160;&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;member Equals : o:obj -&gt; bool + 1 overload<br />&#160;&#160;&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;&#160;&#160;member ToByteArray : unit -&gt; byte[]<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string + 2 overloads<br />&#160;&#160;&#160;&#160;static val Empty : Guid<br />&#160;&#160;&#160;&#160;static member NewGuid : unit -&gt; Guid<br />&#160;&#160;&#160;&#160;static member Parse : input:string -&gt; Guid<br />&#160;&#160;&#160;&#160;static member ParseExact : input:string * format:string -&gt; Guid<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.Guid<br /><br />--------------------<br />System.Guid()<br />System.Guid(b: byte []) : unit<br />System.Guid(g: string) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte []) : unit<br />System.Guid(a: uint32, b: uint16, c: uint16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit</div>
-<div class="tip" id="fs13">System.Guid.NewGuid() : System.Guid</div>
-<div class="tip" id="fs14">namespace Microsoft</div>
-<div class="tip" id="fs15">namespace Microsoft.WindowsAzure</div>
-<div class="tip" id="fs16">namespace Microsoft.WindowsAzure.StorageClient</div>
-<div class="tip" id="fs17">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
-<div class="tip" id="fs18">val query : Linq.QueryBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.query</div>
+<div class="tip" id="fs2">namespace Microsoft</div>
+<div class="tip" id="fs3">namespace Microsoft.WindowsAzure</div>
+<div class="tip" id="fs4">namespace System.Collections</div>
+<div class="tip" id="fs5">namespace System.Collections.Concurrent</div>
+<div class="tip" id="fs6">val dict : keyValuePairs:seq&lt;&#39;Key * &#39;Value&gt; -&gt; System.Collections.Generic.IDictionary&lt;&#39;Key,&#39;Value&gt; (requires equality)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.dict</div>
+<div class="tip" id="fs7">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs8">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs9">val async : AsyncBuilder<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.async</div>
+<div class="tip" id="fs10">Multiple items<br />type Async<br />static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />static member CancelDefaultToken : unit -&gt; unit<br />static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * beginAction:(&#39;Arg1 * &#39;Arg2 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromBeginEnd : arg1:&#39;Arg1 * arg2:&#39;Arg2 * arg3:&#39;Arg3 * beginAction:(&#39;Arg1 * &#39;Arg2 * &#39;Arg3 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member FromContinuations : callback:((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member Ignore : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;unit&gt;<br />static member OnCancel : interruption:(unit -&gt; unit) -&gt; Async&lt;IDisposable&gt;<br />static member Parallel : computations:seq&lt;Async&lt;&#39;T&gt;&gt; -&gt; Async&lt;&#39;T []&gt;<br />static member RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:CancellationToken -&gt; &#39;T<br />static member Sleep : millisecondsDueTime:int -&gt; Async&lt;unit&gt;<br />static member Start : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions * ?cancellationToken:CancellationToken -&gt; Task&lt;&#39;T&gt;<br />static member StartChild : computation:Async&lt;&#39;T&gt; * ?millisecondsTimeout:int -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />static member StartChildAsTask : computation:Async&lt;&#39;T&gt; * ?taskCreationOptions:TaskCreationOptions -&gt; Async&lt;Task&lt;&#39;T&gt;&gt;<br />static member StartImmediate : computation:Async&lt;unit&gt; * ?cancellationToken:CancellationToken -&gt; unit<br />static member StartWithContinuations : computation:Async&lt;&#39;T&gt; * continuation:(&#39;T -&gt; unit) * exceptionContinuation:(exn -&gt; unit) * cancellationContinuation:(OperationCanceledException -&gt; unit) * ?cancellationToken:CancellationToken -&gt; unit<br />static member SwitchToContext : syncContext:SynchronizationContext -&gt; Async&lt;unit&gt;<br />static member SwitchToNewThread : unit -&gt; Async&lt;unit&gt;<br />static member SwitchToThreadPool : unit -&gt; Async&lt;unit&gt;<br />static member TryCancelled : computation:Async&lt;&#39;T&gt; * compensation:(OperationCanceledException -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />static member CancellationToken : Async&lt;CancellationToken&gt;<br />static member DefaultCancellationToken : CancellationToken<br /><br />Full name: Microsoft.FSharp.Control.Async<br /><br />--------------------<br />type Async&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Control.Async&lt;_&gt;</div>
+<div class="tip" id="fs11">static member Async.AwaitTask : task:System.Threading.Tasks.Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;</div>
+<div class="tip" id="fs12">namespace System.Text</div>
+<div class="tip" id="fs13">type Encoding =<br />&#160;&#160;member BodyName : string<br />&#160;&#160;member Clone : unit -&gt; obj<br />&#160;&#160;member CodePage : int<br />&#160;&#160;member DecoderFallback : DecoderFallback with get, set<br />&#160;&#160;member EncoderFallback : EncoderFallback with get, set<br />&#160;&#160;member EncodingName : string<br />&#160;&#160;member Equals : value:obj -&gt; bool<br />&#160;&#160;member GetByteCount : chars:char[] -&gt; int + 3 overloads<br />&#160;&#160;member GetBytes : chars:char[] -&gt; byte[] + 5 overloads<br />&#160;&#160;member GetCharCount : bytes:byte[] -&gt; int + 2 overloads<br />&#160;&#160;...<br /><br />Full name: System.Text.Encoding</div>
+<div class="tip" id="fs14">property System.Text.Encoding.ASCII: System.Text.Encoding</div>
+<div class="tip" id="fs15">System.Text.Encoding.GetBytes(s: string) : byte []<br />System.Text.Encoding.GetBytes(chars: char []) : byte []<br />System.Text.Encoding.GetBytes(chars: char [], index: int, count: int) : byte []<br />System.Text.Encoding.GetBytes(chars: nativeptr&lt;char&gt;, charCount: int, bytes: nativeptr&lt;byte&gt;, byteCount: int) : int<br />System.Text.Encoding.GetBytes(s: string, charIndex: int, charCount: int, bytes: byte [], byteIndex: int) : int<br />System.Text.Encoding.GetBytes(chars: char [], charIndex: int, charCount: int, bytes: byte [], byteIndex: int) : int</div>
+<div class="tip" id="fs16">namespace System.IO</div>
+<div class="tip" id="fs17">Multiple items<br />type MemoryStream =<br />&#160;&#160;inherit Stream<br />&#160;&#160;new : unit -&gt; MemoryStream + 6 overloads<br />&#160;&#160;member CanRead : bool<br />&#160;&#160;member CanSeek : bool<br />&#160;&#160;member CanWrite : bool<br />&#160;&#160;member Capacity : int with get, set<br />&#160;&#160;member Flush : unit -&gt; unit<br />&#160;&#160;member GetBuffer : unit -&gt; byte[]<br />&#160;&#160;member Length : int64<br />&#160;&#160;member Position : int64 with get, set<br />&#160;&#160;member Read : buffer:byte[] * offset:int * count:int -&gt; int<br />&#160;&#160;...<br /><br />Full name: System.IO.MemoryStream<br /><br />--------------------<br />System.IO.MemoryStream() : unit<br />System.IO.MemoryStream(capacity: int) : unit<br />System.IO.MemoryStream(buffer: byte []) : unit<br />System.IO.MemoryStream(buffer: byte [], writable: bool) : unit<br />System.IO.MemoryStream(buffer: byte [], index: int, count: int) : unit<br />System.IO.MemoryStream(buffer: byte [], index: int, count: int, writable: bool) : unit<br />System.IO.MemoryStream(buffer: byte [], index: int, count: int, writable: bool, publiclyVisible: bool) : unit</div>
+<div class="tip" id="fs18">static member Async.AwaitIAsyncResult : iar:System.IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;</div>
+<div class="tip" id="fs19">static member Async.Ignore : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;unit&gt;</div>
+<div class="tip" id="fs20">namespace Microsoft.FSharp.Data</div>
+<div class="tip" id="fs21">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs22">val skip : count:int -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.Seq.skip</div>
+<div class="tip" id="fs23">val head : source:seq&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Collections.Seq.head</div>
+<div class="tip" id="fs24">Multiple items<br />type MeasureAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; MeasureAttribute<br /><br />Full name: Microsoft.FSharp.Core.MeasureAttribute<br /><br />--------------------<br />new : unit -&gt; MeasureAttribute</div>
+<div class="tip" id="fs25">Multiple items<br />type Guid =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : b:byte[] -&gt; Guid + 4 overloads<br />&#160;&#160;&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;member Equals : o:obj -&gt; bool + 1 overload<br />&#160;&#160;&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;&#160;&#160;member ToByteArray : unit -&gt; byte[]<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string + 2 overloads<br />&#160;&#160;&#160;&#160;static val Empty : Guid<br />&#160;&#160;&#160;&#160;static member NewGuid : unit -&gt; Guid<br />&#160;&#160;&#160;&#160;static member Parse : input:string -&gt; Guid<br />&#160;&#160;&#160;&#160;static member ParseExact : input:string * format:string -&gt; Guid<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.Guid<br /><br />--------------------<br />System.Guid()<br />System.Guid(b: byte []) : unit<br />System.Guid(g: string) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte []) : unit<br />System.Guid(a: uint32, b: uint16, c: uint16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit<br />System.Guid(a: int, b: int16, c: int16, d: byte, e: byte, f: byte, g: byte, h: byte, i: byte, j: byte, k: byte) : unit</div>
+<div class="tip" id="fs26">System.Guid.NewGuid() : System.Guid</div>
+<div class="tip" id="fs27">val set : elements:seq&lt;&#39;T&gt; -&gt; Set&lt;&#39;T&gt; (requires comparison)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.set</div>
+<div class="tip" id="fs28">static member Async.RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:System.Threading.CancellationToken -&gt; &#39;T</div>
           
         </div>
         <div class="span1"></div>
       </div>
     </div>
-	<br/><div style="color:gray; text-align: center;"><img alt="Creative Commons -k�ytt�lupa" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /> Tuomas Hietanen, 2014, thorium(at)iki.fi, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:gray;">Creative Commons</a></div>
+	<br/><div style="color:gray; text-align: center;"><img alt="Creative Commons -copyright" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /> Tuomas Hietanen, 2014, thorium(at)iki.fi, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:gray;">Creative Commons</a></div>
   </body>
 </html>

@@ -15,12 +15,10 @@ open System.IO
 open FSharp.Literate
 open FSharp.MetadataFormat
 
-let path = @"C:\Users\tuomashie\Documents\GitHub\thorium.github.io\FSharpAzure\"
-
-
 let templatePath = @"..\packages\FSharp.Formatting.2.4.2\"
-let templateFile = @"literate\templates\template-file.html"
+let templateFile = @"literate\templates\template-file2.html"
 let source = __SOURCE_DIRECTORY__
+let path = source + @"\"
 let template = Path.Combine(source, templatePath+templateFile)
 
 let files = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories)
